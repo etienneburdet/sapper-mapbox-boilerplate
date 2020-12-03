@@ -5,7 +5,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import url from '@rollup/plugin-url';
 import svelte from 'rollup-plugin-svelte';
 import babel from '@rollup/plugin-babel';
+import alias from '@rollup/plugin-alias'
 import { terser } from 'rollup-plugin-terser';
+import sveltePreprocess from 'svelte-preprocess';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
@@ -18,16 +20,32 @@ const onwarn = (warning, onwarn) =>
 	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
 	onwarn(warning);
 
+const entries = {
+	'@components': path.resolve(__dirname, 'src/components'),
+	'@store': path.resolve(__dirname, 'src/store'),
+	'@routes': path.resolve(__dirname, 'src/routes'),
+	'@styles': path.resolve(__dirname, 'src/styles'),
+	'@static': path.resolve(__dirname, 'src/static')
+}
+
+const preprocess = sveltePreprocess({
+	scss: {
+		renderSync: true
+	}
+})
+
 export default {
 	client: {
 		input: config.client.input(),
 		output: config.client.output(),
 		plugins: [
+			alias({entries}),
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			svelte({
+				preprocess,
 				dev,
 				hydratable: true,
 				emitCss: true
@@ -72,11 +90,13 @@ export default {
 		input: config.server.input(),
 		output: config.server.output(),
 		plugins: [
+			alias({entries}),
 			replace({
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			svelte({
+				preprocess,
 				generate: 'ssr',
 				hydratable: true,
 				dev
