@@ -1,33 +1,40 @@
-/* global-require */
-import path from 'path';
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import commonjs from '@rollup/plugin-commonjs';
-import url from '@rollup/plugin-url';
-import svelte from 'rollup-plugin-svelte';
-import babel from '@rollup/plugin-babel';
-import alias from '@rollup/plugin-alias';
-import { terser } from 'rollup-plugin-terser';
-import scss from 'rollup-plugin-scss';
-import sveltePreprocess from 'svelte-preprocess';
-import config from 'sapper/config/rollup';
+import path from "path";
+import resolve from "@rollup/plugin-node-resolve";
+import nodePolyfills from "rollup-plugin-node-polyfills";
+import replace from "@rollup/plugin-replace";
+import commonjs from "@rollup/plugin-commonjs";
+import url from "@rollup/plugin-url";
+import svelte from "rollup-plugin-svelte";
+import babel from "@rollup/plugin-babel";
+import alias from "@rollup/plugin-alias";
+import { terser } from "rollup-plugin-terser";
+import scss from "rollup-plugin-scss";
+import sveltePreprocess from "svelte-preprocess";
+import config from "sapper/config/rollup";
 
-import postcss from 'postcss';
-import autoprefixer from 'autoprefixer';
+import postcss from "postcss";
+import autoprefixer from "autoprefixer";
 // import purgecss from '@fullhuman/postcss-purgecss';
-import pkg from './package.json';
+import pkg from "./package.json";
 
 const mode = process.env.NODE_ENV;
-const dev = mode === 'development';
+const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
-const onwarn = (warning, onwarn) => (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message))
-  || (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message))
-  || onwarn(warning);
+const onwarn = (warning, onwarn) =>
+  (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
+  (warning.code === "CIRCULAR_DEPENDENCY" &&
+    /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  onwarn(warning);
 
-const entries = { '@': path.resolve(__dirname, 'src') };
+const entries = { "@": path.resolve(__dirname, "src") };
 
-const postcssConfig = [autoprefixer];
+const postcssConfig = [
+  autoprefixer,
+  /*purgecss(({
+		content: ['src/!**!/!*.svelte']
+	}))*/
+];
 
 const preprocess = sveltePreprocess({
   scss: {
@@ -36,8 +43,8 @@ const preprocess = sveltePreprocess({
 });
 
 const scssPlugin = scss({
-  output: 'static/global.css',
-  watch: 'src/styles',
+  output: "static/global.css",
+  watch: "src/styles",
   processor: () => postcss(postcssConfig),
 });
 
@@ -48,10 +55,12 @@ export default {
     plugins: [
       alias({ entries }),
       replace({
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
       scssPlugin,
+      commonjs(),
+      nodePolyfills(),
       svelte({
         preprocess,
         dev,
@@ -59,32 +68,31 @@ export default {
         emitCss: true,
       }),
       url({
-        sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
-        publicPath: '/client/',
+        sourceDir: path.resolve(__dirname, "src/node_modules/images"),
+        publicPath: "/client/",
       }),
       resolve({
         browser: true,
-        dedupe: ['svelte'],
+        dedupe: ["svelte"],
       }),
-      commonjs(),
 
-      legacy
-        && babel({
-          extensions: ['.js', '.mjs', '.html', '.svelte'],
-          babelHelpers: 'runtime',
-          exclude: ['node_modules/@babel/**'],
+      legacy &&
+        babel({
+          extensions: [".js", ".mjs", ".html", ".svelte"],
+          babelHelpers: "runtime",
+          exclude: ["node_modules/@babel/**"],
           presets: [
             [
-              '@babel/preset-env',
+              "@babel/preset-env",
               {
-                targets: '> 0.25%, not dead',
+                targets: "> 0.25%, not dead",
               },
             ],
           ],
           plugins: [
-            '@babel/plugin-syntax-dynamic-import',
+            "@babel/plugin-syntax-dynamic-import",
             [
-              '@babel/plugin-transform-runtime',
+              "@babel/plugin-transform-runtime",
               {
                 useESModules: true,
               },
@@ -92,8 +100,8 @@ export default {
           ],
         }),
 
-      !dev
-        && terser({
+      !dev &&
+        terser({
           module: true,
         }),
     ],
@@ -108,29 +116,31 @@ export default {
     plugins: [
       alias({ entries }),
       replace({
-        'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": false,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
       scssPlugin,
+      commonjs(),
       svelte({
         preprocess,
-        generate: 'ssr',
+        generate: "ssr",
         hydratable: true,
         dev,
       }),
       url({
-        sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
-        publicPath: '/client/',
+        sourceDir: path.resolve(__dirname, "src/node_modules/images"),
+        publicPath: "/client/",
         emitFiles: false, // already emitted by client build
       }),
       resolve({
-        dedupe: ['svelte'],
+        dedupe: ["svelte"],
       }),
-      commonjs(),
     ],
-    external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
+    external: Object.keys(pkg.dependencies).concat(
+      require("module").builtinModules
+    ),
 
-    preserveEntrySignatures: 'strict',
+    preserveEntrySignatures: "strict",
     onwarn,
   },
 
@@ -138,12 +148,12 @@ export default {
     input: config.serviceworker.input(),
     output: config.serviceworker.output(),
     plugins: [
+      commonjs(),
       resolve(),
       replace({
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
-      commonjs(),
       !dev && terser(),
     ],
 
