@@ -7,9 +7,14 @@ import svelte from 'rollup-plugin-svelte';
 import babel from '@rollup/plugin-babel';
 import alias from '@rollup/plugin-alias'
 import { terser } from 'rollup-plugin-terser';
+import scss from 'rollup-plugin-scss';
 import sveltePreprocess from 'svelte-preprocess';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
+
+import postcss from 'postcss'
+import autoprefixer from 'autoprefixer'
+import purgecss from '@fullhuman/postcss-purgecss'
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -20,18 +25,28 @@ const onwarn = (warning, onwarn) =>
 	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
 	onwarn(warning);
 
-const entries = {
-	'@components': path.resolve(__dirname, 'src/components'),
-	'@store': path.resolve(__dirname, 'src/store'),
-	'@routes': path.resolve(__dirname, 'src/routes'),
-	'@styles': path.resolve(__dirname, 'src/styles'),
-	'@static': path.resolve(__dirname, 'src/static')
-}
+const entries = { '@': path.resolve(__dirname, 'src') }
+
+const postcssConfig = [
+	autoprefixer,
+	purgecss(({
+		content: ['src/**/*.svelte']
+	}))
+]
 
 const preprocess = sveltePreprocess({
 	scss: {
 		renderSync: true
+	},
+	postcss: {
+		plugins: postcssConfig
 	}
+})
+
+const scssPlugin = scss({
+	output: 'static/global.css',
+	watch: 'src/styles',
+	processor: css => postcss(postcssConfig)
 })
 
 export default {
@@ -44,6 +59,7 @@ export default {
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
+			scssPlugin,
 			svelte({
 				preprocess,
 				dev,
@@ -95,6 +111,7 @@ export default {
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
+			scssPlugin,
 			svelte({
 				preprocess,
 				generate: 'ssr',

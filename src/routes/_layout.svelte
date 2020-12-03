@@ -1,15 +1,12 @@
 <script>
-	import Nav from '../components/Nav.svelte';
-	import Map from '../components/Map.svelte';
+	import Nav from '@/components/Nav.svelte';
+	import Map from '@/components/Map.svelte';
 
 	export let segment;
 </script>
 
-<svelte:head>
-	<style lang="scss" src="@styles/global.scss"></style>
-</svelte:head>
 
-<style>
+<style lang="scss">
 	main {
 		position: relative;
 		background-color: white;

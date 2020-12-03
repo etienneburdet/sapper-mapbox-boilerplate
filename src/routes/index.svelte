@@ -12,9 +12,9 @@
 </script>
 
 <script>
-	import Map from '@components/Map.svelte'
-	import Popup from '@components/Popup.svelte'
-	
+	import Map from '@/components/Map.svelte'
+	import Popup from '@/components/Popup.svelte'
+
 	export let itemId //is merge with matching data returned by preload
 </script>
 
