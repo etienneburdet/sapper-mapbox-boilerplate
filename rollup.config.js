@@ -1,5 +1,6 @@
 import path from 'path';
 import resolve from '@rollup/plugin-node-resolve';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import url from '@rollup/plugin-url';
@@ -14,7 +15,9 @@ import pkg from './package.json';
 
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
+/*
 import purgecss from '@fullhuman/postcss-purgecss'
+*/
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -29,9 +32,9 @@ const entries = { '@': path.resolve(__dirname, 'src') }
 
 const postcssConfig = [
 	autoprefixer,
-	purgecss(({
-		content: ['src/**/*.svelte']
-	}))
+	/*purgecss(({
+		content: ['src/!**!/!*.svelte']
+	}))*/
 ]
 
 const preprocess = sveltePreprocess({
@@ -60,6 +63,8 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			scssPlugin,
+			commonjs(),
+			nodePolyfills(),
 			svelte({
 				preprocess,
 				dev,
@@ -74,7 +79,6 @@ export default {
 				browser: true,
 				dedupe: ['svelte']
 			}),
-			commonjs(),
 
 			legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
@@ -112,6 +116,7 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			scssPlugin,
+			commonjs(),
 			svelte({
 				preprocess,
 				generate: 'ssr',
@@ -125,8 +130,7 @@ export default {
 			}),
 			resolve({
 				dedupe: ['svelte']
-			}),
-			commonjs()
+			})
 		],
 		external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
 
@@ -138,12 +142,12 @@ export default {
 		input: config.serviceworker.input(),
 		output: config.serviceworker.output(),
 		plugins: [
+			commonjs(),
 			resolve(),
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
-			commonjs(),
 			!dev && terser()
 		],
 
