@@ -3,26 +3,26 @@
 </svelte:head>
 
 <script>
-    import {onMount, setContext} from 'svelte'
-    import mapbox from 'mapbox-gl'
+  import {onMount, setContext} from 'svelte'
+  import mapbox from 'mapbox-gl'
 
-    mapbox.accessToken = 'pk.eyJ1IjoiZnBhc3Nhbml0aSIsImEiOiIxNTg3MGRlZWQyNjVkZjExMGVlNWVjNDFjOWQyNzNiMiJ9.pYKDlO4v-SNiDz08G9ZZoQ';
-    let map
-    let container
+  mapbox.accessToken = 'pk.eyJ1IjoiZnBhc3Nhbml0aSIsImEiOiIxNTg3MGRlZWQyNjVkZjExMGVlNWVjNDFjOWQyNzNiMiJ9.pYKDlO4v-SNiDz08G9ZZoQ';
+  let map
+  let container
 
-    setContext('mapbox', {
-        mapbox: mapbox,
-        getMap: () => map,
-        getAccessToken: () => mapbox.accessToken
-    })
+  setContext('mapbox', {
+      mapbox,
+      getMap: () => map,
+      getAccessToken: () => mapbox.accessToken
+  })
 
-    onMount(() => {
-        map = new mapbox.Map({
-            container,
-            style: 'mapbox://styles/mapbox/outdoors-v11',
-            center: [45.406164, 5.765444]
-        })
-    })
+  onMount(() => {
+      map = new mapbox.Map({
+          container,
+          style: 'mapbox://styles/mapbox/outdoors-v11',
+          center: [45.406164, 5.765444]
+      })
+  })
 </script>
 
 <div bind:this={container}>
