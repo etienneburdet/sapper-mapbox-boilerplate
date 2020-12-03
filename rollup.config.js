@@ -28,18 +28,15 @@ const onwarn = (warning, onwarn) =>
 const entries = { '@': path.resolve(__dirname, 'src') }
 
 const postcssConfig = [
-  autoprefixer,
-  purgecss(({
-    content: ['src/**/*.svelte']
-  }))
+  autoprefixer
+  // purgecss(({
+  //   content: ['src/**/*.svelte']
+  // }))
 ]
 
 const preprocess = sveltePreprocess({
   scss: {
     renderSync: true
-  },
-  postcss: {
-    plugins: postcssConfig
   }
 })
 

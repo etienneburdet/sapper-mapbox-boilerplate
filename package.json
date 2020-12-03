@@ -34,6 +34,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-svelte3": "^2.7.3",
     "postcss": "^8.1.13",
     "rollup": "^2.3.4",
     "rollup-plugin-scss": "^2.6.1",
