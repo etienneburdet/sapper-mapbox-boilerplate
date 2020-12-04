@@ -1,10 +1,8 @@
-import * as sapper from '@sapper/app';
-import { prefetchRoutes } from '@sapper/app';
-
-import '@/styles/global.scss';
+import * as sapper from "@sapper/app";
+import { prefetchRoutes } from "@sapper/app";
 
 sapper.start({
-  target: document.querySelector('#sapper'),
+  target: document.querySelector("#sapper")
 });
 
 prefetchRoutes();

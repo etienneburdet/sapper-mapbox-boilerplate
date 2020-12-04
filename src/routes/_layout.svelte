@@ -5,18 +5,21 @@
 	export let segment;
 </script>
 
-
-<style lang="scss">
-	main {
-		position: relative;
-		background-color: white;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-</style>
+<svelte:head>
+	<style src="../styles/global.scss"></style>
+</svelte:head>
 
 <Nav {segment}/>
 
 <main>
  		<slot></slot>
 </main>
+
+<style lang="scss">
+main {
+	position: relative;
+	background-color: white;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+</style>
