@@ -1,5 +1,5 @@
 <script context="module">
-	export async function preload(page, session) {
+	export async function preload(page) {
 		const { query }	= page;
 		const itemId = query.item
 
@@ -12,10 +12,10 @@
 </script>
 
 <script>
-	import Map from '@/components/Map.svelte'
-	import Popup from '@/components/Popup.svelte'
+import Map from '@/components/Map.svelte'
+import Popup from '@/components/Popup.svelte'
 
-	export let itemId //is merge with matching data returned by preload
+export let itemId // is merge with matching data returned by preload
 </script>
 
 <Map />
