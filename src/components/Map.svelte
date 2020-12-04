@@ -25,19 +25,26 @@
   })
 </script>
 
-<div bind:this={container}>
+<div id="map-container" bind:this={container}>
     {#if map}
         <slot></slot>
     {/if}
 </div>
 
-<style lang="scss">
-    div {
-        position: absolute;
-        top: 0;
+<style lang="scss" global>
+    #map-container {
+        position: fixed;
+        top: 50px;
         left: 0;
-        z-index: 0;
-        height: 100vh;
-        width: 100vw;
+        right: 0;
+        bottom: 0;
+        height: calc(100% - 50px);
+        width: 100%;
+    }
+
+    .mapboxgl-canvas {
+        &:focus {
+            outline: none;
+        }
     }
 </style>
