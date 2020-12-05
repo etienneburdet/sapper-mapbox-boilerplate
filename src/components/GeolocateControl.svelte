@@ -7,7 +7,7 @@
     import { createEventDispatcher } from 'svelte';
     import mapbox from 'mapbox-gl';
 
-    const { getMap } = getContext('mapbox');
+    const { getMap } = getContext('map');
     const map = getMap();
 
     const dispatch = createEventDispatcher();

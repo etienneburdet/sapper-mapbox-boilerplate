@@ -15,7 +15,7 @@
     export let bbox = [];
     export let placeholder = "Search a place";
 
-    const { getMap, getAccessToken } = getContext('mapbox');
+    const { getMap, getAccessToken } = getContext('map');
     const map = getMap();
     const token = getAccessToken();
 
