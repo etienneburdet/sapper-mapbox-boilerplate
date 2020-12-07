@@ -1,4 +1,8 @@
 <script context="module">
+	import { treesUrl, getGeojsonEndpoint} from '@/plugins/ods-data.js'
+
+	const treesGeojsonEndpoint = getGeojsonEndpoint(treesUrl)
+	console.log(treesGeojsonEndpoint);
 	export async function preload(page, session) {
 		const { query }	= page;
 		const itemId = query.item;
@@ -6,7 +10,7 @@
 	 /* Fetch data here with this.fetch (special fetch)
 	 const res = await this.fetch(`blog/${itemId}.json`);
 	 */
-		const resFromAPI = await this.fetch('https://data.opendatasoft.com/api/v2/catalog/datasets/arbresremarquablesparis2011%40public/exports/geojson')
+		const resFromAPI = await this.fetch(treesGeojsonEndpoint)
 		const treeData = await resFromAPI.json()
 		return { treeData }
 	}
@@ -23,10 +27,10 @@ export let treeData // is merge with matching data returned by preload
 
 
 <div class="columns">
-	<div class="column">
+	<div class="column is-one-third">
 		<List>
 			{#each treeData.features as tree, index (tree.properties.objectid)}
-			<ListItem item={tree} />
+			<ListItem item={tree.properties} />
 			{/each}
 		</List>
 	</div>

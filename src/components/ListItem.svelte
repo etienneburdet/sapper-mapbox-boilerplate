@@ -10,10 +10,9 @@
   </figure>
   <div class="media-content">
     <div class="content">
+      <h4 class="title is-4"></h4>
       <p>
-        <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
-        <br>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+        {JSON.stringify(item)}
       </p>
     </div>
     <nav class="level is-mobile">
