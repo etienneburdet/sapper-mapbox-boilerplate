@@ -5,3 +5,5 @@ yarn-error.log
 /__sapper__/
 /sapper-mapbox-boilerplate.iml
 /.idea/
+
+.vercel

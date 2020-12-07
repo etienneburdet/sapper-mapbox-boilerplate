@@ -26,54 +26,42 @@ import Popup from '@/components/Popup.svelte';
 import List from '@/components/List.svelte';
 import ListItem from '@/components/ListItem.svelte';
 
-export let treeData // is merge with matching data returned by preload
+import paint from './_mapstyle.js';
 
-const paint = {
-			'circle-radius': [
-					'interpolate', ['linear'], ['zoom'],
-					8, 1,
-					15, 2,
-					19, 6,
-					22, 10
-			],
-			'circle-opacity': 0.8,
-			'circle-color': [
-					'match',
-					['get', 'stadedeveloppement'],
-					'A',
-					'#317256',
-					'J',
-					'#398564',
-					'JA',
-					'#419873',
-					'M',
-					'#49ab81',
-					/* other */ '#52bf90'
-			]
-	}
+export let treeData // is merge with matching data returned by preload
+const setActive = (event) => {
+	console.log(event.detail.layerId)
+}
 </script>
 
 <div class="columns">
 	<div class="column is-one-third">
 		<List>
 			{#each treeData.features as tree, index (tree.properties.objectid)}
-			<ListItem
-				title={tree.properties.libellefrancais}
-				description={tree.properties.arrondissement}
-			/>
+				<a href="?tree={tree.properties.objectid}">
+					<ListItem
+						title={tree.properties.libellefrancais}
+						description={tree.properties.arrondissement}
+					/>
+				</a>
 			{/each}
 		</List>
 	</div>
 	<div class="column is-two-thirds">
 		<Map>
-			<MapSource id="trees" data={treeData}>
-				<MapLayer type="circle" {paint} />
+			<MapSource layerId="trees" data={treeData}>
+				<MapLayer
+					id="trees-circles"
+					type="circle"
+					{paint}
+					on:mapClick={setActive}
+				/>
 			</MapSource>
 		</Map>
 	</div>
 </div>
 
-<!-- <ul>
+<!-- <u>
 	Same page navigation with query string
 	<li><a href="?item=1">1</a></li>
 	<li><a href="?item=2">2</a></li>

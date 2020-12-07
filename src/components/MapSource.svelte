@@ -14,7 +14,6 @@
     });
 
     onMount(() => {
-        console.log("MapSource loading");
         map.isStyleLoaded()
                 ? setSource()
                 : map.on('load', setSource);
@@ -24,7 +23,6 @@
 
     const setSource = () => {
         if (map.getSource(id)) {
-            console.log("Data set to MapSource");
             map.getSource(id).setData(data);
         } else {
             map.addSource(id, {
@@ -32,7 +30,6 @@
                 'data': data
             });
             go = true;
-            console.log("source added to map", go, JSON.stringify(data).substring(0, 100));
         }
     };
 
