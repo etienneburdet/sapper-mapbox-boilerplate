@@ -1,29 +1,31 @@
 <script>
-    import {getContext, onMount, createEventDispatcher} from "svelte";
+    import { getContext, onMount, createEventDispatcher } from "svelte";
 
-    const {getMap} = getContext('map');
+    const { getMap } = getContext('map');
     const map = getMap();
 
-    const {getMapSourceId} = getContext('source');
+    const { getMapSourceId } = getContext('source');
     const source = getMapSourceId();
+
+    export let type;
+    export let paint = {};
+    export let layout = {};
+    export let id = 'layerId';
 
     const dispatch = createEventDispatcher();
     const dispatchLayerEvent = (event) => {
       dispatch('mapClick', {
         map: map,
-        layerId: layerId,
+        layerId: id,
         mapevent: event
       })
     }
 
-    export let type;
-    export let paint = {};
-    export let layout = {};
-    export let layerId = 'layerId';
 
     onMount(() => {
+        console.log("MapLayer loading");
         map.addLayer({
-            "id": layerId,
+            "id": id,
             "type": type,
             "source": source,
             "paint": paint,
@@ -31,5 +33,6 @@
         });
     });
 
-    map.on('click', layerId, dispatchLayerEvent)
+    map.on('click', id, dispatchLayerEvent);
+
 </script>

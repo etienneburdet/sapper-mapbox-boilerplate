@@ -2,7 +2,7 @@
   export let id
 </script>
 
-<div class="has-background-primary">
+<div>
   {id}
 </div>
 
