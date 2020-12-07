@@ -1,7 +1,3 @@
-<svelte:head>
-    <title>App</title>
-</svelte:head>
-
 <script context="module">
     import {isSSR} from "../stores/sideRendering";
 

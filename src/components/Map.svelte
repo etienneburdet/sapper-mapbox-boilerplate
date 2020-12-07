@@ -35,9 +35,6 @@
 
 <style lang="scss">
   div  {
-        position: fixed;
-        top: 50px;
-        left: 0;
         z-index: 0;
         height: 100%;
         width: 100%;

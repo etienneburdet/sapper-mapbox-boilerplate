@@ -1,5 +1,6 @@
 <script>
-  export let item;
+  export let title;
+  export let description;
 </script>
 
 <article class="media">
@@ -10,9 +11,9 @@
   </figure>
   <div class="media-content">
     <div class="content">
-      <h4 class="title is-4"></h4>
+      <h4 class="title is-4">{title}</h4>
       <p>
-        {JSON.stringify(item)}
+        {description}
       </p>
     </div>
     <nav class="level is-mobile">

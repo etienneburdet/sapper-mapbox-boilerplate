@@ -2,7 +2,7 @@
 	import { treesUrl, getGeojsonEndpoint} from '@/plugins/ods-data.js'
 
 	const treesGeojsonEndpoint = getGeojsonEndpoint(treesUrl)
-	console.log(treesGeojsonEndpoint);
+
 	export async function preload(page, session) {
 		const { query }	= page;
 		const itemId = query.item;
@@ -18,11 +18,37 @@
 
 <script>
 import Map from '@/components/Map.svelte';
+import MapSource from '@/components/MapSource.svelte';
+import MapLayer from '@/components/MapLayer.svelte';
 import Popup from '@/components/Popup.svelte';
 import List from '@/components/List.svelte';
 import ListItem from '@/components/ListItem.svelte';
 
 export let treeData // is merge with matching data returned by preload
+
+const paint = {
+			'circle-radius': [
+					'interpolate', ['linear'], ['zoom'],
+					8, 1,
+					15, 2,
+					19, 6,
+					22, 10
+			],
+			'circle-opacity': 0.8,
+			'circle-color': [
+					'match',
+					['get', 'stadedeveloppement'],
+					'A',
+					'#317256',
+					'J',
+					'#398564',
+					'JA',
+					'#419873',
+					'M',
+					'#49ab81',
+					/* other */ '#52bf90'
+			]
+	}
 </script>
 
 
@@ -30,12 +56,19 @@ export let treeData // is merge with matching data returned by preload
 	<div class="column is-one-third">
 		<List>
 			{#each treeData.features as tree, index (tree.properties.objectid)}
-			<ListItem item={tree.properties} />
+			<ListItem
+				title={tree.properties.libellefrancais}
+				description={tree.properties.arrondissement}
+			/>
 			{/each}
 		</List>
 	</div>
 	<div class="column is-two-thirds">
-		<Map />
+		<Map>
+			<MapSource id="trees" data={treeData}>
+				<MapLayer type="circle" {paint} />
+			</MapSource>
+		</Map>
 	</div>
 </div>
 
