@@ -26,7 +26,7 @@
 
 <Nav {segment}/>
 
-<main class="container">
+<main>
  		<slot></slot>
 </main>
 
@@ -34,7 +34,8 @@
 main {
 	position: relative;
 	background-color: white;
-	margin: 0;
 	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
 }
 </style>

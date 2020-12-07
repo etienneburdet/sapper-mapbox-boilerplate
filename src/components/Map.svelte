@@ -1,7 +1,3 @@
-<svelte:head>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet"/>
-</svelte:head>
-
 <script>
   import {onMount, setContext} from 'svelte'
   import mapbox from 'mapbox-gl'
@@ -24,6 +20,10 @@
       })
   })
 </script>
+
+<svelte:head>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet"/>
+</svelte:head>
 
 <div bind:this={container}>
     {#if map}

@@ -2,3 +2,11 @@
 
 @import "_vars";
 @import "bulma/bulma";
+
+body {
+  height: 100vh;
+}
+
+#sapper {
+  height: 100%;
+}

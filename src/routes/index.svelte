@@ -15,21 +15,23 @@
 <script>
 import Map from '@/components/Map.svelte';
 import Popup from '@/components/Popup.svelte';
+import List from '@/components/List.svelte';
 import ListItem from '@/components/ListItem.svelte';
 
 export let treeData // is merge with matching data returned by preload
-$: console.log(treeData)
 </script>
 
 
 <div class="columns">
-	<div class="column is-one-third">
-		{#each treeData.features as tree, index (tree.properties.objectid)}
-			<ListItem item={tree} />
-		{/each}
-	</div>
 	<div class="column">
-		<!-- <Map /> -->
+		<List>
+			{#each treeData.features as tree, index (tree.properties.objectid)}
+			<ListItem item={tree} />
+			{/each}
+		</List>
+	</div>
+	<div class="column is-two-thirds">
+		<Map />
 	</div>
 </div>
 
@@ -52,6 +54,15 @@ $: console.log(treeData)
 </ul> -->
 
 <style>
+	.columns {
+		height: 100%;
+		margin-top: 0;
+	}
+
+	.column {
+		position: relative;
+	}
+
 	ul {
 		width: 200px;
 		margin: 32px;
