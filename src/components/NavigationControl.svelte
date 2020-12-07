@@ -4,7 +4,7 @@
 
     export let position = "top-right";
 
-    const { getMap } = getContext('mapbox');
+    const { getMap } = getContext('map');
     const map = getMap();
 
     const mapControl = new mapbox.NavigationControl();
