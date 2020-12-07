@@ -1,0 +1,114 @@
+/* ==========================================================================
+    ODS Design System
+   ========================================================================== */
+
+$identity-100:#00C7B1;
+$identity-200:#142E7B;
+$identity-300:#0086D6;
+$identity-400:#EFB71B;
+$identity-500:#CE0037;
+$identity-600:#4BC467;
+
+$light-100: #ffffff;
+$light-200: #F6F8FB;
+$light-300: #DEE5EF;
+$light-400: #CBD2DB;
+$light-500: #898D92;
+$light-600: #565656;
+$light-700: #000000;
+
+$ods-title: #000000;
+$ods-text: #565656;
+
+
+/* ==========================================================================
+    Bulma & Codelibrary variables
+   ========================================================================== */
+
+/* Colors
+   ========================================================================== */
+
+$primary: $identity-200;
+$info: $identity-300;
+$success: $identity-600;
+$warning: $identity-400;
+$danger: $identity-500;
+
+$body-background-color: $light-100;
+
+
+/* Typography
+   ========================================================================== */
+
+$body-size: 14px;
+$size-1: 2.466rem; // 37 px
+$size-2: 1.935rem; // 29 px
+$size-3: 1.5335rem; // 23 px
+$size-4: 1.3rem;
+$size-5: 1rem;
+$size-6: 0.8rem;
+$size-7: 0.64rem;
+
+$size-small: $size-7;
+$size-normal: $size-5;
+$size-medium: $size-4;
+$size-large: $size-3;
+
+$title-color: $ods-title;
+$subtitle-color: $ods-text;
+$title-weight: 500;
+
+/* Radius
+   ========================================================================== */
+
+$radius-small: 4px;
+$radius: 6px;
+$radius-large: 8px;
+
+/* Spacing
+   ========================================================================== */
+
+$spacing-100: 0.866rem; // 13px
+$spacing-200: 1.733rem; // 26px
+$spacing-300: 2.6rem; // 39px
+$spacing-400: 4.3rem; // 65px
+
+/* Content
+   ========================================================================== */
+
+$content-heading-weight: 500;
+$content-heading-line-height: 1.25;
+
+/* ==========================================================================
+    Bulma Elements Customization
+   ========================================================================== */
+
+/* Box
+   ========================================================================== */
+
+$box-radius: $radius;
+$box-shadow: none;
+$box-background-color: $light-100;
+$box-padding: $spacing-100;
+
+/* ==========================================================================
+    Bulma Components
+   ========================================================================== */
+
+/* Tags
+   ========================================================================== */
+
+$tag-background-color: #e6f0fa;
+$tag-color: #024369;
+
+/* Footer
+   ========================================================================== */
+
+$footer-background-color: $light-100;
+$footer-padding: $spacing-100 $spacing-300;
+
+/* Card
+   ========================================================================== */
+
+$card-background-color: $light-100;
+$card-shadow: none;
