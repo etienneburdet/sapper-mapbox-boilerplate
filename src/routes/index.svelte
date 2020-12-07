@@ -1,5 +1,5 @@
 <script context="module">
-	import { treesUrl, getGeojsonEndpoint} from '@/plugins/ods-data.js'
+	import { treesUrl, getGeojsonEndpoint} from '@/plugins/ods-data.js';
 
 	const treesGeojsonEndpoint = getGeojsonEndpoint(treesUrl)
 
@@ -10,9 +10,11 @@
 	 /* Fetch data here with this.fetch (special fetch)
 	 const res = await this.fetch(`blog/${itemId}.json`);
 	 */
+
 		const resFromAPI = await this.fetch(treesGeojsonEndpoint)
-		const treeData = await resFromAPI.json()
-		return { treeData }
+		const treeData = await resFromAPI.json();
+
+		return { treeData };
 	}
 </script>
 
@@ -50,7 +52,6 @@ const paint = {
 			]
 	}
 </script>
-
 
 <div class="columns">
 	<div class="column is-one-third">
@@ -93,11 +94,14 @@ const paint = {
 <style>
 	.columns {
 		height: 100%;
+		width: 100%;
 		margin-top: 0;
+		overflow: hidden;
 	}
 
 	.column {
-		position: relative;
+		height: 100%;
+		width: 100%;
 	}
 
 	ul {

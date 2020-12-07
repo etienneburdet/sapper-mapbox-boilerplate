@@ -3,7 +3,7 @@
   export let description;
 </script>
 
-<article class="media">
+<article class="media" on:click>
   <figure class="media-left">
     <p class="image is-64x64">
       <img src="https://bulma.io/images/placeholders/128x128.png">

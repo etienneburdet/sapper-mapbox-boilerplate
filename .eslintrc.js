@@ -21,12 +21,12 @@ module.exports = {
     }
   ],
   rules: {
-    "global-require": 0,
-    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
-    "import/no-mutable-exports": 0,
-    "import/prefer-default-export": 0,
-    "import/first": 0,
-    "no-labels": 0,
-    "no-restricted-syntax": 0
+    //   "global-require": 0,
+    //   "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
+    //   "import/no-mutable-exports": 0,
+    //   "import/prefer-default-export": 0,
+    //   "import/first": 0,
+    //   "no-labels": 0,
+    //   "no-restricted-syntax": 0
   }
 };

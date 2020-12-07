@@ -1,6 +1,9 @@
 <script>
+	import { stores } from '@sapper/app';
 	import Nav from '@/components/Nav.svelte';
-	import Map from '@/components/Map.svelte';
+	import Spinner from '@/components/Spinner.svelte';
+
+	const { preloading } = stores;
 
 	export let segment;
 </script>
@@ -27,7 +30,12 @@
 <Nav {segment}/>
 
 <main>
- 		<slot></slot>
+		{#if $preloading}
+		{console.log('spinner')}
+			<div class="button is-loading"></div>
+		{:else}
+ 			<slot></slot>
+		{/if}
 </main>
 
 <style lang="scss">

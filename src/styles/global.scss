@@ -4,10 +4,16 @@
 @import "_vars";
 @import "bulma/bulma";
 
+html {
+  height: 100%;
+}
+
 body {
-  height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
 #sapper {
   height: 100%;
+  width: 100%;
 }
