@@ -7,9 +7,6 @@ export async function preload(page, session) {
   const { id } = page.params;
   let { treeData } = session;
 
-  /* Fetch data here with this.fetch (special fetch)
-  const res = await this.fetch(`blog/${itemId}.json`);
-  */
   if (!treeData) {
     const resFromAPI = await this.fetch(treesGeojsonEndpoint);
     treeData = await resFromAPI.json();
@@ -29,14 +26,10 @@ export async function preload(page, session) {
   import ListItem from '@/components/ListItem.svelte';
 
   import paint from './_mapstyle';
+  import { setActivePoint } from './_helpers'
 
   export let treeData; // is merge with matching data returned by preload
   export let id;
-
-  const setActivePoint = (event) => {
-    const [point] = event.detail.mapevent.features;
-    goto(`/items/${point.properties.objectid}`);
-  };
 </script>
 
 <div class="columns">
@@ -47,6 +40,7 @@ export async function preload(page, session) {
           id={tree.properties.objectid}
           title={tree.properties.libellefrancais}
           description={tree.properties.arrondissement}
+          active={tree.properties.objectid.toString() === id}
         />
       {/each}
     </List>
@@ -88,13 +82,5 @@ export async function preload(page, session) {
     position: relative;
     height: 100%;
     width: 100%;
-  }
-
-  ul {
-    width: 200px;
-    margin: 32px;
-    position: relative;
-    background: white;
-    z-index: 10;
   }
 </style>

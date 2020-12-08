@@ -14,6 +14,16 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['svelte3'],
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', 'src'],
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json'],
+      },
+    },
+  },
   overrides: [
     {
       files: ['*.svelte'],

@@ -2,10 +2,11 @@
   export let id;
   export let title;
   export let description;
+  export let active;
 </script>
 
 <a rel="prefetch" href="/items/{id}">
-  <article class="media" on:click>
+  <article class="media" on:click class:has-background-light={active}>
     <figure class="media-left">
       <p class="image is-64x64">
         <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -15,6 +16,7 @@
       <div class="content">
         <h4 class="title is-4">{title}</h4>
         <p>
+          {active}
           {description}
         </p>
       </div>
