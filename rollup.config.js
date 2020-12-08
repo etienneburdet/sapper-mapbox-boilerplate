@@ -30,7 +30,7 @@ const postcssConfig = [
   autoprefixer,
   purgecss({
     content: ['./src/**/*.svelte', './node_modules/svelte/*.js'],
-    defaultExtractor: (content) => [...content.matchAll(/(?:class:global\()*([\w\d-/:%.]+)/gm)].map((element) => element[1]),
+    defaultExtractor: (content) => [...content.matchAll(/(?:class:|global\()*([\w\d-/:%.]+)/gm)].map((element) => element[1]),
   }),
 ];
 
