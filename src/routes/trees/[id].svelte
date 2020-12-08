@@ -1,19 +1,23 @@
 <script context="module">
-import { treesUrl, getGeojsonEndpoint } from '@/plugins/ods-data';
+  import { treesGeojsonEndpoint, getTreeRecordEndpoint } from './_helpers';
 
-const treesGeojsonEndpoint = getGeojsonEndpoint(treesUrl);
+  export async function preload(page, session) {
+    const { id } = page.params;
+    let treeDetails = undefined;
+    if (id !== '0') {
+      const resFromAPI = await this.fetch(getTreeRecordEndpoint(`objectid=${id}`));
+      const jsonFromAPI = await resFromAPI.json();
+      treeDetails = jsonFromAPI.records[0].record;
+    }
 
-export async function preload(page, session) {
-  const { id } = page.params;
-  let { treeData } = session;
-
-  if (!treeData) {
-    const resFromAPI = await this.fetch(treesGeojsonEndpoint);
-    treeData = await resFromAPI.json();
-    session.treeData = treeData;
+    let { treesData } = session;
+    if (!treesData) {
+      const resFromAPI = await this.fetch(treesGeojsonEndpoint);
+      treesData = await resFromAPI.json();
+      session.treesData = treesData;
+    }
+    return { treesData, treeDetails };
   }
-  return { treeData, id };
-}
 </script>
 
 <script>
@@ -26,39 +30,34 @@ export async function preload(page, session) {
   import ListItem from '@/components/ListItem.svelte';
 
   import paint from './_mapstyle';
-  import { setActivePoint } from './_helpers'
+  import { setActivePoint } from './_helpers';
 
-  export let treeData; // is merge with matching data returned by preload
-  export let id;
+  export let treesData;
+  export let treeDetails;
 </script>
 
 <div class="columns">
   <div class="column is-one-third">
     <List>
-      {#each treeData.features as tree, index (tree.properties.objectid)}
+      {#each treesData.features as tree, index (tree.properties.objectid)}
         <ListItem
           id={tree.properties.objectid}
           title={tree.properties.libellefrancais}
           description={tree.properties.arrondissement}
-          active={tree.properties.objectid.toString() === id}
+          active={false}
         />
       {/each}
     </List>
   </div>
   <div class="column is-two-thirds">
     <div id="infobox" class="box">
-      {#if id !== '0'}
-        <Popup text={id} />
+      {#if treeDetails}
+        <Popup item={treeDetails} />
       {/if}
     </div>
     <Map>
-      <MapSource id="trees" data={treeData}>
-        <MapLayer
-          id="trees-circles"
-          type="circle"
-          {paint}
-          on:mapClick={setActivePoint}
-        />
+      <MapSource id="trees" data={treesData}>
+        <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
     </Map>
   </div>

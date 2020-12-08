@@ -1,11 +1,11 @@
 <script>
-  export let text;
+  export let item;
   // let { libellefrancais, arrondissement } = point.properties;
 </script>
 
 <div>
-  <h4>{text}</h4>
-  <a rel="prefetch" href="/items/0">close</a>
+  <p>{JSON.stringify(item)}</p>
+  <a rel="prefetch" href="/trees/0">close</a>
 </div>
 
 <style>
