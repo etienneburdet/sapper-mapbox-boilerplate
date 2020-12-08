@@ -11,7 +11,10 @@
       mapbox,
       getMap: () => map,
       getAccessToken: () => mapbox.accessToken
-  })
+  });
+
+  export const getMap = () => { return map };
+  export const flyTo = (flyToOptions) => map.flyTo(flyToOptions);
 
   onMount(() => {
       map = new mapbox.Map({

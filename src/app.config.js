@@ -1,11 +1,14 @@
 export default {
+    jawg: {
+        acccess_token: "4cKtE4Rze1HrvxWa9a7mdolSk10lVThTFC8zadQYMIMxTjkpTeIDJAAmhReDGnCH"
+    },
     mapbox: {
         apikey: "pk.eyJ1IjoiZnBhc3Nhbml0aSIsImEiOiIxNTg3MGRlZWQyNjVkZjExMGVlNWVjNDFjOWQyNzNiMiJ9.pYKDlO4v-SNiDz08G9ZZoQ",
         init: { /* default map location (center of the map, and zoom level) */
             zoom: 12,
             center: [2.347457,48.857627]
         },
-        style: "mapbox://styles/mapbox/light-v10",
+        style: "https://api.jawg.io/styles/jawg-light.json?access-token=4cKtE4Rze1HrvxWa9a7mdolSk10lVThTFC8zadQYMIMxTjkpTeIDJAAmhReDGnCH",
         geocoder: { /* Narrow search results to the defined boundingbox to avoid to many noises */
             searchbbox: [2.108065, 50.896051, 2.608629, 51.132778],
             placeholder: "Chercher une adresse"

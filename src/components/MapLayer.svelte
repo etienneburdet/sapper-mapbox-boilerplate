@@ -1,5 +1,6 @@
 <script>
     import {getContext, onMount} from "svelte";
+    import mapbox from 'mapbox-gl'
 
     const {getMap} = getContext('map');
     const map = getMap();
@@ -20,5 +21,39 @@
             "paint": paint,
             "layout": layout
         });
+
+        map.on('mousemove', function (e) {
+            var items = map.queryRenderedFeatures(e.point, {
+                layers: [source]
+            });
+            if (items.length > 0) {
+                map.getCanvas().style.cursor = 'pointer';
+            } else {
+                map.getCanvas().style.cursor = 'default';
+            }
+        });
+
+        map.on('click', (e) => {
+            var items = map.queryRenderedFeatures(e.point, {layers: [source]});
+            var el = document.createElement('div');
+            el.classList.add('p-5');
+            if (items.length > 0) {
+                items.forEach((item) => {
+                    var label = document.createElement('p');
+                    label.innerText = item.properties.libellefrancais;
+                    el.appendChild(label);
+                });
+                new mapbox.Popup()
+                        .setLngLat(items[0].geometry.coordinates)
+                        .setDOMContent(el)
+                        .addTo(map);
+            }
+        });
     });
 </script>
+
+<style lang="scss" global>
+    .mapboxgl-popup-content {
+        padding: 15px !important;
+    }
+</style>

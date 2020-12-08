@@ -2,9 +2,12 @@
     import {isSSR} from "../stores/sideRendering";
 
     export async function preload(page, session) {
+        if (typeof document == 'undefined') return;
+
         let isSSRPage;
 
         console.log("PRELOAD APP");
+        if (!config.data.baseurl) return undefined;
         const url = new URL(config.data.baseurl + config.data.query);
         const geojson = this.fetch(url);
 
@@ -35,18 +38,25 @@
     import config from '@/app.config'
     /*import {isSSR} from "../stores/sideRendering";*/
     import {onMount} from "svelte";
+    import Marker from "../components/Marker.svelte";
 
     export let geojson;
     export let getGeojson = undefined;
     export let asyncGeojson = undefined;
 
+    let mapComponent;
+    let geocoder;
+    let geolocate;
+    let markerPosition;
+
+    const type = "circle";
     const paint = {
         'circle-radius': [
             'interpolate', ['linear'], ['zoom'],
             8, 1,
             15, 2,
-            19, 6,
-            22, 10
+            //19, 6,
+            22, 15
         ],
         'circle-opacity': 0.8,
         'circle-color': [
@@ -83,33 +93,49 @@
             asyncGeojson = getGeojson();
         }
     });
+
+    const recenterMapFromEvent = (CustomEvent) => {
+        markerPosition = CustomEvent.detail.coords;
+        if (CustomEvent.type == "geolocate") {
+            geocoder.forceInputValue("Votre position");
+        }
+        geolocate.turnOff();
+        console.log("FLY TO Event from controllers");
+        mapComponent.flyTo({
+            center: CustomEvent.detail.coords
+        });
+    }
 </script>
 
 <svelte:head>
-<title>App</title>
+    <title>App</title>
 </svelte:head>
 
-<Map>
-    <Geocoder placeholder="Coucou" marker={false}></Geocoder>
+<Map bind:this={mapComponent}>
     <NavigationControl position="top-left"></NavigationControl>
-    <GeolocateControl position="top-right"></GeolocateControl>
 
+    <Geocoder placeholder="Coucou"
+              bind:this={geocoder}
+              on:geocode={recenterMapFromEvent}></Geocoder>
+    <GeolocateControl bind:this={geolocate}
+                      on:geolocate={recenterMapFromEvent}></GeolocateControl>
+    <Marker lngLat={markerPosition}></Marker>
     <!-- CSR -->
     {#if asyncGeojson}
         {#await asyncGeojson}
             <Spinner></Spinner>
         {:then geojson}
             <MapSource id="data" data={geojson}>
-                <MapLayer type="circle" paint={paint}></MapLayer>
+                <MapLayer type={type} paint={paint}></MapLayer>
             </MapSource>
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
     {/if}
-    <!-- SSR -->
+        <!-- SSR -->
     {#if geojson.features}
         <MapSource id="data" data={geojson}>
-            <MapLayer type="circle" paint={paint}></MapLayer>
+            <MapLayer type={type} paint={paint}></MapLayer>
         </MapSource>
     {/if}
 
