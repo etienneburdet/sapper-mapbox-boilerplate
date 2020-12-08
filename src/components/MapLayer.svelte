@@ -17,20 +17,20 @@
       dispatch('mapClick', {
         map: map,
         layerId: id,
-        mapevent: event
-      })
+        mapevent: event,
+      });
     }
 
-
     onMount(() => {
-        console.log("MapLayer loading");
-        map.addLayer({
-            "id": id,
-            "type": type,
-            "source": source,
-            "paint": paint,
-            "layout": layout
-        });
+      map.addLayer({
+        id,
+        type,
+        source,
+        paint,
+        layout,
+      });
+
+      return () => map.getLayer(id) && map.removeLayer(id);
     });
 
     map.on('click', id, dispatchLayerEvent);

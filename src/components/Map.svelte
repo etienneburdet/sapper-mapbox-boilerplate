@@ -1,26 +1,26 @@
 <script>
-  import {onMount, setContext} from 'svelte'
-  import mapbox from 'mapbox-gl'
+  import { onMount, setContext } from 'svelte';
+  import mapbox from 'mapbox-gl';
   import config from '@/app.config'
 
   mapbox.accessToken = config.mapbox.apikey;
-  let map
-  let container
+  let map;
+  let container;
 
   setContext('map', {
-      mapbox,
-      getMap: () => map,
-      getAccessToken: () => mapbox.accessToken
-  })
+    mapbox,
+    getMap: () => map,
+    getAccessToken: () => mapbox.accessToken,
+  });
 
   onMount(() => {
-      map = new mapbox.Map({
-          container,
-          style: config.mapbox.style,
-          center: config.mapbox.init.center,
-          zoom: config.mapbox.init.zoom
-      })
-  })
+    map = new mapbox.Map({
+      container,
+      style: config.mapbox.style,
+      center: config.mapbox.init.center,
+      zoom: config.mapbox.init.zoom,
+    });
+  });
 </script>
 
 <svelte:head>

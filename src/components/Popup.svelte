@@ -1,9 +1,11 @@
 <script>
-  export let id
+  export let text;
+  // let { libellefrancais, arrondissement } = point.properties;
 </script>
 
 <div>
-  {id}
+  <h4>{text}</h4>
+  <a rel="prefetch" href="/items/0">close</a>
 </div>
 
 <style>

@@ -1,50 +1,44 @@
 <script>
-    import {getContext, onMount, setContext} from "svelte";
+  import { getContext, onMount, setContext } from 'svelte';
 
-    export let data;
-    export let id;
+  export let data;
+  export let id;
 
-    let go;
+  let isSourceLoaded;
 
-    const {getMap} = getContext('map');
-    const map = getMap();
+  const { getMap } = getContext('map');
+  const map = getMap();
 
-    setContext('source', {
-        getMapSourceId: () => id
-    });
+  setContext('source', {
+    getMapSourceId: () => id,
+  });
 
-    onMount(() => {
-        map.isStyleLoaded()
-                ? setSource()
-                : map.on('load', setSource);
-
-        return destroySource
-    });
-
-    const setSource = () => {
-        if (map.getSource(id)) {
-            map.getSource(id).setData(data);
-        } else {
-            map.addSource(id, {
-                'type': 'geojson',
-                'data': data
-            });
-            go = true;
-        }
-    };
-
-    const destroySource = () => {
-        go = false;
-        if (map.getLayer(id)) {
-            map.removeLayer(id);
-        }
-        if (map.getSource(id)) {
-            map.removeSource(id);
-        }
+  const setSource = () => {
+    if (map.getSource(id)) {
+      map.getSource(id).setData(data);
+    } else {
+      map.addSource(id, {
+        type: 'geojson',
+        data,
+      });
+      isSourceLoaded = true;
     }
+  };
 
+  const destroySource = () => {
+    if (map.getSource(id)) {
+      map.removeSource(id);
+    }
+    isSourceLoaded = false;
+  };
+
+  onMount(() => {
+    map.isStyleLoaded() ? setSource() : map.on('load', setSource);
+
+    return destroySource;
+  });
 </script>
 
-{#if go}
+{#if isSourceLoaded}
     <slot></slot>
 {/if}
