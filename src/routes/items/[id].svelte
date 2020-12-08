@@ -31,12 +31,11 @@ export async function preload(page, session) {
   import paint from './_mapstyle';
 
   export let treeData; // is merge with matching data returned by preload
-  export let activePoint;
   export let id;
 
   const setActivePoint = (event) => {
-    [activePoint] = event.detail.mapevent.features;
-    goto(`/?tree=${activePoint.properties.objectid}`);
+    const [point] = event.detail.mapevent.features;
+    goto(`/items/${point.properties.objectid}`);
   };
 </script>
 
@@ -71,19 +70,6 @@ export async function preload(page, session) {
   </div>
 </div>
 
-<!-- <u>
-	Same page navigation with query string
-	<li><a href="?item=1">1</a></li>
-	<li><a href="?item=2">2</a></li>
-	<li><a href="?item=3">3</a></li>
-</ul> -->
-
-<!-- <ul>
-	Different page navigation
-	<li><a href="items/1">1</a></li>
-	<li><a href="items/2">2</a></li>
-	<li><a href="items/3">3</a></li>
-</ul> -->
 <style>
   #infobox {
     position: absolute;
