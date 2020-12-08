@@ -3,24 +3,18 @@ import { treesUrl, getGeojsonEndpoint } from '@/plugins/ods-data';
 
 const treesGeojsonEndpoint = getGeojsonEndpoint(treesUrl);
 
-export async function preload(page) {
+export async function preload(page, session) {
   const { id } = page.params;
+  let { treeData } = session;
 
-  const { query } = page;
-  const activePointId = parseInt(query.tree, 10);
   /* Fetch data here with this.fetch (special fetch)
-   const res = await this.fetch(`blog/${itemId}.json`);
-   */
-
-  const resFromAPI = await this.fetch(treesGeojsonEndpoint);
-  const treeData = await resFromAPI.json();
-  const activePoint = treeData.features.find((feature) => {
-    const featId = feature.properties.objectid;
-    return featId === activePointId;
-  });
-  /* Fetch data here with this.fetch (special fetch)
-    const res = await this.fetch(`blog/${itemId}.json`);
-    */
+  const res = await this.fetch(`blog/${itemId}.json`);
+  */
+  if (!treeData) {
+    const resFromAPI = await this.fetch(treesGeojsonEndpoint);
+    treeData = await resFromAPI.json();
+    session.treeData = treeData;
+  }
   return { treeData, id };
 }
 </script>
@@ -34,7 +28,7 @@ export async function preload(page) {
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
 
-  import paint from '../_mapstyle';
+  import paint from './_mapstyle';
 
   export let treeData; // is merge with matching data returned by preload
   export let activePoint;
