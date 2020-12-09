@@ -17,9 +17,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        map: [
-          ['@', 'src'],
-        ],
+        map: [['@', 'src']],
         extensions: ['.ts', '.js', '.jsx', '.json'],
       },
     },
@@ -35,6 +33,8 @@ module.exports = {
         'import/first': 0,
         'import/no-duplicates': 0,
         'import/order': 0,
+        'import/no-unresolved': 0,
+        'import/prefer-default-export': 0,
         'no-labels': 0,
         'no-restricted-syntax': 0,
       },

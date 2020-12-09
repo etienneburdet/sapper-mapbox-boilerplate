@@ -1,8 +1,8 @@
 <script>
-  export let activeItem
+  export let activeItem;
 
-  let id = undefined;
-  $: id = activeItem && activeItem.fields.objectid
+  let id;
+  $: id = activeItem && activeItem.fields.objectid;
 </script>
 
 <div>

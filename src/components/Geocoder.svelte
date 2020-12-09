@@ -100,7 +100,7 @@
       position: absolute;
       right: 50px;
       top: 10px;
-
+      
       ul#autoComplete_list {
           background: white;
           margin-top: 5px;
