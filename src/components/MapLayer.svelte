@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount, createEventDispatcher } from "svelte";
+    import { getContext, onMount, createEventDispatcher } from 'svelte';
 
     const { getMap } = getContext('map');
     const map = getMap();
@@ -15,11 +15,11 @@
     const dispatch = createEventDispatcher();
     const dispatchLayerEvent = (event) => {
       dispatch('mapClick', {
-        map: map,
+        map,
         layerId: id,
         mapevent: event,
       });
-    }
+    };
 
     onMount(() => {
       map.addLayer({
@@ -35,4 +35,14 @@
 
     map.on('click', id, dispatchLayerEvent);
 
+    map.on('mousemove', (e) => {
+      const items = map.queryRenderedFeatures(e.point, {
+        layers: [source],
+      });
+      if (items.length > 0) {
+        map.getCanvas().style.cursor = 'pointer';
+      } else {
+        map.getCanvas().style.cursor = 'default';
+      }
+    });
 </script>

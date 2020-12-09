@@ -1,6 +1,5 @@
 <script>
   export let item;
-  // let { libellefrancais, arrondissement } = point.properties;
 </script>
 
 <div>

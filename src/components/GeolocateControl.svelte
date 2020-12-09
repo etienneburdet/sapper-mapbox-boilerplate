@@ -4,36 +4,39 @@
 
 <script>
     import { getContext } from 'svelte';
-    import { createEventDispatcher } from 'svelte';
-    import mapbox from 'mapbox-gl';
 
-    const { getMap } = getContext('map');
+    const { getMap, getSearchMarker, getGeolocateControls } = getContext('map');
     const map = getMap();
-
-    const dispatch = createEventDispatcher();
+    const marker = getSearchMarker();
+    const geolocate = getGeolocateControls();
 
     export let position = 'top-right';
-    export let options = {
-        positionOptions: {
-            enableHighAccuracy: true
-        },
-        trackUserLocation: true
-    };
+    let status = false;
 
-    const geolocate = new mapbox.GeolocateControl(options);
-
-    geolocate.on('geolocate', async (e) => {
-        dispatch('geolocate', {
-            event: e
-        });
+    geolocate.on('geolocate', (e) => {
+      status = true;
+      const coords = [e.coords.longitude, e.coords.latitude];
+      map.flyTo({ center: coords });
+      marker.setLngLat(coords).addTo(map);
     });
-    geolocate.on('trackuserlocationend', function() {
-        dispatch('trackuserlocationend');
+
+    // geolocate.on('trackuserlocationstart', () => {
+    //   status = true;
+    //   dispatch('trackuserlocationstart');
+    // });
+    //
+    // geolocate.on('trackuserlocationend', function () {
+    //     status = false;
+    //     dispatch('trackuserlocationend');
+    // });
+
+    geolocate.on('error', () => {
+      status = false;
     });
 
     if (position instanceof HTMLElement) {
-        position.appendChild(geolocate.onAdd(map));
-    } else if (['top-left','top-right','bottom-left','bottom-right'].includes(position)) {
-        map.addControl(geolocate, position);
+      position.appendChild(geolocate.onAdd(map));
+    } else if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(position)) {
+      map.addControl(geolocate, position);
     }
 </script>

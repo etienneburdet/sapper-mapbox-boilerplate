@@ -5,22 +5,37 @@
 
   mapbox.accessToken = config.mapbox.apikey;
   let map;
+  let searchMarker;
+  let geolocateControls;
   let container;
 
-  setContext(config.mapbox.key {
-    mapbox,
-    getMap: () => map,
-    getAccessToken: () => mapbox.accessToken,
+  setContext('map', {
+      mapbox,
+      getSearchMarker: () => searchMarker,
+      getGeolocateControls: () => geolocateControls,
+      getMap: () => map,
+      getAccessToken: () => mapbox.accessToken,
   });
 
+  export let geolocOptions = {
+      positionOptions: {
+          enableHighAccuracy: true
+      },
+      trackUserLocation: false,
+      showUserLocation: false,
+  };
+
   onMount(() => {
-    map = new mapbox.Map({
-      container,
-      style: config.mapbox.style,
-      center: config.mapbox.init.center,
-      zoom: config.mapbox.init.zoom,
-    });
-  });
+      map = new mapbox.Map({
+          container,
+          style: config.mapbox.style,
+          center: config.mapbox.init.center,
+          zoom: config.mapbox.init.zoom
+      })
+
+      searchMarker = new mapbox.Marker();
+      geolocateControls = new mapbox.GeolocateControl(geolocOptions);
+  })
 </script>
 
 <svelte:head>
