@@ -1,9 +1,12 @@
 <script>
+  export let activeItem
 
+  let id = undefined;
+  $: id = activeItem && activeItem.fields.objectid
 </script>
 
 <div>
-  <slot></slot>
+  <slot {id}></slot>
 </div>
 
 <style>

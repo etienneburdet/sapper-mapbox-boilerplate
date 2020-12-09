@@ -38,13 +38,13 @@
 
 <div class="columns">
   <div class="column is-one-third">
-    <List>
+    <List activeItem={treeDetails} let:id={activeId}>
       {#each treesData.features as tree, index (tree.properties.objectid)}
         <ListItem
           id={tree.properties.objectid}
           title={tree.properties.libellefrancais}
           description={tree.properties.arrondissement}
-          active={false}
+          active={tree.properties.objectid === activeId}
         />
       {/each}
     </List>
