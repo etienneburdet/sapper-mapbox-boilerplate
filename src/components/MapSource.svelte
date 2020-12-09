@@ -26,6 +26,9 @@
   };
 
   const destroySource = () => {
+    const layers = map.getStyle().layers
+    layers.forEach((layer) => map.removeLayer(layer.id));
+
     if (map.getSource(id)) {
       map.removeSource(id);
     }

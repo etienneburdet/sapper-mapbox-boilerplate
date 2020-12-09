@@ -7,7 +7,7 @@
   let map;
   let container;
 
-  setContext('map', {
+  setContext(config.mapbox.key {
     mapbox,
     getMap: () => map,
     getAccessToken: () => mapbox.accessToken,
