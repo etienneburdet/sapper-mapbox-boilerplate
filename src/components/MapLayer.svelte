@@ -37,7 +37,7 @@
 
     map.on('mousemove', (e) => {
       const items = map.queryRenderedFeatures(e.point, {
-        layers: [source],
+        layers: [id],
       });
       if (items.length > 0) {
         map.getCanvas().style.cursor = 'pointer';
