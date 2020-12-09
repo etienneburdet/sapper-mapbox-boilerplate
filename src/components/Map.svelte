@@ -4,17 +4,26 @@
   import config from '@/app.config'
 
   mapbox.accessToken = config.mapbox.apikey;
-  let map
-  let container
+  let map;
+  let searchMarker;
+  let geolocateControls;
+  let container;
 
   setContext('map', {
       mapbox,
+      getSearchMarker: () => searchMarker,
+      getGeolocateControls: () => geolocateControls,
       getMap: () => map,
-      getAccessToken: () => mapbox.accessToken
+      getAccessToken: () => mapbox.accessToken,
   });
 
-  export const getMap = () => { return map };
-  export const flyTo = (flyToOptions) => map.flyTo(flyToOptions);
+  export let geolocOptions = {
+      positionOptions: {
+          enableHighAccuracy: true
+      },
+      trackUserLocation: false,
+      showUserLocation: false,
+  };
 
   onMount(() => {
       map = new mapbox.Map({
@@ -23,6 +32,9 @@
           center: config.mapbox.init.center,
           zoom: config.mapbox.init.zoom
       })
+
+      searchMarker = new mapbox.Marker();
+      geolocateControls = new mapbox.GeolocateControl(geolocOptions);
   })
 </script>
 

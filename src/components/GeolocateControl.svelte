@@ -3,38 +3,30 @@
 </svelte:head>
 
 <script>
-    import {getContext} from 'svelte';
-    import {createEventDispatcher} from 'svelte';
+    import { getContext } from 'svelte';
     import mapbox from 'mapbox-gl';
 
-    const {getMap} = getContext('map');
+    const { getMap, getSearchMarker, getGeolocateControls } = getContext('map');
     const map = getMap();
-
-    const dispatch = createEventDispatcher();
-
-    export const turnOff = () => {
-        if (status == true) geolocate.trigger();
-    };
+    const marker = getSearchMarker();
+    const geolocate = getGeolocateControls();
 
     export let position = 'top-right';
     export let options = {
         positionOptions: {
             enableHighAccuracy: true
         },
-        trackUserLocation: true,
-        showUserLocation: true
+        trackUserLocation: false,
+        showUserLocation: false,
     };
 
     let status = false;
 
-    const geolocate = new mapbox.GeolocateControl(options);
-
-    geolocate.on('geolocate', async (e) => {
+    geolocate.on('geolocate', (e) => {
         status = true;
-        dispatch('geolocate', {
-            coords: [e.coords.longitude, e.coords.latitude],
-            geolocateEvent: e
-        });
+        const coords = [e.coords.longitude, e.coords.latitude];
+        map.flyTo({ center: coords });
+        marker.setLngLat(coords).addTo(map);
     });
 
     geolocate.on('trackuserlocationstart', function () {

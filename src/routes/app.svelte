@@ -113,13 +113,8 @@
 
 <Map bind:this={mapComponent}>
     <NavigationControl position="top-left"></NavigationControl>
-
-    <Geocoder placeholder="Coucou"
-              bind:this={geocoder}
-              on:geocode={recenterMapFromEvent}></Geocoder>
-    <GeolocateControl bind:this={geolocate}
-                      on:geolocate={recenterMapFromEvent}></GeolocateControl>
-    <Marker lngLat={markerPosition}></Marker>
+    <Geocoder placeholder="Coucou" />
+    <GeolocateControl />
     <!-- CSR -->
     {#if asyncGeojson}
         {#await asyncGeojson}
