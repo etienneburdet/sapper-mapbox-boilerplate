@@ -1,6 +1,6 @@
 <script>
-  import {onMount, setContext} from 'svelte'
-  import mapbox from 'mapbox-gl'
+  import { onMount, setContext } from 'svelte';
+  import mapbox from 'mapbox-gl';
   import config from '@/app.config'
 
   mapbox.accessToken = config.mapbox.apikey;

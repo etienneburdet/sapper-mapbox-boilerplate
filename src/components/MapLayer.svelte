@@ -2,18 +2,27 @@
     import {getContext, onMount} from "svelte";
     import mapbox from 'mapbox-gl'
 
-    const {getMap} = getContext('map');
+    const { getMap } = getContext('map');
     const map = getMap();
 
-    const {getMapSourceId} = getContext('source');
+    const { getMapSourceId } = getContext('source');
     const source = getMapSourceId();
 
     export let type;
     export let paint = {};
     export let layout = {};
+    export let id = 'layerId';
+
+    const dispatch = createEventDispatcher();
+    const dispatchLayerEvent = (event) => {
+      dispatch('mapClick', {
+        map: map,
+        layerId: id,
+        mapevent: event,
+      });
+    }
 
     onMount(() => {
-        console.log("MapLayer loading");
         map.addLayer({
             "id": source,
             "type": type,
@@ -33,22 +42,22 @@
             }
         });
 
-        map.on('click', (e) => {
-            var items = map.queryRenderedFeatures(e.point, {layers: [source]});
-            var el = document.createElement('div');
-            el.classList.add('p-5');
-            if (items.length > 0) {
-                items.forEach((item) => {
-                    var label = document.createElement('p');
-                    label.innerText = item.properties.libellefrancais;
-                    el.appendChild(label);
-                });
-                new mapbox.Popup()
-                        .setLngLat(items[0].geometry.coordinates)
-                        .setDOMContent(el)
-                        .addTo(map);
-            }
-        });
+        // map.on('click', (e) => {
+        //     var items = map.queryRenderedFeatures(e.point, {layers: [source]});
+        //     var el = document.createElement('div');
+        //     el.classList.add('p-5');
+        //     if (items.length > 0) {
+        //         items.forEach((item) => {
+        //             var label = document.createElement('p');
+        //             label.innerText = item.properties.libellefrancais;
+        //             el.appendChild(label);
+        //         });
+        //         new mapbox.Popup()
+        //                 .setLngLat(items[0].geometry.coordinates)
+        //                 .setDOMContent(el)
+        //                 .addTo(map);
+        //     }
+        // });
     });
 </script>
 

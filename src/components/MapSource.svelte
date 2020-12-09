@@ -1,53 +1,47 @@
 <script>
-    import {getContext, onMount, setContext} from "svelte";
+  import { getContext, onMount, setContext } from 'svelte';
 
-    export let data;
-    export let id;
+  export let data;
+  export let id;
 
-    let go;
+  let isSourceLoaded;
 
-    const {getMap} = getContext('map');
-    const map = getMap();
+  const { getMap } = getContext('map');
+  const map = getMap();
 
-    setContext('source', {
-        getMapSourceId: () => id
-    });
+  setContext('source', {
+    getMapSourceId: () => id,
+  });
 
-    onMount(() => {
-        console.log("MapSource loading");
-        map.isStyleLoaded()
-                ? setSource()
-                : map.on('load', setSource);
-
-        return destroySource
-    });
-
-    const setSource = () => {
-        if (map.getSource(id)) {
-            console.log("Data set to MapSource");
-            map.getSource(id).setData(data);
-        } else {
-            map.addSource(id, {
-                'type': 'geojson',
-                'data': data
-            });
-            go = true;
-            console.log("source added to map", go, JSON.stringify(data).substring(0, 100));
-        }
-    };
-
-    const destroySource = () => {
-        go = false;
-        if (map.getLayer(id)) {
-            map.removeLayer(id);
-        }
-        if (map.getSource(id)) {
-            map.removeSource(id);
-        }
+  const setSource = () => {
+    if (map.getSource(id)) {
+      map.getSource(id).setData(data);
+    } else {
+      map.addSource(id, {
+        type: 'geojson',
+        data,
+      });
+      isSourceLoaded = true;
     }
+  };
 
+  const destroySource = () => {
+    const layers = map.getStyle().layers
+    layers.forEach((layer) => map.removeLayer(layer.id));
+
+    if (map.getSource(id)) {
+      map.removeSource(id);
+    }
+    isSourceLoaded = false;
+  };
+
+  onMount(() => {
+    map.isStyleLoaded() ? setSource() : map.on('load', setSource);
+
+    return destroySource;
+  });
 </script>
 
-{#if go}
+{#if isSourceLoaded}
     <slot></slot>
 {/if}

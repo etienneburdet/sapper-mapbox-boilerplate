@@ -1,9 +1,11 @@
 <script>
-  export let id
+  export let item;
+  // let { libellefrancais, arrondissement } = point.properties;
 </script>
 
-<div class="has-background-primary">
-  {id}
+<div>
+  <p>{JSON.stringify(item)}</p>
+  <a rel="prefetch" href="/trees/0">close</a>
 </div>
 
 <style>
