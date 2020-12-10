@@ -1,27 +1,34 @@
 <script>
-import { goto } from '@sapper/app';
+    import { goto } from '@sapper/app';
     import { onMount } from 'svelte';
     import config from '@/app.config';
 
     /*export let marker = true;*/
-    export let placeholder = "Search a place";
+    export let id = 'searchbox';
+    export let placeholder = 'Search a place';
     export let center = {
-      lat: 48.866667,
-      lng: 2.333333
+        lat: 48.866667,
+        lng: 2.333333
     };
     let query;
 
+    const focusInput = () => {
+        if (query) {
+          document.execCommand('selectAll');
+        }
+    }
+
     onMount(async () => {
-        const autoCompleteModule = await import("@tarekraafat/autocomplete.js");
+        const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
         const autoComplete = autoCompleteModule.default;
         const ac = new autoComplete({
             data: {
                 src: async () => {
-                    const {lat, lng} = center;
+                    const { lat, lng } = center;
                     const token = config.jawg.acccess_token;
                     const searchquery = query;
                     const source = await fetch(
-                        `https://api.jawg.io/places/v1/autocomplete?size=10&text=${searchquery}&focus.point.lat=${lat}&focus.point.lon=${lng}&boundary.country=FR&access-token=${token}`);
+                            `https://api.jawg.io/places/v1/autocomplete?size=10&text=${searchquery}&focus.point.lat=${lat}&focus.point.lon=${lng}&boundary.country=FR&access-token=${token}`);
                     const data = await source.json();
                     const ret = data.features.reduce((acc, val) => {
                         val.properties['geometry'] = val.geometry;
@@ -29,14 +36,14 @@ import { goto } from '@sapper/app';
                     }, []);
                     return ret;
                 },
-                key: ["label"],
+                key: ['label'],
                 cache: false
             },
             placeHolder: placeholder,
-            selector: "#searchbox",
+            selector: '#' + id,
             threshold: 2,
             debounce: 200,
-            trigger: ['input','focus'],
+            trigger: ['input', 'focus'],
             searchEngine: (query, record) => {
                 return record;
             },
@@ -48,8 +55,8 @@ import { goto } from '@sapper/app';
             resultsList: {
                 render: true,
                 destination: '.jawg-geocoder',
-                position: "afterend",
-                element: "ul"
+                position: 'afterend',
+                element: 'ul'
             },
             maxResults: 10,
             highlight: true,
@@ -57,15 +64,16 @@ import { goto } from '@sapper/app';
                 content: (data, source) => {
                     source.innerHTML = data.label;
                 },
-                element: "li"
+                element: 'li'
             },
             noResults: (dataFeedback, generateList) => {
                 generateList(ac, dataFeedback, dataFeedback.results);
-                const result = document.createElement("li");
-                result.setAttribute("class", "no_result");
-                result.setAttribute("tabindex", "1");
+                const result = document.createElement('li');
+                result.setAttribute('class', 'no_result');
+                result.setAttribute('tabindex', '1');
                 result.innerHTML = `<span>Found No Results for "${dataFeedback.query}"</span>`;
-                document.querySelector(`#${ac.resultsList.idName}`).appendChild(result);
+                document.querySelector(`#${ac.resultsList.idName}`)
+                        .appendChild(result);
             },
             onSelection: feedback => {
                 const coords = feedback.selection.value.geometry.coordinates;
@@ -81,26 +89,30 @@ import { goto } from '@sapper/app';
 
 
 <div class="jawg-geocoder">
-    <input id="searchbox" class="input" type="text" autocomplete="off"
-      bind:value={query}/>
+    <input id={id} class="input" type="text" autocomplete="off"
+           on:focus={focusInput}
+           bind:value={query}/>
 </div>
 
 
 <style lang="scss" global>
-  .jawg-geocoder {
-      ul {
-          background: white;
-          margin-top: 5px;
-          border: 1px solid #dbdbdb;
-          border-radius: 6px;
-          padding: 4px 0;
+    .jawg-geocoder {
+        ul {
+            background: white;
+            margin-top: 5px;
+            border: 1px solid #dbdbdb;
+            border-radius: 6px;
+            padding: 4px 0;
+            position: absolute;
+            z-index: 1;
 
-          li {
-              padding: 4px 8px;
-              &.autoComplete_selected {
-                  background-color: #f4f4ff;
-              }
-          }
-      }
-  }
+            li {
+                padding: 4px 8px;
+
+                &.autoComplete_selected {
+                    background-color: #f4f4ff;
+                }
+            }
+        }
+    }
 </style>

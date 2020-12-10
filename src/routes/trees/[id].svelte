@@ -1,106 +1,383 @@
 <script context="module">
-  import { treesGeojsonEndpoint, getTreeRecordEndpoint } from './_helpers';
+    import { treesGeojsonEndpoint, getTreeRecordEndpoint } from './_helpers';
 
-  export async function preload(page, session) {
-    const { id } = page.params;
-    const { query } = page;
+    export async function preload(page, session) {
+        const { id } = page.params;
+        const { query } = page;
 
-    let treeDetails;
-    if (id !== '0') {
-      const resFromAPI = await this.fetch(getTreeRecordEndpoint(`objectid=${id}`));
-      const jsonFromAPI = await resFromAPI.json();
-      treeDetails = jsonFromAPI.records[0].record;
+        let treeDetails;
+        if (id !== '0') {
+            const resFromAPI = await this.fetch(getTreeRecordEndpoint(`objectid=${id}`));
+            const jsonFromAPI = await resFromAPI.json();
+            treeDetails = jsonFromAPI.records[0].record;
+        }
+
+        let { treesData } = session;
+        if (!treesData) {
+            const resFromAPI = await this.fetch(treesGeojsonEndpoint);
+            treesData = await resFromAPI.json();
+            session.treesData = treesData;
+        }
+        return {
+            treesData,
+            treeDetails,
+            query
+        };
     }
-
-    let { treesData } = session;
-    if (!treesData) {
-      const resFromAPI = await this.fetch(treesGeojsonEndpoint);
-      treesData = await resFromAPI.json();
-      session.treesData = treesData;
-    }
-    return { treesData, treeDetails, query };
-  }
 </script>
 
 <script>
-  import { goto } from '@sapper/app';
-  import Geocoder from '@/components/Geocoder.svelte';
-  import Map from '@/components/Map.svelte';
-  import MapSource from '@/components/MapSource.svelte';
-  import MapLayer from '@/components/MapLayer.svelte';
-  import Marker from '@/components/Marker.svelte';
-  import Popup from '@/components/Popup.svelte';
-  import List from '@/components/List.svelte';
-  import ListItem from '@/components/ListItem.svelte';
+    import { goto } from '@sapper/app';
+    import Geocoder from '@/components/Geocoder.svelte';
+    import Map from '@/components/Map.svelte';
+    import MapSource from '@/components/MapSource.svelte';
+    import MapLayer from '@/components/MapLayer.svelte';
+    import Marker from '@/components/Marker.svelte';
+    import Popup from '@/components/Popup.svelte';
+    import List from '@/components/List.svelte';
+    import ListItem from '@/components/ListItem.svelte';
+    import Geolocator from '@/components/Geolocator.svelte';
 
-  import paint from './_mapstyle';
-  import { q2center, setActivePoint } from './_helpers';
+    import { paint } from './_mapstyle';
+    import { q2center, setActivePoint } from './_helpers';
+    import { onMount } from 'svelte';
+    import { media } from '../../plugins/mediaQueries';
+    import AdvancedFilters from '../../components/AdvancedFilters.svelte';
 
-  export let treesData;
-  export let treeDetails;
-  export let query;
+    export let treesData;
+    export let treeDetails;
+    export let query;
+
+    let toggleList = false;
+    let showAdvFilters = false;
+    let showMobileAdvFilters = false;
 </script>
 
-<div class="columns">
-  <div class="column is-one-third">
-    <List activeItem={treeDetails} let:id={activeId}>
-      {#each treesData.features as tree, index (tree.properties.objectid)}
-        <ListItem
-          id={tree.properties.objectid}
-          title={tree.properties.libellefrancais}
-          description={tree.properties.arrondissement}
-          active={tree.properties.objectid === activeId}
-        />
-      {/each}
-    </List>
-  </div>
-  <div class="column is-two-thirds">
-    <div id="infobox" class="box">
-      {#if treeDetails}
-        <Popup item={treeDetails} />
-      {/if}
+<div id="page-ctn">
+    <div id="list-ctn" class:mobile-open={toggleList}>
+        <!-- DESKTOP LIST HEADER -->
+        <div id="list-ctn-header" class="custom-styled-select">
+            <Geocoder id="desktopsearchbox"/>
+            <Geolocator></Geolocator>
+
+            <div id="list-ctn-header-btn" class:show-adv-filters={showAdvFilters}
+                 on:click={() => showAdvFilters = !showAdvFilters}>
+                Affiner la recherche <i class="fas fas-arrow-up"></i>
+            </div>
+
+            <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
+                <AdvancedFilters></AdvancedFilters>
+            </div>
+        </div>
+        <!-- DESKTOP LIST -->
+        <div id="list-ctn-content">
+            <List activeItem={treeDetails} let:id={activeId}>
+                {#each treesData.features as tree, index (tree.properties.objectid)}
+                    <ListItem
+                            id={tree.properties.objectid}
+                            fields={tree.properties}
+                            active={tree.properties.objectid === activeId}
+                    />
+                {/each}
+            </List>
+        </div>
     </div>
-    <Map
-      navigationPosition="top-left"
-      geolocatePosition="top-right"
-      center={q2center(query.coords)}
-    >
-      <div id="geocoder" slot="search">
-        <Geocoder />
-      </div>
-      <MapSource id="trees" data={treesData}>
-        <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
-      </MapSource>
-      {#if query.coords}
-        <Marker center={q2center(query.coords)} />
-      {/if}
-    </Map>
-  </div>
+
+    <div id="map-ctn">
+        <!-- MOBILE HEADER -->
+        <div id="map-header">
+            <div class="map-header-btn" on:click={() => toggleList = !toggleList}>
+                {#if !toggleList}<span>Liste</span>{/if}
+                {#if toggleList}<span>Carte</span>{/if}
+            </div>
+            <div id="map-header-content">
+                <Geocoder id="mobilesearchbox"/>
+            </div>
+            <Geolocator></Geolocator>
+        </div>
+
+        <!-- MAP FOOTER / FILTERS -->
+        <div id="map-footer">
+            <div id="map-footer-filters-btn" class:show-adv-filters={showMobileAdvFilters}
+                 on:click={() => showMobileAdvFilters = true}>
+                Affiner les résultats
+            </div>
+            <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
+                <div class="adv-filters-ctn-top">
+                    <p>Affiner les résultats</p>
+                    <i class="header-menu-close fas fa-times" on:click={() => showMobileAdvFilters = false}></i>
+                </div>
+                <AdvancedFilters></AdvancedFilters>
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <Map navigationPosition="bottom-right"
+             center={q2center(query.coords)}>
+            <MapSource id="trees" data={treesData}>
+                <MapLayer id="trees-circles" type="circle" paint={paint} on:mapClick={setActivePoint}/>
+            </MapSource>
+            {#if query.coords}
+                <Marker center={q2center(query.coords)}/>
+            {/if}
+        </Map>
+
+
+    </div>
+
+    <!-- POP UP -->
+    <div id="popup-ctn" class:open={treeDetails}>
+        {#if treeDetails}
+            <Popup item={treeDetails}/>
+        {/if}
+    </div>
 </div>
 
-<style>
-  #geocoder {
-    position: absolute;
-    right: 50px;
-    top: 10px;
-  }
+<style lang="scss">
+    #page-ctn {
+        display: flex;
+        height: 100%;
+    }
 
-  #infobox {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-  }
+    #list-ctn {
+        display: flex;
+        flex-direction: column;
+        width: 374px;
+        z-index: 2;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
 
-  .columns {
-    height: 100%;
-    width: 100%;
-    margin-top: 0;
-    overflow: hidden;
-  }
+        #list-ctn-header {
+            background-color: black;
+            color: white;
+            position: relative;
+            padding: 20px;
 
-  .column {
-    position: relative;
-    height: 100%;
-    width: 100%;
-  }
+            :global(.jawg-geocoder) {
+                margin-bottom: 10px;
+            }
+
+            :global(.geolocator) {
+                position: absolute;
+                right: 25px;
+                top: 24px;
+                padding: 6px;
+                height: 28px;
+                width: 28px;
+
+                :global(img) {
+                    height: 16px;
+                    width: 16px;
+                }
+            }
+
+            #list-ctn-header-btn {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                &:after {
+                    border: 2px solid white;
+                    border-radius: 1.5px;
+                    border-right: 0;
+                    border-top: 0;
+                    content: " ";
+                    display: block;
+                    height: 0.625em;
+                    margin-left: 5px;
+                    transform: rotate(135deg);
+                    transform-origin: center;
+                    width: 0.625em;
+                }
+
+                &.show-adv-filters:after {
+                    transform: rotate(-45deg);
+                }
+            }
+
+            .adv-filters-ctn {
+                display: none;
+                margin-top: 10px;
+
+                &.show-adv-filters {
+                    display: block;
+                }
+            }
+        }
+
+        #list-ctn-content {
+            flex: 1;
+            overflow: scroll;
+            background: white;
+        }
+
+        :global(&.open) {
+            left: 0;
+        }
+    }
+
+    #map-ctn {
+        width: calc(100% - 374px);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        #map-header {
+            display: none;
+
+            position: absolute;
+            z-index: 1;
+            padding: 10px;
+            height: 57px;
+            width: 100%;
+
+            .map-header-btn {
+                background-color: black;
+                padding: 7px 10px;
+                border-radius: 6px;
+                color: white;
+                cursor: pointer;
+            }
+
+            :global(.geolocator) {
+                padding: 8px;
+
+                :global(img) {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            #map-header-content {
+                flex: 1;
+                margin: 0 5px;
+
+                :global(.jawg-geocoder) {
+                    height: 100%;
+                }
+
+                :global(input) {
+                    height: 100%;
+                }
+            }
+        }
+
+        #map-footer {
+            display: none;
+
+            position: absolute;
+            bottom: 0px;
+            z-index: 1;
+            width: 100%;
+            justify-content: center;
+            align-content: center;
+
+            #map-footer-filters-btn {
+                margin-bottom: 10px;
+                background-color: black;
+                color: white;
+                border-radius: 10000000px;
+                padding: 7px 20px;
+                cursor: pointer;
+
+                &.show-adv-filters {
+                    display: none;
+                }
+            }
+
+            .adv-filters-ctn {
+                display: none;
+                width: 100%;
+                padding: 22px 20px;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                background-color: black;
+                color: white;
+                box-shadow: 0px -6px 13px rgba(0, 0, 0, 0.15);
+
+                .adv-filters-ctn-top {
+                    display: flex;
+                    justify-content: space-between;
+
+                    p {
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        margin-bottom: 20px;
+                    }
+
+                    .header-menu-close {
+                        font-size: 1.2em;
+                        cursor: pointer;
+                    }
+                }
+
+                &.show-adv-filters {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    #popup-ctn {
+        position: absolute;
+        left: -395px;
+        width: 395px;
+        height: 100%;
+        overflow-y: auto;
+        background: white;
+        border-left: 1px solid #dddddd;
+        transition: 0.2s ease left;
+        z-index: 1;
+        padding: 20px;
+
+        &.open {
+            left: 374px;
+        }
+    }
+
+    @media screen and (max-width: 769px) {
+        #list-ctn {
+            position: absolute;
+            left: -100%;
+            bottom: 0;
+            width: 100%;
+            z-index: 1;
+            background: white;
+            height: calc(100% - 55px);
+            transition: 0.2s ease left;
+
+            &.mobile-open {
+                left: 0;
+
+                #list-ctn-header {
+                    display: none;
+                }
+            }
+        }
+
+        #map-ctn {
+            width: 100%;
+
+            #map-header {
+                display: flex;
+            }
+
+            #map-footer {
+                display: flex;
+            }
+        }
+
+        #popup-ctn {
+            left: 0;
+            bottom: -70%;
+            height: 70%;
+            width: 100%;
+            transition: 0.2s ease bottom;
+
+            &.open {
+                left: 0;
+                bottom: 0;
+            }
+        }
+    }
+
 </style>

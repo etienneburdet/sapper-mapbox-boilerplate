@@ -61,7 +61,6 @@
         {#if geolocatePosition}
           <GeolocateControl position={geolocatePosition} />
         {/if}
-        <slot name="search"></slot>
         <slot></slot>
     {/if}
 </div>

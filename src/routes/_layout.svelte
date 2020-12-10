@@ -1,49 +1,55 @@
 <script>
-	import { stores } from '@sapper/app';
-	import Nav from '@/components/Nav.svelte';
-	import Spinner from '@/components/Spinner.svelte';
+    import {stores} from '@sapper/app';
+    import Nav from '@/components/Nav.svelte';
+    import Spinner from '@/components/Spinner.svelte';
 
-	const { preloading } = stores;
+    const {preloading} = stores;
 
-	export let segment;
+    export let segment;
 </script>
 
 <svelte:head>
-	<meta name="msapplication-TileColor" content="#ffffff" />
-	<meta name="theme-color" content="#ffffff" />
+    <meta name="msapplication-TileColor" content="#ffffff"/>
+    <meta name="theme-color" content="#ffffff"/>
 
-	<meta name="description" content="A base sapper app for list over maps with calls to ods API">
-	<meta property="og:title" content="ODS Sapper Map Template">
-	<meta property="og:description" content="A base sapper app for list over maps with calls to ods API">
-	<meta property="og:image" content="TODO">
-	<meta property="og:url" content="TOD">
-	<meta name="twitter:card" content="TODO">
+    <meta name="description" content="A base sapper app for list over maps with calls to ods API">
+    <meta property="og:title" content="ODS Sapper Map Template">
+    <meta property="og:description" content="A base sapper app for list over maps with calls to ods API">
+    <meta property="og:image" content="TODO">
+    <meta property="og:url" content="TOD">
+    <meta name="twitter:card" content="TODO">
 
-	<meta property="og:site_name" content="Opendatasoft">
-	<meta name="twitter:image:alt" content="Alt text for image">
-	<meta property="fb:app_id" content="your_app_id" />
-	<meta name="twitter:site" content="@website-username">
+    <meta property="og:site_name" content="Opendatasoft">
+    <meta name="twitter:image:alt" content="Alt text for image">
+    <meta property="fb:app_id" content="your_app_id"/>
+    <meta name="twitter:site" content="@website-username">
 
-	<style src="../styles/global.scss"></style>
+    <style src="../styles/global.scss"></style>
 </svelte:head>
 
 <Nav {segment}/>
 
 <main>
-		{#if $preloading}
-		{console.log('spinner')}
-			<div class="button is-loading"></div>
-		{:else}
- 			<slot></slot>
-		{/if}
+    {#if $preloading}
+        {console.log('spinner')}
+        <div class="button is-loading"></div>
+    {:else}
+        <slot></slot>
+    {/if}
 </main>
 
 <style lang="scss">
-main {
-	position: relative;
-	background-color: white;
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-}
+    main {
+        position: relative;
+        background-color: white;
+        box-sizing: border-box;
+        width: 100%;
+        height: calc(100% - 70px);
+    }
+
+    @media screen and (max-width: 769px) {
+        main {
+            height: calc(100% - 50px);
+        }
+    }
 </style>
