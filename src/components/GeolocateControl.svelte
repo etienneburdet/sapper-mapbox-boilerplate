@@ -1,16 +1,14 @@
-<svelte:head>
-    <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
-</svelte:head>
 
 <script>
     import { getContext } from 'svelte';
 
-    const { getMap, getSearchMarker, getGeolocateControls } = getContext('map');
+    export let position;
+
+    const { getMap, getSearchMarker, getGeolocateControl } = getContext('map');
     const map = getMap();
     const marker = getSearchMarker();
-    const geolocate = getGeolocateControls();
+    const geolocate = getGeolocateControl();
 
-    export let position = 'top-right';
     let status = false;
 
     geolocate.on('geolocate', (e) => {
@@ -40,3 +38,7 @@
       map.addControl(geolocate, position);
     }
 </script>
+
+<svelte:head>
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+</svelte:head>

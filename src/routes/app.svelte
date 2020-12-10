@@ -111,10 +111,7 @@
     <title>App</title>
 </svelte:head>
 
-<Map bind:this={mapComponent}>
-    <NavigationControl position="top-left"></NavigationControl>
-    <Geocoder placeholder="Coucou" />
-    <GeolocateControl />
+<Map navigationPosition="top-left" geolocatePosition="top-right">
     <!-- CSR -->
     {#if asyncGeojson}
         {#await asyncGeojson}
@@ -133,5 +130,4 @@
             <MapLayer type={type} paint={paint}></MapLayer>
         </MapSource>
     {/if}
-
 </Map>

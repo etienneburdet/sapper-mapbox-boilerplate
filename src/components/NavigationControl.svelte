@@ -1,8 +1,8 @@
 <script>
-    import {getContext} from 'svelte';
+    import { getContext } from 'svelte';
     import mapbox from 'mapbox-gl';
 
-    export let position = 'top-right';
+    export let position;
 
     const { getMap } = getContext('map');
     const map = getMap();

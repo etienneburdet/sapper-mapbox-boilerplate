@@ -1,41 +1,49 @@
 <script>
   import { onMount, setContext } from 'svelte';
   import mapbox from 'mapbox-gl';
-  import config from '@/app.config'
+  import config from '@/app.config';
 
-  mapbox.accessToken = config.mapbox.apikey;
-  let map;
-  let searchMarker;
-  let geolocateControls;
-  let container;
+  import NavigationControl from './NavigationControl.svelte';
+  import GeolocateControl from './GeolocateControl.svelte';
 
-  setContext('map', {
-      mapbox,
-      getSearchMarker: () => searchMarker,
-      getGeolocateControls: () => geolocateControls,
-      getMap: () => map,
-      getAccessToken: () => mapbox.accessToken,
-  });
-
-  export let geolocOptions = {
-      positionOptions: {
-          enableHighAccuracy: true
-      },
-      trackUserLocation: false,
-      showUserLocation: false,
+  export let navigationPosition;
+  export let geolocatePosition;
+  export let geolocateOptions = {
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    trackUserLocation: false,
+    showUserLocation: false,
   };
 
-  onMount(() => {
-      map = new mapbox.Map({
-          container,
-          style: config.mapbox.style,
-          center: config.mapbox.init.center,
-          zoom: config.mapbox.init.zoom
-      })
+  let map;
+  let searchMarker;
+  let container;
+  let geolocateControl;
 
-      searchMarker = new mapbox.Marker();
-      geolocateControls = new mapbox.GeolocateControl(geolocOptions);
-  })
+  mapbox.accessToken = config.mapbox.apikey;
+  setContext('map', {
+    mapbox,
+    getSearchMarker: () => searchMarker,
+    getGeolocateControl: () => geolocateControl,
+    getMap: () => map,
+    getAccessToken: () => mapbox.accessToken,
+  });
+
+  onMount(() => {
+    map = new mapbox.Map({
+      container,
+      style: config.mapbox.style,
+      center: config.mapbox.init.center,
+      zoom: config.mapbox.init.zoom,
+    });
+
+    searchMarker = new mapbox.Marker();
+
+    if (geolocatePosition) {
+      geolocateControl = new mapbox.GeolocateControl(geolocateOptions);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -44,6 +52,13 @@
 
 <div bind:this={container}>
     {#if map}
+        {#if navigationPosition}
+          <NavigationControl postion={navigationPosition} />
+        {/if}
+        {#if geolocatePosition}
+          <GeolocateControl position={geolocatePosition} />
+        {/if}
+        <slot name="search"></slot>
         <slot></slot>
     {/if}
 </div>
