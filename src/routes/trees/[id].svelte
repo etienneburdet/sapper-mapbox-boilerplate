@@ -41,8 +41,8 @@
   export let query;
 </script>
 
-<div class="columns">
-  <div class="column is-one-third">
+<div class="columns is-mobile">
+  <div class="column is-4">
     <List activeItem={treeDetails} let:id={activeId}>
       {#each treesData.features as tree, index (tree.properties.objectid)}
         <ListItem
@@ -54,7 +54,7 @@
       {/each}
     </List>
   </div>
-  <div class="column is-two-thirds">
+  <div class="column is-8">
     <div id="infobox" class="box">
       {#if treeDetails}
         <Popup item={treeDetails} />
@@ -102,5 +102,9 @@
     position: relative;
     height: 100%;
     width: 100%;
+  }
+
+  .is-two-thirds {
+    min-width: 400px;
   }
 </style>

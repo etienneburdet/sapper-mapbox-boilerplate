@@ -84,7 +84,7 @@
   <input id="searchbox" class="input" type="text" autocomplete="off" bind:value={query} />
 </div>
 
-<style lang="scss" global>
+<style lang="scss">
   .jawg-geocoder {
     ul {
       background: white;
