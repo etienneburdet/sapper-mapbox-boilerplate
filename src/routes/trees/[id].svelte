@@ -3,7 +3,9 @@
 
   export async function preload(page, session) {
     const { id } = page.params;
-    let treeDetails = undefined;
+    const { query } = page;
+
+    let treeDetails;
     if (id !== '0') {
       const resFromAPI = await this.fetch(getTreeRecordEndpoint(`objectid=${id}`));
       const jsonFromAPI = await resFromAPI.json();
@@ -16,12 +18,13 @@
       treesData = await resFromAPI.json();
       session.treesData = treesData;
     }
-    return { treesData, treeDetails };
+    return { treesData, treeDetails, query };
   }
 </script>
 
 <script>
   import { goto } from '@sapper/app';
+  import Geocoder from '@/components/Geocoder.svelte';
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
   import MapLayer from '@/components/MapLayer.svelte';
@@ -34,6 +37,7 @@
 
   export let treesData;
   export let treeDetails;
+  export let query;
 </script>
 
 <div class="columns">
@@ -55,7 +59,14 @@
         <Popup item={treeDetails} />
       {/if}
     </div>
-    <Map>
+    <Map
+      navigationPosition="top-left"
+      geolocatePosition="top-right"
+      center={query.coords}
+    >
+      <div id="geocoder" slot="search">
+        <Geocoder />
+      </div>
       <MapSource id="trees" data={treesData}>
         <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
@@ -64,6 +75,12 @@
 </div>
 
 <style>
+  #geocoder {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+  }
+
   #infobox {
     position: absolute;
     top: 24px;
