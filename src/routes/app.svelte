@@ -112,13 +112,16 @@
 </svelte:head>
 
 <Map navigationPosition="top-left" geolocatePosition="top-right">
+    <div class="geocoder" slot="search">
+      <Geocoder />
+    </div>
     <!-- CSR -->
     {#if asyncGeojson}
         {#await asyncGeojson}
             <Spinner></Spinner>
         {:then geojson}
             <MapSource id="data" data={geojson}>
-                <MapLayer type={type} paint={paint}></MapLayer>
+                <MapLayer type={type} paint={paint} />
             </MapSource>
         {:catch error}
             <p style="color: red">{error.message}</p>
@@ -127,7 +130,15 @@
         <!-- SSR -->
     {#if geojson.features}
         <MapSource id="data" data={geojson}>
-            <MapLayer type={type} paint={paint}></MapLayer>
+            <MapLayer type={type} paint={paint} />
         </MapSource>
     {/if}
 </Map>
+
+.<style>
+.geocoder {
+  position: absolute;
+  right: 50px;
+  top: 10px;
+}
+</style>

@@ -1,22 +1,15 @@
 <script>
-    import {getContext, onMount} from 'svelte';
+import { goto } from '@sapper/app';
+    import { onMount } from 'svelte';
     import config from '@/app.config';
 
     /*export let marker = true;*/
     export let placeholder = "Search a place";
-    let input;
+    export let center = {
+      lat: 48.866667,
+      lng: 2.333333
+    };
     let query;
-    let acCtn;
-
-    const { getMap, getSearchMarker, getGeolocateControls } = getContext('map');
-
-    const map = getMap();
-    const marker = getSearchMarker();
-    const geolocate = getGeolocateControls();
-
-    geolocate.on('geolocate', () => {
-      query = "vorte position";
-    });
 
     onMount(async () => {
         const autoCompleteModule = await import("@tarekraafat/autocomplete.js");
@@ -24,7 +17,7 @@
         const ac = new autoComplete({
             data: {
                 src: async () => {
-                    var {lat, lng} = map.getCenter();
+                    const {lat, lng} = center;
                     const token = config.jawg.acccess_token;
                     const searchquery = query;
                     const source = await fetch(
@@ -34,7 +27,6 @@
                         val.properties['geometry'] = val.geometry;
                         return [...acc, val.properties];
                     }, []);
-                    console.log(ret);
                     return ret;
                 },
                 key: ["label"],
@@ -55,7 +47,7 @@
             },
             resultsList: {
                 render: true,
-                destination: acCtn,
+                destination: '.jawg-geocoder',
                 position: "afterend",
                 element: "ul"
             },
@@ -78,10 +70,9 @@
             onSelection: feedback => {
                 const coords = feedback.selection.value.geometry.coordinates;
                 query = feedback.selection.value.label;
-                map.flyTo({
-                    center: coords
-                });
-                marker.setLngLat(coords).addTo(map)
+                const url = new URL(window.location);
+                url.searchParams.set('coords', coords);
+                goto(url);
             }
         });
     });
@@ -89,19 +80,15 @@
 </script>
 
 
-<div class="jawg-geocoder" bind:this={acCtn}>
+<div class="jawg-geocoder">
     <input id="searchbox" class="input" type="text" autocomplete="off"
-            bind:this={input} bind:value={query}/>
+      bind:value={query}/>
 </div>
 
 
 <style lang="scss" global>
   .jawg-geocoder {
-      position: absolute;
-      right: 50px;
-      top: 10px;
-      
-      ul#autoComplete_list {
+      ul {
           background: white;
           margin-top: 5px;
           border: 1px solid #dbdbdb;
