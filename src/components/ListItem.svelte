@@ -5,7 +5,7 @@
 </script>
 
 <a rel="prefetch" href="/trees/{id}">
-  <div class="item" on:click class:has-background-light={active}>
+  <div class="item" class:has-background-light={active}>
     <p class="title is-size-5">{fields.libellefrancais}</p>
     <p class="subtitle is-size-6">{fields.adresse}</p>
     <div class="tags">
