@@ -46,17 +46,7 @@
     }
   });
 
-  const coordsStr2Arr = (coordsString) => {
-    const lngLatStr = coordsString.split(',');
-    const lng = parseFloat(lngLatStr[0]);
-    const lat = parseFloat(lngLatStr[1]);
-    return [lng, lat];
-  };
-
-  $: {
-    map && map.flyTo({ center : coordsStr2Arr(center) });
-    console.log('fly to', coordsStr2Arr(center));
-  }
+  $: map && map.flyTo({ center });
 </script>
 
 <svelte:head>

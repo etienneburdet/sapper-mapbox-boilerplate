@@ -1,19 +1,16 @@
 <script>
-    import { getContext } from 'svelte';
-    import mapbox from 'mapbox-gl';
+  import { getContext, onMount } from 'svelte';
 
-    const { getMap } = getContext('map');
-    const map = getMap();
+  const { mapbox, getMap } = getContext('map');
+  const map = getMap();
 
-    export let lngLat;
-    let marker;
+  export let center;
+  const marker = new mapbox.Marker()
 
-    $: {
-      if (marker) { // if marker already exists, delete before adding a new one
-        marker.remove();
-      }
-      if (lngLat) {
-        marker = new mapbox.Marker().setLngLat(lngLat).addTo(map);
-      }
-    }
+  onMount(() => {
+    marker.addTo(map);
+    return () => marker.remove();
+  });
+
+  $: marker && marker.setLngLat(center)
 </script>

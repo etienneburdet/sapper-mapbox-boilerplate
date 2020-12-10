@@ -23,3 +23,14 @@ export const treesGeojsonEndpoint = addQueryParamsList(fullGeojson)({
 
 const treesRecordsEndpoint = getRecordsEndpoint(treesUrl);
 export const getTreeRecordEndpoint = addWhereQuery(treesRecordsEndpoint);
+
+export const q2center = (coordsString) => {
+  if (!coordsString) {
+    return;
+  }
+
+  const lngLatStr = coordsString.split(',');
+  const lng = parseFloat(lngLatStr[0]);
+  const lat = parseFloat(lngLatStr[1]);
+  return [lng, lat];
+};

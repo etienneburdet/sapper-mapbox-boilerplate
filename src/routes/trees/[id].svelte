@@ -28,12 +28,13 @@
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
   import MapLayer from '@/components/MapLayer.svelte';
+  import Marker from '@/components/Marker.svelte';
   import Popup from '@/components/Popup.svelte';
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
 
   import paint from './_mapstyle';
-  import { setActivePoint } from './_helpers';
+  import { q2center, setActivePoint } from './_helpers';
 
   export let treesData;
   export let treeDetails;
@@ -62,7 +63,7 @@
     <Map
       navigationPosition="top-left"
       geolocatePosition="top-right"
-      center={query.coords}
+      center={q2center(query.coords)}
     >
       <div id="geocoder" slot="search">
         <Geocoder />
@@ -70,6 +71,9 @@
       <MapSource id="trees" data={treesData}>
         <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
+      {#if query.coords}
+        <Marker center={q2center(query.coords)} />
+      {/if}
     </Map>
   </div>
 </div>
