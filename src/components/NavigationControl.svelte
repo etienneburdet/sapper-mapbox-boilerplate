@@ -1,10 +1,9 @@
 <script>
     import { getContext } from 'svelte';
-    import mapbox from 'mapbox-gl';
 
     export let position;
 
-    const { getMap } = getContext('map');
+    const { getMap, mapbox } = getContext('map');
     const map = getMap();
 
     const mapControl = new mapbox.NavigationControl();

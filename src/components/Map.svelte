@@ -53,7 +53,7 @@
 <div bind:this={container}>
     {#if map}
         {#if navigationPosition}
-          <NavigationControl postion={navigationPosition} />
+          <NavigationControl position={navigationPosition} />
         {/if}
         {#if geolocatePosition}
           <GeolocateControl position={geolocatePosition} />
