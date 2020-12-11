@@ -30,7 +30,7 @@
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
 
-  import AdvancedFilters from '../../components/AdvancedFilters.svelte';
+  import Filter from '@/components/Filter.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
@@ -51,6 +51,8 @@
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
+
+  const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
 </script>
 
 <div id="page-ctn">
@@ -69,7 +71,7 @@
       </div>
 
       <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
-        <AdvancedFilters />
+        <Filter id="produits" options={produits} />
       </div>
     </div>
     <!-- DESKTOP LIST -->

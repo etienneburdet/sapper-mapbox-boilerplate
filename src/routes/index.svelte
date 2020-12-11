@@ -6,7 +6,6 @@
   import { goto } from '@sapper/app';
 
   import Geocoder from '@/components/Geocoder.svelte';
-  import AdvancedFilters from '@/components/AdvancedFilters.svelte';
 
   const navigateToCoords = (event) => {
     const [lng, lat] = event.detail.coords;
