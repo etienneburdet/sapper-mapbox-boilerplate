@@ -18,3 +18,9 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.control.is-grouped {
+  +mobile {
+    flex-direction: column;
+  }
+}

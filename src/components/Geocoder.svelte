@@ -95,6 +95,7 @@
       class="input"
       type="text"
       autocomplete="off"
+      name="coords"
       on:focus={focusInput}
       bind:value={query}
     />
