@@ -89,28 +89,12 @@
   });
 </script>
 
-<div class="jawg-geocoder" />
-
-<!-- <div class="field has-addon jawg-geocoder">
-  <div class="control">
-    <input
-      {id}
-      class="input"
-      type="text"
-      autocomplete="off"
-      on:focus={focusInput}
-      bind:value={query}
-    />
-  </div>
-  {#if geolocator}
-    <div class="control">
-      <Geolocator />
-    </div>
-  {/if}
-</div> -->
-
-<div id="search-container-{id}" class="field has-addons jawg-geocoder">
-  <div class="control">
+<div
+  id="search-container-{id}"
+  class="field jawg-geocoder"
+  class:has-addons={geolocator}
+>
+  <div class="control is-flex-grow-1">
     <input
       {id}
       class="input"
@@ -129,6 +113,10 @@
 
 <style lang="scss" global>
   @import 'src/styles/_ods-design-system.scss';
+
+  input {
+    width: 100%;
+  }
 
   .jawg-geocoder {
     position: relative;

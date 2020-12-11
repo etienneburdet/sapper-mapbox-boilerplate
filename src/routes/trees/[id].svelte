@@ -28,6 +28,9 @@
 
 <script>
   import { goto } from '@sapper/app';
+  import { onMount } from 'svelte';
+
+  import AdvancedFilters from '../../components/AdvancedFilters.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
@@ -40,9 +43,6 @@
 
   import { paint } from './_mapstyle';
   import { q2center, setActivePoint } from './_helpers';
-  import { onMount } from 'svelte';
-  import { media } from '../../plugins/mediaQueries';
-  import AdvancedFilters from '../../components/AdvancedFilters.svelte';
 
   export let treesData;
   export let treeDetails;
@@ -160,20 +160,6 @@
       position: relative;
       padding: 20px;
 
-      .geolocator {
-        position: absolute;
-        right: 25px;
-        top: 24px;
-        padding: 6px;
-        height: 28px;
-        width: 28px;
-
-        img {
-          height: 16px;
-          width: 16px;
-        }
-      }
-
       #list-ctn-header-btn {
         display: flex;
         align-items: center;
@@ -242,26 +228,9 @@
         cursor: pointer;
       }
 
-      :global(.geolocator) {
-        padding: 8px;
-
-        :global(img) {
-          width: 20px;
-          height: 20px;
-        }
-      }
-
       #map-header-content {
         flex: 1;
         margin: 0 5px;
-
-        /* :global(.jawg-geocoder) {
-          height: 100%;
-        }
-
-        :global(input) {
-          height: 100%;
-        } */
       }
     }
 
@@ -363,6 +332,7 @@
 
       #map-header {
         display: flex;
+        align-items: center
       }
 
       #map-footer {
