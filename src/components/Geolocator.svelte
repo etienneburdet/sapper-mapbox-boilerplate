@@ -33,7 +33,7 @@
 </script>
 
 <button
-  class="button is-primary"
+  class="button is-dark"
   class:spin={searching}
   bind:this={geolocator}
   on:click={getPosition}

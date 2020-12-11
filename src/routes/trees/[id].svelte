@@ -89,7 +89,7 @@
   <div id="map-ctn">
     <!-- MOBILE HEADER -->
     <div id="map-header">
-      <button class="button is-black" on:click={() => (toggleList = !toggleList)}>
+      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
         {#if !toggleList}<span>Liste</span>{/if}
         {#if toggleList}<span>Carte</span>{/if}
       </button>
@@ -104,7 +104,7 @@
     <!-- MAP FOOTER / FILTERS -->
     <div id="map-footer">
       <button
-        class="button is-rounded is-black mb-3"
+        class="button is-rounded is-dark mb-3"
         id="map-footer-filters-btn"
         class:show-adv-filters={showMobileAdvFilters}
         on:click={() => (showMobileAdvFilters = true)}
