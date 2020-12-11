@@ -42,7 +42,7 @@
   import Geolocator from '@/components/Geolocator.svelte';
 
   import { paint } from './_mapstyle';
-  import { q2center, setActivePoint } from './_helpers';
+  import { q2center, setActivePoint, filterPage } from './_helpers';
 
   export let query;
   export let treesData;
@@ -55,18 +55,6 @@
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
   const partenaires = ['La ruche', 'La ferme', 'La la'];
   const services = ['Producteur', 'Point de vente'];
-
-  const filterPage = (event) => {
-    const url = new URL(window.location);
-    const { searchParams } = url;
-    const keys = Object.keys(event.detail);
-    keys.forEach((key) =>
-      event.detail[key]
-        ? url.searchParams.set(key, event.detail[key])
-        : url.searchParams.delete(key),
-    );
-    goto(url);
-  };
 </script>
 
 <div id="page-ctn">

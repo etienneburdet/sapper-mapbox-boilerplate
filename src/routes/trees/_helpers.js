@@ -18,7 +18,8 @@ const treesUrl = formDatanetworkUrl('arbresremarquablesparis2011%40public');
 const fullGeojson = getGeojsonEndpoint(treesUrl);
 export const treesGeojsonEndpoint = addQueryParamsList(fullGeojson)({
   rows: '-1',
-  select: 'geom_x_y, objectid, adresse, libellefrancais, typeemplacement, stadedeveloppement, domanialite',
+  select:
+    'geom_x_y, objectid, adresse, libellefrancais, typeemplacement, stadedeveloppement, domanialite',
 });
 
 const treesRecordsEndpoint = getRecordsEndpoint(treesUrl);
@@ -33,4 +34,12 @@ export const q2center = (coordsString) => {
   const lng = parseFloat(lngLatStr[0]);
   const lat = parseFloat(lngLatStr[1]);
   return [lng, lat];
+};
+
+export const filterPage = (event) => {
+  const url = new URL(window.location);
+  const { searchParams } = url;
+  const keys = Object.keys(event.detail);
+  keys.forEach((key) => (event.detail[key] ? url.searchParams.set(key, event.detail[key]) : url.searchParams.delete(key)));
+  goto(url);
 };
