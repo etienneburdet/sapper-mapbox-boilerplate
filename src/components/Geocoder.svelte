@@ -58,7 +58,7 @@
       },
       resultsList: {
         render: true,
-        destination: '.jawg-geocoder',
+        destination: `#search-container-${id}`,
         position: 'beforeend',
         element: 'ul',
       },
@@ -109,7 +109,7 @@
   {/if}
 </div> -->
 
-<div class="field has-addons jawg-geocoder">
+<div id="search-container-{id}" class="field has-addons jawg-geocoder">
   <div class="control">
     <input
       {id}
