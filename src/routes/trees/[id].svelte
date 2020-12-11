@@ -52,9 +52,8 @@
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
 
-<<<<<<< Updated upstream
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
-=======
+
   const filterPage = (event) => {
     const url = new URL(window.location);
     const { searchParams } = url;
@@ -62,7 +61,6 @@
     keys.forEach((key) => url.searchParams.set(key, event.detail[key]));
     goto(url);
   };
->>>>>>> Stashed changes
 </script>
 
 <div id="page-ctn">
