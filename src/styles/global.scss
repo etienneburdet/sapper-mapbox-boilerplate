@@ -1,8 +1,9 @@
 @charset 'utf-8';
 
-@import "_ods-design-system";
-@import "_vars";
-@import "bulma/bulma";
+@import '_ods-design-system';
+@import 'bulma/bulma';
+
+$mobile: $tablet;
 
 html {
   height: 100%;

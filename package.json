@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
-    "@tarekraafat/autocomplete.js": "^8.0.2",
+    "@tarekraafat/autocomplete.js": "8.0.3",
     "bulma": "^0.9.1",
     "compression": "^1.7.1",
     "eslint-config-prettier": "^6.15.0",
