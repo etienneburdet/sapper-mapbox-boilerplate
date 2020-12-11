@@ -1,16 +1,25 @@
 <script>
   import { goto } from '@sapper/app';
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount } from 'svelte';
   import config from '@/app.config';
 
-  const dispatch = createEventDispatcher();
+  import Geolocator from '@/components/Geolocator.svelte';
+
   /*export let marker = true;*/
+  export let geolocator = false;
+  export let id = 'searchbox';
   export let placeholder = 'Search a place';
   export let center = {
     lat: 48.866667,
     lng: 2.333333,
   };
   let query;
+
+  const focusInput = () => {
+    if (query) {
+      document.execCommand('selectAll');
+    }
+  };
 
   onMount(async () => {
     const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
@@ -26,7 +35,6 @@
           );
           const data = await source.json();
           const ret = data.features.reduce((acc, val) => {
-            console.log('typing');
             val.properties['geometry'] = val.geometry;
             return [...acc, val.properties];
           }, []);
@@ -36,7 +44,7 @@
         cache: false,
       },
       placeHolder: placeholder,
-      selector: '#searchbox',
+      selector: '#' + id,
       threshold: 2,
       debounce: 200,
       trigger: ['input', 'focus'],
@@ -50,8 +58,8 @@
       },
       resultsList: {
         render: true,
-        destination: '.jawg-geocoder',
-        position: 'afterend',
+        destination: `#search-container-${id}`,
+        position: 'beforeend',
         element: 'ul',
       },
       maxResults: 10,
@@ -75,28 +83,54 @@
         query = feedback.selection.value.label;
         const url = new URL(window.location);
         url.searchParams.set('coords', coords);
-        dispatch('geocode', { coords });
+        goto(url);
       },
     });
-  console.log(ac);
   });
 </script>
 
-<div class="jawg-geocoder">
-  <input id="searchbox" class="input" type="text" autocomplete="off" bind:value={query} />
+<div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
+  <div class="control is-flex-grow-1">
+    <input
+      {id}
+      class="input"
+      type="text"
+      autocomplete="off"
+      on:focus={focusInput}
+      bind:value={query}
+    />
+  </div>
+  {#if geolocator}
+    <div class="control">
+      <Geolocator />
+    </div>
+  {/if}
 </div>
 
-<style lang="scss">
+<style lang="scss" global>
+  @import 'src/styles/_ods-design-system.scss';
+
+  input {
+    width: 100%;
+  }
+
   .jawg-geocoder {
+    position: relative;
     ul {
       background: white;
+      color: black;
       margin-top: 5px;
       border: 1px solid #dbdbdb;
       border-radius: 6px;
       padding: 4px 0;
-
+      position: absolute;
+      top: $spacing-300;
+      z-index: 1;
+      overflow: visible;
+      margin-bottom: 10px;
       li {
         padding: 4px 8px;
+
         &.autoComplete_selected {
           background-color: #f4f4ff;
         }

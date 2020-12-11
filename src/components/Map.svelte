@@ -44,8 +44,6 @@
     if (geolocatePosition) {
       geolocateControl = new mapbox.GeolocateControl(geolocateOptions);
     }
-
-    console.log(container, map);
   });
 
   $: map && map.flyTo({ center });
@@ -63,7 +61,6 @@
     {#if geolocatePosition}
       <GeolocateControl position={geolocatePosition} />
     {/if}
-    <slot name="search" />
     <slot />
   {/if}
 </div>
