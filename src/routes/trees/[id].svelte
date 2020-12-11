@@ -89,10 +89,10 @@
   <div id="map-ctn">
     <!-- MOBILE HEADER -->
     <div id="map-header">
-      <div class="map-header-btn" on:click={() => (toggleList = !toggleList)}>
+      <button class="button is-black" on:click={() => (toggleList = !toggleList)}>
         {#if !toggleList}<span>Liste</span>{/if}
         {#if toggleList}<span>Carte</span>{/if}
-      </div>
+      </button>
       <div id="map-header-content">
         <Geocoder id="mobilesearchbox" />
       </div>
@@ -219,14 +219,6 @@
       padding: 10px;
       height: 57px;
       width: 100%;
-
-      .map-header-btn {
-        background-color: black;
-        padding: 7px 10px;
-        border-radius: 6px;
-        color: white;
-        cursor: pointer;
-      }
 
       #map-header-content {
         flex: 1;
