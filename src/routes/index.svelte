@@ -34,7 +34,7 @@
       </div>
       <div class="column">
         <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
-        <div class="field is-grouped>
+        <div class="field is-grouped">
           <div class="control is-expanded">
             <div class="select is-fullwidth">
               <select>
@@ -43,9 +43,7 @@
               </select>
             </div>
           </div>
-          <p class="control">
-            <button class="button is-info" on:click={}> Search </button>
-          </p>
+          <p class="control"><button class="button is-info"> Search </button></p>
         </div>
       </div>
     </div>
