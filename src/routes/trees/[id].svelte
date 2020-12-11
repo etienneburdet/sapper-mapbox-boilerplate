@@ -53,12 +53,18 @@
   let showMobileAdvFilters = false;
 
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
+  const partenaires = ['La ruche', 'La ferme', 'La la'];
+  const services = ['Producteur', 'Point de vente'];
 
   const filterPage = (event) => {
     const url = new URL(window.location);
     const { searchParams } = url;
     const keys = Object.keys(event.detail);
-    keys.forEach((key) => url.searchParams.set(key, event.detail[key]));
+    keys.forEach((key) =>
+      event.detail[key]
+        ? url.searchParams.set(key, event.detail[key])
+        : url.searchParams.delete(key),
+    );
     goto(url);
   };
 </script>
@@ -79,7 +85,18 @@
       </div>
 
       <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
-        <Filter id="produits" options={produits} />
+        <Filter id="produits" options={produits} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Produits</h4>
+          <span slot="description">Choisissez votre cotégorie de porduits</span>
+        </Filter>
+        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Partenaires</h4>
+          <span slot="description">Choisissez les partenaires</span>
+        </Filter>
+        <Filter id="services" options={services} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Services</h4>
+          <span slot="description">Type de préstation</span>
+        </Filter>
       </div>
     </div>
     <!-- DESKTOP LIST -->
@@ -129,7 +146,18 @@
             on:click={() => (showMobileAdvFilters = false)}
           />
         </div>
-        <AdvancedFilters />
+        <Filter id="produits" options={produits} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Produits</h4>
+          <span slot="description">Choisissez votre cotégorie de porduits</span>
+        </Filter>
+        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Partenaires</h4>
+          <span slot="description">Choisissez les partenaires</span>
+        </Filter>
+        <Filter id="services" options={services} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Services</h4>
+          <span slot="description">Type de préstation</span>
+        </Filter>
       </div>
     </div>
 

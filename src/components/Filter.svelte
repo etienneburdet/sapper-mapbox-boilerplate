@@ -1,10 +1,7 @@
 <script>
-  import { goto } from '@sapper/app';
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  const services = ['Producteur', 'Point de vente'];
-  const partenaires = ['La ruche', 'La ferme', 'La la'];
 
   export let options;
   export let id;
@@ -21,8 +18,8 @@
 <div class="filter-title">
   <slot name="title" />
 </div>
-<div class="select">
-  <select bind:value={selection} on:blur={dispatchChoice}>
+<div class="select is-fullwidth">
+  <select bind:value={selection} on:change={dispatchChoice}>
     <option value="">
       <slot name="description" />
     </option>

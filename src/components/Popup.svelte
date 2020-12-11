@@ -1,52 +1,47 @@
 <script>
-    export let item;
+  import { stores } from '@sapper/app';
+  const { page } = stores();
+  const querystring = new URLSearchParams($page.query).toString();
+
+  export let item;
 </script>
 
 <div class="popup">
-    <a rel="prefetch" href="/trees/0">
-        <i class="fas fa-times"></i>
-    </a>
-    <p class="title">
-        {item.fields.libellefrancais}
-    </p>
-    <p class="subtitle">
-        {item.fields.genre}
-    </p>
-    <hr/>
-    <p>
-        {item.fields.domanialite}
-    </p>
-    <p>
-        {item.fields.adresse}
-    </p>
-    <hr/>
-    <p>
-        Exploitation familiale depuis 3 générations, située entre Morvan et Charolais, comptant 130 vaches allaitantes nourries par notre propre production de céréales et fourrage. Découpe et transformation directement à la ferme. Accueil et vente directe à la ferme sur rendez-vous. Livraison possible ou envoi chronopost réfrigéré.
-    </p>
-    <hr/>
-    <p class="title is-size-6">
-        Type de produits
-    </p>
-    <div class="tags">
-        <div class="tag is-medium">{item.fields.typeemplacement}</div>
-        <div class="tag is-medium">{item.fields.stadedeveloppement}</div>
-        <div class="tag is-medium">{item.fields.domanialite}</div>
-    </div>
+  <a rel="prefetch" href="/trees/0?{querystring}"> <i class="fas fa-times" /> </a>
+  <p class="title">{item.fields.libellefrancais}</p>
+  <p class="subtitle">{item.fields.genre}</p>
+  <hr />
+  <p>{item.fields.domanialite}</p>
+  <p>{item.fields.adresse}</p>
+  <hr />
+  <p>
+    Exploitation familiale depuis 3 générations, située entre Morvan et Charolais, comptant 130
+    vaches allaitantes nourries par notre propre production de céréales et fourrage. Découpe et
+    transformation directement à la ferme. Accueil et vente directe à la ferme sur rendez-vous.
+    Livraison possible ou envoi chronopost réfrigéré.
+  </p>
+  <hr />
+  <p class="title is-size-6">Type de produits</p>
+  <div class="tags">
+    <div class="tag is-medium">{item.fields.typeemplacement}</div>
+    <div class="tag is-medium">{item.fields.stadedeveloppement}</div>
+    <div class="tag is-medium">{item.fields.domanialite}</div>
+  </div>
 </div>
 
 <style lang="scss">
-    .popup {
-        height: 100%;
-        width: 100%;
+  .popup {
+    height: 100%;
+    width: 100%;
 
-        a {
-            color: black;
-            font-size: 1.2em;
-            float: right;
-        }
-
-        .tag:not(body).is-medium {
-            font-size: 0.9rem;
-        }
+    a {
+      color: black;
+      font-size: 1.2em;
+      float: right;
     }
+
+    .tag:not(body).is-medium {
+      font-size: 0.9rem;
+    }
+  }
 </style>

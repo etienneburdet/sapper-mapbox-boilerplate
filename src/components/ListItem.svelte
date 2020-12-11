@@ -1,10 +1,14 @@
 <script>
+  import { stores } from '@sapper/app';
+  const { page } = stores();
+  const querystring = new URLSearchParams($page.query).toString();
+
   export let id;
   export let fields;
   export let active;
 </script>
 
-<a rel="prefetch" href="/trees/{id}">
+<a rel="prefetch" href="/trees/{id}?{querystring}">
   <div class="item" class:has-background-light={active}>
     <p class="title is-size-5">{fields.libellefrancais}</p>
     <p class="subtitle is-size-6">{fields.adresse}</p>
