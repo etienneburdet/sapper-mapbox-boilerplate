@@ -44,22 +44,32 @@
   import { paint } from './_mapstyle';
   import { q2center, setActivePoint } from './_helpers';
 
+  export let query;
   export let treesData;
   export let treeDetails;
-  export let query;
 
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
 
+<<<<<<< Updated upstream
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
+=======
+  const filterPage = (event) => {
+    const url = new URL(window.location);
+    const { searchParams } = url;
+    const keys = Object.keys(event.detail);
+    keys.forEach((key) => url.searchParams.set(key, event.detail[key]));
+    goto(url);
+  };
+>>>>>>> Stashed changes
 </script>
 
 <div id="page-ctn">
   <div id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator={true} />
+      <Geocoder id="desktopsearchbox" geolocator={true} on:geocode={filterPage} />
 
       <div
         id="list-ctn-header-btn"
