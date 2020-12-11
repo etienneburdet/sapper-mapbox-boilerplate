@@ -1,9 +1,10 @@
 <script>
-  import { goto } from '@sapper/app';
-  import { onMount } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import config from '@/app.config';
 
   import Geolocator from '@/components/Geolocator.svelte';
+
+  const dispatch = createEventDispatcher();
 
   /*export let marker = true;*/
   export let geolocator = false;
@@ -81,16 +82,14 @@
       onSelection: (feedback) => {
         const coords = feedback.selection.value.geometry.coordinates;
         query = feedback.selection.value.label;
-        const url = new URL(window.location);
-        url.searchParams.set('coords', coords);
-        goto(url);
+        dispatch('geocode', { coords });
       },
     });
   });
 </script>
 
 <div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
-  <div class="control is-flex-grow-1">
+  <div class="control is-expanded">
     <input
       {id}
       class="input"
