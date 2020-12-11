@@ -7,17 +7,14 @@
         <i class="fas fa-times"></i>
     </a>
     <p class="title">
-        {item.fields.libellefrancais}
+        {item.fields.add_nom_ferme}
     </p>
     <p class="subtitle">
-        {item.fields.genre}
+        {item.fields.add_ville}
     </p>
     <hr/>
     <p>
-        {item.fields.domanialite}
-    </p>
-    <p>
-        {item.fields.adresse}
+        {item.fields.add_adresse}
     </p>
     <hr/>
     <p>

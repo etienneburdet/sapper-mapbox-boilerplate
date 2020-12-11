@@ -2,6 +2,7 @@
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
 
+  export let facets;
 
   const services = ['Producteur', 'Point de vente'];
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
@@ -13,6 +14,8 @@
   let partenaireSelected;
 
   onMount(() => {
+    console.log(facets);
+
     url = new URL(window.location);
     serviceSelected = url.searchParams.get('service');
     produitSelected = url.searchParams.get('produit');

@@ -2,7 +2,7 @@
   export let activeItem;
 
   let id;
-  $: id = activeItem && activeItem.fields.objectid;
+  $: id = activeItem && activeItem.fields.id;
 </script>
 
 <div>

@@ -1,28 +1,54 @@
 import { goto } from '@sapper/app';
+import GeoJson from 'geojson';
+
 import {
-  formDatasetUrl,
-  getGeojsonEndpoint,
-  getRecordsEndpoint,
+  getOpendatasoftV1Endpoint,
+  getOpendatasoftEndpoint,
+  getJsonODSEndpoint,
+  getRecordIDEndpoint,
+  getFacetsEndpoint,
+  addQueryParamsObject,
   addQueryParamsList,
   addWhereQuery,
+  addFacetListQuery
 } from '@/plugins/ods-data';
 
 export const setActivePoint = (event) => {
   const [point] = event.detail.mapevent.features;
-  goto(`/trees/${point.properties.objectid}`);
+  goto(`/trees/${point.properties.id}`);
 };
 
-const formDatanetworkUrl = formDatasetUrl('https://data.opendatasoft.com/api/v2/catalog/datasets/');
-const treesUrl = formDatanetworkUrl('arbresremarquablesparis2011%40public');
+const baseUrl = getOpendatasoftEndpoint('producteursagri');
+const datasetUrl = baseUrl('bienvenue-a-la-ferme');
 
-const fullGeojson = getGeojsonEndpoint(treesUrl);
-export const treesGeojsonEndpoint = addQueryParamsList(fullGeojson)({
-  rows: '-1',
-  select: 'geom_x_y, objectid, adresse, libellefrancais, typeemplacement, stadedeveloppement, domanialite',
+const fullJson = getJsonODSEndpoint(datasetUrl);
+export const jsonEndpoint = addQueryParamsObject(fullJson)({
+  apikey: 'a7e4ed36006940138ec06146831b780b8c41b2d14719ba6da17c6148',
+  rows: '10000',
+  select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
 
-const treesRecordsEndpoint = getRecordsEndpoint(treesUrl);
-export const getTreeRecordEndpoint = addWhereQuery(treesRecordsEndpoint);
+export const getRecord = getRecordIDEndpoint(datasetUrl,'a7e4ed36006940138ec06146831b780b8c41b2d14719ba6da17c6148');
+
+const facetsEndpoint = getFacetsEndpoint(datasetUrl);
+export const getFacets = addQueryParamsList(facetsEndpoint)([
+  {
+    'key': 'apikey',
+    'value': 'a7e4ed36006940138ec06146831b780b8c41b2d14719ba6da17c6148'
+  },
+  {
+    'key': 'facet',
+    'value': 'add_section'
+  },
+  {
+    'key': 'facet',
+    'value': 'add_code_postal'
+  },
+  {
+    'key': 'facet',
+    'value': 'type'
+  }
+]);
 
 export const q2center = (coordsString) => {
   if (!coordsString) {
@@ -33,4 +59,13 @@ export const q2center = (coordsString) => {
   const lng = parseFloat(lngLatStr[0]);
   const lat = parseFloat(lngLatStr[1]);
   return [lng, lat];
+};
+
+export const jsonToGeojson = (json) => {
+  /* flatten api V1 output */
+  json.forEach((item) => {
+    Object.assign(item, item.fields);
+    delete item.fields;
+  });
+  return GeoJson.parse(json, { 'Point': ['add_lat', 'add_lon'] });
 };
