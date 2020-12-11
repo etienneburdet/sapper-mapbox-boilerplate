@@ -41,7 +41,7 @@
   export let query;
 </script>
 
-<div class="columns is-mobile">
+<div class="columns">
   <div class="column is-4">
     <List activeItem={treeDetails} let:id={activeId}>
       {#each treesData.features as tree, index (tree.properties.objectid)}
@@ -101,10 +101,5 @@
   .column {
     position: relative;
     height: 100%;
-    width: 100%;
-  }
-
-  .is-two-thirds {
-    min-width: 400px;
   }
 </style>
