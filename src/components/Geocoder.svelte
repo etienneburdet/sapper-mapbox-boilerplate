@@ -26,6 +26,7 @@
           );
           const data = await source.json();
           const ret = data.features.reduce((acc, val) => {
+            console.log('typing');
             val.properties['geometry'] = val.geometry;
             return [...acc, val.properties];
           }, []);
@@ -77,6 +78,7 @@
         dispatch('geocode', { coords });
       },
     });
+  console.log(ac);
   });
 </script>
 

@@ -10,9 +10,11 @@
   };
 </script>
 
+<Geocoder />
 <div class="container">
   <h1>La ferme d'à côté</h1>
-  <Geocoder on:geocode={navigateToCoords} />
+  <div id="geocoder">
+  </div>
 </div>
 <h1>Welcome</h1>
 <a href="trees/0">Search something</a>
