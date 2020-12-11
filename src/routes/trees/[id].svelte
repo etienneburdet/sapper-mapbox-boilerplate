@@ -103,13 +103,14 @@
 
     <!-- MAP FOOTER / FILTERS -->
     <div id="map-footer">
-      <div
+      <button
+        class="button is-rounded is-black mb-3"
         id="map-footer-filters-btn"
         class:show-adv-filters={showMobileAdvFilters}
         on:click={() => (showMobileAdvFilters = true)}
       >
         Affiner les résultats
-      </div>
+      </button>
       <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
         <div class="adv-filters-ctn-top">
           <p>Affiner les résultats</p>
@@ -237,13 +238,6 @@
       align-content: center;
 
       #map-footer-filters-btn {
-        margin-bottom: 10px;
-        background-color: black;
-        color: white;
-        border-radius: 10000000px;
-        padding: 7px 20px;
-        cursor: pointer;
-
         &.show-adv-filters {
           display: none;
         }

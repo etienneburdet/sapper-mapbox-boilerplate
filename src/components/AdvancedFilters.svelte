@@ -2,12 +2,12 @@
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
 
-  let url;
 
   const services = ['Producteur', 'Point de vente'];
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
   const partenaires = ['La ruche', 'La ferme', 'La la'];
 
+  let url;
   let serviceSelected;
   let produitSelected;
   let partenaireSelected;
