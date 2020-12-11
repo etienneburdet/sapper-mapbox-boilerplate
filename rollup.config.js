@@ -55,10 +55,10 @@ export default {
       commonjs(),
       nodePolyfills(),
       svelte({
-        preprocess,
         dev,
         hydratable: true,
         emitCss: true,
+        preprocess,
       }),
       url({
         sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
@@ -114,10 +114,10 @@ export default {
       }),
       commonjs(),
       svelte({
-        preprocess,
         generate: 'ssr',
         hydratable: true,
         dev,
+        preprocess,
       }),
       url({
         sourceDir: path.resolve(__dirname, 'src/node_modules/images'),

@@ -44,32 +44,34 @@
     if (geolocatePosition) {
       geolocateControl = new mapbox.GeolocateControl(geolocateOptions);
     }
+
+    console.log(container, map);
   });
 
   $: map && map.flyTo({ center });
 </script>
 
 <svelte:head>
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet"/>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
 </svelte:head>
 
 <div bind:this={container}>
-    {#if map}
-        {#if navigationPosition}
-          <NavigationControl position={navigationPosition} />
-        {/if}
-        {#if geolocatePosition}
-          <GeolocateControl position={geolocatePosition} />
-        {/if}
-        <slot name="search"></slot>
-        <slot></slot>
+  {#if map}
+    {#if navigationPosition}
+      <NavigationControl position={navigationPosition} />
     {/if}
+    {#if geolocatePosition}
+      <GeolocateControl position={geolocatePosition} />
+    {/if}
+    <slot name="search" />
+    <slot />
+  {/if}
 </div>
 
 <style lang="scss">
-  div  {
-        z-index: 0;
-        height: 100%;
-        width: 100%;
-    }
+  div {
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+  }
 </style>
