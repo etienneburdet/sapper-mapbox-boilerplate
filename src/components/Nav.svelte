@@ -32,9 +32,9 @@
           <a
             on:click={closeMenu}
             rel="prefetch"
-            aria-current={segment === 'trees' ? 'page' : undefined}
-            href="trees"
-          >trees</a>
+            aria-current={segment === 'farms' ? 'page' : undefined}
+            href="farms"
+          >farms</a>
         </li>
         <li>
           <a

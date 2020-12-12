@@ -10,7 +10,7 @@ import {
 
 export const setActivePoint = (event) => {
   const [point] = event.detail.mapevent.features;
-  goto(`/trees/${point.properties.id}`);
+  goto(`/farms/${point.properties.id}`);
 };
 
 const getDatasetURL = getODSEndpoint('producteursagri');
@@ -20,11 +20,11 @@ const authDataset = addQueryParamsObject(datasetURL)({ apikey: 'API_KEY' });
 const fullJsonURL = getJsonODSEndpoint(datasetURL);
 export const filteredJsonURL = addQueryParamsObject(fullJsonURL)({
   apikey: 'API_KEY',
-  rows: '10000',
+  rows: '100',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
 
-export const getTreeURL = getRecordEndpoint(authDataset);
+export const getFarmURL = getRecordEndpoint(authDataset);
 
 export const json2geojson = (json) => {
   const flatJson = json.map((record) => ({ id: record.id, ...record.fields }));

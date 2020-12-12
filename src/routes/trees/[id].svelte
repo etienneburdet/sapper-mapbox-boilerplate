@@ -1,28 +1,28 @@
 <script context="module">
-  import { filteredJsonURL, getTreeURL, json2geojson } from './_helpers';
+  import { filteredJsonURL, getFarmURL, json2geojson } from './_helpers';
   export async function preload(page, session) {
     const { id } = page.params;
     const { query } = page;
 
-    let treeDetails;
+    let farmDetails;
     if (id !== '0') {
-      const resFromAPI = await this.fetch(getTreeURL(id));
+      const resFromAPI = await this.fetch(getFarmURL(id));
       const jsonFromAPI = await resFromAPI.json();
-      treeDetails = jsonFromAPI.record;
+      farmDetails = jsonFromAPI.record;
     }
 
-    let { treesData } = session;
-    let treesGeojson;
-    if (!treesData) {
+    let { farmsData } = session;
+    let farmsGeojson;
+    if (!farmsData) {
       const resFromAPI = await this.fetch(filteredJsonURL);
-      treesData = await resFromAPI.json();
-      session.treesData = treesData;
-      treesGeojson = json2geojson(treesData);
+      farmsData = await resFromAPI.json();
+      session.farmsData = farmsData;
+      farmsGeojson = json2geojson(farmsData);
     }
     return {
-      treesData,
-      treesGeojson,
-      treeDetails,
+      farmsData,
+      farmsGeojson,
+      farmDetails,
       query,
     };
   }
@@ -47,11 +47,9 @@
   import { q2center, setActivePoint, filterPage } from './_helpers';
 
   export let query;
-  export let treesData;
-  export let treesGeojson;
-  export let treeDetails;
-
-  $: console.log(treesGeojson);
+  export let farmsData;
+  export let farmsGeojson;
+  export let farmDetails;
 
   let toggleList = false;
   let showAdvFilters = false;
@@ -94,9 +92,9 @@
     </div>
     <!-- DESKTOP LIST -->
     <div id="list-ctn-content">
-      <List activeItem={treeDetails} let:id={activeId}>
-        {#each treesData as tree, index (tree.id)}
-          <ListItem id={tree.id} fields={tree.fields} active={tree.id === activeId} />
+      <List activeItem={farmDetails} let:id={activeId}>
+        {#each farmsData.slice(0, 10) as farm, index (farm.id)}
+          <ListItem id={farm.id} fields={farm.fields} active={farm.id === activeId} />
         {/each}
       </List>
     </div>
@@ -152,8 +150,8 @@
 
     <!-- MAP -->
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <MapSource id="trees" data={treesGeojson}>
-        <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
+      <MapSource id="farms" data={farmsGeojson}>
+        <MapLayer id="farms-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
       {#if query.coords}
         <Marker center={q2center(query.coords)} />
@@ -162,9 +160,9 @@
   </div>
 
   <!-- POP UP -->
-  <div id="popup-ctn" class:open={treeDetails}>
-    {#if treeDetails}
-      <Popup item={treeDetails} />
+  <div id="popup-ctn" class:open={farmDetails}>
+    {#if farmDetails}
+      <Popup item={farmDetails} />
     {/if}
   </div>
 </div>
