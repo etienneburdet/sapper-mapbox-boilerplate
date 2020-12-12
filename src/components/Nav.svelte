@@ -7,13 +7,8 @@
   let closeBtn;
   let ul;
 
-  onMount(() => {
-    ul.addEventListener('click', (e) => {
-      if (e.target.tagName == 'A') {
-        open = false;
-      }
-    });
-  });
+  const openMenu = () => (open = true);
+  const closeMenu = () => (open = false);
 </script>
 
 <nav class:open>
@@ -22,18 +17,36 @@
     <div class="header-menu">
       <div class="header-menu-top">
         <p>MENU</p>
-        <i class="header-menu-close fas fa-times" on:click={(open = false)} />
+        <i class="header-menu-close fas fa-times" on:click={closeMenu} />
       </div>
-      <ul bind:this={ul}>
-        <li><a aria-current={segment === undefined ? 'page' : undefined} href=".">home</a></li>
-        <li><a aria-current={segment === 'trees' ? 'page' : undefined} href="trees">trees</a></li>
-        <li><a aria-current={segment === 'about' ? 'page' : undefined} href="about">about</a></li>
-
-        <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-                     the blog data when we hover over the link or tap it on a touchscreen -->
+      <ul>
         <li>
           <a
-            on:click={(open = true)}
+            on:click={closeMenu}
+            rel="prefetch"
+            aria-current={segment === undefined ? 'page' : undefined}
+            href="."
+          >home</a>
+        </li>
+        <li>
+          <a
+            on:click={closeMenu}
+            rel="prefetch"
+            aria-current={segment === 'trees' ? 'page' : undefined}
+            href="trees"
+          >trees</a>
+        </li>
+        <li>
+          <a
+            on:click={closeMenu}
+            rel="prefetch"
+            aria-current={segment === 'about' ? 'page' : undefined}
+            href="about"
+          >about</a>
+        </li>
+        <li>
+          <a
+            on:click={closeMenu}
             rel="prefetch"
             aria-current={segment === 'partners' ? 'page' : undefined}
             href="partners"
@@ -43,6 +56,7 @@
     </div>
     <div class="burger is-align-items-center is-mobile">
       <a
+        on:click={openMenu}
         role="button"
         class="navbar-burger burger"
         aria-label="menu"
@@ -178,19 +192,4 @@
       }
     }
   }
-
-  /*[aria-current] {
-        position: relative;
-        display: inline-block;
-    }
-
-    [aria-current]::after {
-        position: absolute;
-        content: '';
-        width: calc(100%);
-        height: 2px;
-        background-color: rgb(255, 62, 0);
-        display: block;
-        bottom: -1px;
-    }*/
 </style>
