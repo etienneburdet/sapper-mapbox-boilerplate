@@ -1,4 +1,4 @@
-export const formDatasetUrl = (baseUrl) => (dataset) => new URL(dataset, baseUrl);
+export const getODSEndpoint = (domain) => (dataset) => new URL(`https://${domain}.opendatasoft.com/api/v2/catalog/datasets/${dataset}`);
 
 export const getGeojsonEndpoint = (url) => {
   const path = url.pathname;
@@ -6,10 +6,30 @@ export const getGeojsonEndpoint = (url) => {
   return new URL(geojsonPath, url);
 };
 
-export const getRecordsEndpoint = (url) => {
+export const getJsonODSEndpoint = (url) => {
   const path = url.pathname;
-  const recordsPath = `${path}/records`;
-  return new URL(recordsPath, url);
+  const jsonPath = `${path}/exports/jsonods`;
+  return new URL(jsonPath, url);
+};
+
+export const getRecordsEndpoint = (url) => {
+  const recordsPath = `${url.pathname}/records`;
+  const recordsUrl = new URL(recordsPath, url);
+  recordsUrl.search = url.search;
+  return recordsUrl;
+};
+
+export const getRecordEndpoint = (url) => (id) => {
+  const recordPath = `${url.pathname}/records/${id}`;
+  const recordUrl = new URL(recordPath, url);
+  recordUrl.search = url.search;
+  return recordUrl;
+};
+
+export const getFacetsEndpoint = (url) => {
+  const path = url.pathname;
+  const facetsPath = `${path}/facets`;
+  return new URL(facetsPath, url);
 };
 
 const addQueryParamToUrl = (url) => (clause) => (value) => {
@@ -31,7 +51,7 @@ export const addIncludeAppMetasQuery = (url) => addQueryParamToUrl(url)('include
 export const addTimezoneQuery = (url) => addQueryParamToUrl(url)('timezone');
 
 // More general tool to pass an array of { clause: value } params
-export const addQueryParamsList = (url) => (queryParams) => {
+export const addQueryParamsObject = (url) => (queryParams) => {
   const appendedUrl = new URL(url);
   appendedUrl.search = new URLSearchParams(queryParams);
   return appendedUrl;

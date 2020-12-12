@@ -94,6 +94,7 @@ export default {
                 useESModules: true,
               },
             ],
+            ['transform-object-rest-spread', { useBuiltIns: true }],
           ],
         }),
 

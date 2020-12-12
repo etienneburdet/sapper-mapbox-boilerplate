@@ -10,12 +10,10 @@
 
 <a rel="prefetch" href="/trees/{id}?{querystring}">
   <div class="item" class:has-background-light={active}>
-    <p class="title is-size-5">{fields.libellefrancais}</p>
-    <p class="subtitle is-size-6">{fields.adresse}</p>
+    <p class="title is-size-5">{fields.add_nom_ferme}</p>
+    <p class="subtitle is-size-6">{fields.add_adresse}</p>
     <div class="tags">
-      <div class="tag is-medium">{fields.typeemplacement}</div>
-      <div class="tag is-medium">{fields.stadedeveloppement}</div>
-      <div class="tag is-medium">{fields.domanialite}</div>
+      <div class="tag is-medium">{fields.add_ville}</div>
     </div>
   </div>
 </a>

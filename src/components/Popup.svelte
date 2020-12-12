@@ -8,11 +8,10 @@
 
 <div class="popup">
   <a rel="prefetch" href="/trees/0?{querystring}"> <i class="fas fa-times" /> </a>
-  <p class="title">{item.fields.libellefrancais}</p>
-  <p class="subtitle">{item.fields.genre}</p>
+  <p class="title">{item.fields.add_nom_ferme}</p>
+  <p class="subtitle">{item.fields.add_ville}</p>
   <hr />
-  <p>{item.fields.domanialite}</p>
-  <p>{item.fields.adresse}</p>
+  <p>{item.fields.add_adresse}</p>
   <hr />
   <p>
     Exploitation familiale depuis 3 générations, située entre Morvan et Charolais, comptant 130

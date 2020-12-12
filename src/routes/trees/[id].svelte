@@ -1,24 +1,27 @@
 <script context="module">
-  import { treesGeojsonEndpoint, getTreeRecordEndpoint } from './_helpers';
+  import { filteredJsonURL, getTreeURL, json2geojson } from './_helpers';
   export async function preload(page, session) {
     const { id } = page.params;
     const { query } = page;
 
     let treeDetails;
     if (id !== '0') {
-      const resFromAPI = await this.fetch(getTreeRecordEndpoint(`objectid=${id}`));
+      const resFromAPI = await this.fetch(getTreeURL(id));
       const jsonFromAPI = await resFromAPI.json();
-      treeDetails = jsonFromAPI.records[0].record;
+      treeDetails = jsonFromAPI.record;
     }
 
     let { treesData } = session;
+    let treesGeojson;
     if (!treesData) {
-      const resFromAPI = await this.fetch(treesGeojsonEndpoint);
+      const resFromAPI = await this.fetch(filteredJsonURL);
       treesData = await resFromAPI.json();
       session.treesData = treesData;
+      treesGeojson = json2geojson(treesData);
     }
     return {
       treesData,
+      treesGeojson,
       treeDetails,
       query,
     };
@@ -45,7 +48,10 @@
 
   export let query;
   export let treesData;
+  export let treesGeojson;
   export let treeDetails;
+
+  $: console.log(treesGeojson);
 
   let toggleList = false;
   let showAdvFilters = false;
@@ -89,12 +95,8 @@
     <!-- DESKTOP LIST -->
     <div id="list-ctn-content">
       <List activeItem={treeDetails} let:id={activeId}>
-        {#each treesData.features as tree, index (tree.properties.objectid)}
-          <ListItem
-            id={tree.properties.objectid}
-            fields={tree.properties}
-            active={tree.properties.objectid === activeId}
-          />
+        {#each treesData as tree, index (tree.id)}
+          <ListItem id={tree.id} fields={tree.fields} active={tree.id === activeId} />
         {/each}
       </List>
     </div>
@@ -150,7 +152,7 @@
 
     <!-- MAP -->
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <MapSource id="trees" data={treesData}>
+      <MapSource id="trees" data={treesGeojson}>
         <MapLayer id="trees-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
       {#if query.coords}

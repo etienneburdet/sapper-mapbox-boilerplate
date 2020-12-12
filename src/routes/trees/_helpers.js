@@ -1,29 +1,36 @@
 import { goto } from '@sapper/app';
+import GeoJSON from 'geojson';
+
 import {
-  formDatasetUrl,
-  getGeojsonEndpoint,
-  getRecordsEndpoint,
-  addQueryParamsList,
-  addWhereQuery,
+  getODSEndpoint,
+  getJsonODSEndpoint,
+  getRecordEndpoint,
+  addQueryParamsObject,
 } from '@/plugins/ods-data';
 
 export const setActivePoint = (event) => {
   const [point] = event.detail.mapevent.features;
-  goto(`/trees/${point.properties.objectid}`);
+  goto(`/trees/${point.properties.id}`);
 };
 
-const formDatanetworkUrl = formDatasetUrl('https://data.opendatasoft.com/api/v2/catalog/datasets/');
-const treesUrl = formDatanetworkUrl('arbresremarquablesparis2011%40public');
+const getDatasetURL = getODSEndpoint('producteursagri');
+const datasetURL = getDatasetURL('bienvenue-a-la-ferme');
+const authDataset = addQueryParamsObject(datasetURL)({ apikey: 'API_KEY' });
 
-const fullGeojson = getGeojsonEndpoint(treesUrl);
-export const treesGeojsonEndpoint = addQueryParamsList(fullGeojson)({
-  rows: '-1',
-  select:
-    'geom_x_y, objectid, adresse, libellefrancais, typeemplacement, stadedeveloppement, domanialite',
+const fullJsonURL = getJsonODSEndpoint(datasetURL);
+export const filteredJsonURL = addQueryParamsObject(fullJsonURL)({
+  apikey: 'API_KEY',
+  rows: '10000',
+  select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
 
-const treesRecordsEndpoint = getRecordsEndpoint(treesUrl);
-export const getTreeRecordEndpoint = addWhereQuery(treesRecordsEndpoint);
+export const getTreeURL = getRecordEndpoint(authDataset);
+
+export const json2geojson = (json) => {
+  const flatJson = json.map((record) => ({ id: record.id, ...record.fields }));
+  const geojson = GeoJSON.parse(flatJson, { Point: ['add_lat', 'add_lon'] });
+  return geojson;
+};
 
 export const q2center = (coordsString) => {
   if (!coordsString) {
@@ -38,8 +45,13 @@ export const q2center = (coordsString) => {
 
 export const filterPage = (event) => {
   const url = new URL(window.location);
-  const { searchParams } = url;
   const keys = Object.keys(event.detail);
-  keys.forEach((key) => (event.detail[key] ? url.searchParams.set(key, event.detail[key]) : url.searchParams.delete(key)));
+  keys.forEach((key) => {
+    if (event.detail[key]) {
+      url.searchParams.set(key, event.detail[key]);
+    } else {
+      url.searchParams.delete(key);
+    }
+  });
   goto(url);
 };
