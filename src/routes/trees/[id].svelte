@@ -1,6 +1,5 @@
 <script context="module">
   import { treesGeojsonEndpoint, getTreeRecordEndpoint } from './_helpers';
-
   export async function preload(page, session) {
     const { id } = page.params;
     const { query } = page;

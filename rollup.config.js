@@ -1,4 +1,5 @@
 import path from 'path';
+import dotenv from 'dotenv';
 import resolve from '@rollup/plugin-node-resolve';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 import replace from '@rollup/plugin-replace';
@@ -15,6 +16,8 @@ import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
 import purgecss from '@fullhuman/postcss-purgecss';
 import pkg from './package.json';
+
+dotenv.config();
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -51,6 +54,7 @@ export default {
       replace({
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode),
+        API_KEY: process.env.API_KEY,
       }),
       commonjs(),
       nodePolyfills(),
@@ -111,6 +115,7 @@ export default {
       replace({
         'process.browser': false,
         'process.env.NODE_ENV': JSON.stringify(mode),
+        API_KEY: process.env.API_KEY,
       }),
       commonjs(),
       svelte({

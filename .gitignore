@@ -6,3 +6,4 @@ yarn-error.log
 /sapper-mapbox-boilerplate.iml
 /.idea/
 .vercel
+.env
