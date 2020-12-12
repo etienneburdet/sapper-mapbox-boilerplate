@@ -29,6 +29,7 @@
   <style src="../styles/global.scss">
   </style>
 </svelte:head>
+
 {#if $preloading}
   <LoadBar />
 {/if}
