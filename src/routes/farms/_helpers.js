@@ -20,7 +20,7 @@ const authDataset = addQueryParamsObject(datasetURL)({ apikey: 'API_KEY' });
 const fullJsonURL = getJsonODSEndpoint(datasetURL);
 export const filteredJsonURL = addQueryParamsObject(fullJsonURL)({
   apikey: 'API_KEY',
-  rows: '100',
+  rows: '10000',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
 

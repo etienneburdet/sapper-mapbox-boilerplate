@@ -17,7 +17,6 @@
       const resFromAPI = await this.fetch(filteredJsonURL);
       farmsData = await resFromAPI.json();
       session.farmsData = farmsData;
-      farmsGeojson = json2geojson(farmsData);
     }
     return {
       farmsData,
@@ -48,8 +47,10 @@
 
   export let query;
   export let farmsData;
-  export let farmsGeojson;
   export let farmDetails;
+  let farmsGeojson;
+
+  $: farmsGeojson = json2geojson(farmsData);
 
   let toggleList = false;
   let showAdvFilters = false;
@@ -93,7 +94,7 @@
     <!-- DESKTOP LIST -->
     <div id="list-ctn-content">
       <List activeItem={farmDetails} let:id={activeId}>
-        {#each farmsData.slice(0, 10) as farm, index (farm.id)}
+        {#each farmsData as farm, index (farm.id)}
           <ListItem id={farm.id} fields={farm.fields} active={farm.id === activeId} />
         {/each}
       </List>
