@@ -1,8 +1,17 @@
 <script context="module">
-  import { filteredJsonURL, getFarmURL, json2geojson } from './_helpers';
+  import {
+    filteredJsonURL,
+    getFarmURL,
+    json2geojson,
+    farmsBaseUrl,
+    farmsGeojsonUrl,
+    getFarmRecord,
+  } from './_helpers';
   export async function preload(page, session) {
     const { id } = page.params;
     const { query } = page;
+
+    console.log(farmsGeojsonUrl);
 
     let farmDetails;
     if (id !== '0') {
@@ -20,7 +29,6 @@
     }
     return {
       farmsData,
-      farmsGeojson,
       farmDetails,
       query,
     };
@@ -49,8 +57,6 @@
   export let farmsData;
   export let farmDetails;
   let farmsGeojson;
-
-  $: farmsGeojson = json2geojson(farmsData);
 
   let toggleList = false;
   let showAdvFilters = false;

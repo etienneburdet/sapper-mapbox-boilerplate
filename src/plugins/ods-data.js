@@ -1,3 +1,41 @@
+export const dataset = (domain, dataset) => new URL(`https://${domain}.opendatasoft.com/api/v2/catalog/datasets/${dataset}`);
+
+const apikey = (url, key) => {
+  const authUrl = url;
+  url.searchParams.set('apikey', key);
+  return authUrl;
+};
+
+export const privateDataset = (domain, datasetName, key) => {
+  const publicUrl = dataset(domain, datasetName);
+  const authUrl = apikey(publicUrl, key);
+  return authUrl;
+};
+
+export const exportFile = (url, exportName) => {
+  const exportpath = `${url.pathname}/exports/${exportName}`;
+  const exportUrl = new URL(exportpath, url);
+  exportUrl.search = url.search;
+  return exportUrl;
+};
+
+export const record = (url) => (id) => {
+  const recordPath = `${url.pathname}/records/${id}`;
+  const recordUrl = new URL(recordPath, url);
+  recordUrl.search = url.search;
+  return recordUrl;
+};
+
+export const query = (url, queryObject) => {
+  const searchParams = new URLSearchParams(url.search);
+  Object.entries(queryObject).forEach((entry) => {
+    searchParams.set(entry[0], entry[1]);
+  });
+  const queryUrl = url;
+  queryUrl.search = searchParams;
+  return queryUrl;
+};
+
 export const getODSEndpoint = (domain) => (dataset) => new URL(`https://${domain}.opendatasoft.com/api/v2/catalog/datasets/${dataset}`);
 
 export const getGeojsonEndpoint = (url) => {
