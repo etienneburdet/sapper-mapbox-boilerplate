@@ -9,7 +9,7 @@
 
   const navigateToCoords = (event) => {
     const [lng, lat] = event.detail.coords;
-    goto(`/farms/0?coords=${lng},${lat}`);
+    goto(`/farms/all?coords=${lng},${lat}`);
   };
 </script>
 

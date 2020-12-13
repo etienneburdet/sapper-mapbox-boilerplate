@@ -7,7 +7,7 @@
 </script>
 
 <div class="popup">
-  <a rel="prefetch" href="/farms/0?{querystring}"> <i class="fas fa-times" /> </a>
+  <a rel="prefetch" href="/farms/all?{querystring}"> <i class="fas fa-times" /> </a>
   <p class="title">{item.fields.add_nom_ferme}</p>
   <p class="subtitle">{item.fields.add_ville}</p>
   <hr />

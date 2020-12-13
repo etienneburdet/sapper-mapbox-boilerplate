@@ -1,34 +1,35 @@
 <script context="module">
-  import {
-    filteredJsonURL,
-    getFarmURL,
-    json2geojson,
-    farmsBaseUrl,
-    farmsGeojsonUrl,
-    getFarmRecord,
-  } from './_helpers';
+  import { farmsGeojsonUrl, farmsShortlistUrl, getFarmWhere } from './_helpers';
+
   export async function preload(page, session) {
     const { id } = page.params;
     const { query } = page;
 
-    console.log(farmsGeojsonUrl);
-
     let farmDetails;
-    if (id !== '0') {
-      const resFromAPI = await this.fetch(getFarmURL(id));
+    if (id !== 'all') {
+      const farmUrl = getFarmWhere(`add_nom_ferme like "${id}"`);
+      const resFromAPI = await this.fetch(farmUrl);
       const jsonFromAPI = await resFromAPI.json();
-      farmDetails = jsonFromAPI.record;
+      farmDetails = jsonFromAPI.records[0].record;
     }
 
-    let { farmsData } = session;
-    let farmsGeojson;
-    if (!farmsData) {
-      const resFromAPI = await this.fetch(filteredJsonURL);
-      farmsData = await resFromAPI.json();
-      session.farmsData = farmsData;
+    let farmsShortlist;
+    if (true) {
+      // todo condition
+      const resFromAPI = await this.fetch(farmsShortlistUrl);
+      const jsonFromAPI = await resFromAPI.json();
+      farmsShortlist = jsonFromAPI.records;
+    }
+
+    let { farmsGeojson } = session;
+    if (!farmsGeojson) {
+      const resFromAPI = await this.fetch(farmsGeojsonUrl);
+      farmsGeojson = await resFromAPI.json();
+      session.farmsGeojson = farmsGeojson;
     }
     return {
-      farmsData,
+      farmsGeojson,
+      farmsShortlist,
       farmDetails,
       query,
     };
@@ -53,10 +54,10 @@
   import { paint } from './_mapstyle';
   import { q2center, setActivePoint, filterPage } from './_helpers';
 
-  export let query;
-  export let farmsData;
+  export let farmsGeojson;
+  export let farmsShortlist;
   export let farmDetails;
-  let farmsGeojson;
+  export let query;
 
   let toggleList = false;
   let showAdvFilters = false;
@@ -100,8 +101,12 @@
     <!-- DESKTOP LIST -->
     <div id="list-ctn-content">
       <List activeItem={farmDetails} let:id={activeId}>
-        {#each farmsData as farm, index (farm.id)}
-          <ListItem id={farm.id} fields={farm.fields} active={farm.id === activeId} />
+        {#each farmsShortlist as farm (farm)}
+          <ListItem
+            id={farm.record.fields.add_nom_ferme}
+            fields={farm.record.fields}
+            active={farm.record.fields.add_nom_ferme === activeId}
+          />
         {/each}
       </List>
     </div>
@@ -157,12 +162,12 @@
 
     <!-- MAP -->
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <MapSource id="farms" data={farmsGeojson}>
+      <!-- <MapSource id="farms" data={farmsGeojson}>
         <MapLayer id="farms-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
       {#if query.coords}
         <Marker center={q2center(query.coords)} />
-      {/if}
+      {/if} -->
     </Map>
   </div>
 
