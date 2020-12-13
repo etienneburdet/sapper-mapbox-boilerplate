@@ -1,5 +1,5 @@
 <script context="module">
-  import { farmsGeojsonUrl, farmsShortlistUrl, getFarmWhere } from './_helpers';
+  import { farmsShortlistUrl, getFarmWhere } from './_helpers';
 
   export async function preload(page, session) {
     const { id } = page.params;
@@ -21,14 +21,13 @@
       farmsShortlist = jsonFromAPI.records;
     }
 
-    let { farmsGeojson } = session;
-    if (!farmsGeojson) {
-      const resFromAPI = await this.fetch(farmsGeojsonUrl);
-      farmsGeojson = await resFromAPI.json();
-      session.farmsGeojson = farmsGeojson;
-    }
+    // let { farmsGeojson } = session;
+    // if (!farmsGeojson) {
+    //   const resFromAPI = await this.fetch(farmsGeojsonUrl);
+    //   farmsGeojson = await resFromAPI.json();
+    //   session.farmsGeojson = farmsGeojson;
+    // }
     return {
-      farmsGeojson,
       farmsShortlist,
       farmDetails,
       query,
@@ -54,7 +53,6 @@
   import { paint } from './_mapstyle';
   import { q2center, setActivePoint, filterPage } from './_helpers';
 
-  export let farmsGeojson;
   export let farmsShortlist;
   export let farmDetails;
   export let query;
@@ -66,6 +64,10 @@
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
   const partenaires = ['La ruche', 'La ferme', 'La la'];
   const services = ['Producteur', 'Point de vente'];
+
+  // Fake data for testing
+  const farmsGeojsonUrl =
+    'https://data.opendatasoft.com/api/v2/catalog/datasets/velib-disponibilite-en-temps-reel%40parisdata/exports/geojson?rows=-1&timezone=UTC&pretty=false';
 </script>
 
 <div id="page-ctn">
@@ -162,12 +164,12 @@
 
     <!-- MAP -->
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <!-- <MapSource id="farms" data={farmsGeojson}>
+      <MapSource id="farms" dataUrl={farmsGeojsonUrl}>
         <MapLayer id="farms-circles" type="circle" {paint} on:mapClick={setActivePoint} />
       </MapSource>
       {#if query.coords}
         <Marker center={q2center(query.coords)} />
-      {/if} -->
+      {/if}
     </Map>
   </div>
 

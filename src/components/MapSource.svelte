@@ -1,7 +1,7 @@
 <script>
   import { getContext, onMount, setContext } from 'svelte';
 
-  export let data;
+  export let dataUrl;
   export let id;
 
   let isSourceLoaded;
@@ -13,7 +13,7 @@
     getMapSourceId: () => id,
   });
 
-  const setSource = () => {
+  const setSource = (data) => {
     if (map.getSource(id)) {
       map.getSource(id).setData(data);
     } else {
@@ -35,13 +35,29 @@
     isSourceLoaded = false;
   };
 
-  onMount(() => {
-    map.isStyleLoaded() ? setSource() : map.on('load', setSource);
+  onMount(async () => {
+    try {
+      const resFromApi = await fetch(dataUrl);
+      const geojsonFromApi = await resFromApi.json();
+      map.addSource(id, {
+        type: 'geojson',
+        data: geojsonFromApi,
+      });
+      isSourceLoaded = true;
+    } catch (err) {
+      console.error('erreur', err);
+    }
+
+    // if (map.isStyleLoaded()) {
+    //   setSource(geojsonFromApi);
+    // } else {
+    //   map.on('load', () => setSource(geojsonFromApi));
+    // }
 
     return destroySource;
   });
 </script>
 
 {#if isSourceLoaded}
-    <slot></slot>
+  <slot />
 {/if}
