@@ -1,5 +1,6 @@
 <script>
   import { getContext, onMount, setContext } from 'svelte';
+  import { fetchGeojson } from '@/routes/farms/_helpers';
 
   export let dataUrl;
   export let id;
@@ -19,7 +20,7 @@
     } else {
       map.addSource(id, {
         type: 'geojson',
-        data: dataUrl,
+        data,
       });
       isSourceLoaded = true;
     }
@@ -36,10 +37,13 @@
   };
 
   onMount(async () => {
+    const farmsGeojson = await fetchGeojson();
+    console.log(farmsGeojson);
+
     if (map.isStyleLoaded()) {
-      setSource();
+      setSource(farmsGeojson);
     } else {
-      map.on('load', () => setSource());
+      map.on('load', () => setSource(farmsGeojson));
     }
 
     return destroySource;

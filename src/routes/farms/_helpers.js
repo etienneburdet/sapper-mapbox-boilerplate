@@ -1,5 +1,5 @@
 import { goto } from '@sapper/app';
-
+import GeoJSON from 'geojson';
 import * as ods from '@/plugins/ods-data';
 // import {
 //   getODSEndpoint,
@@ -19,6 +19,26 @@ export const farmsGeojsonUrl = ods.query(fullGeojson, {
   rows: '10000',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
+
+const json2geojson = (json) => {
+  /* eslint-disable */
+  const flatJson = json.map((record) => Object.assign({ id: record.id }, record.fields));
+  /* eslint-enable */
+  const geojson = GeoJSON.parse(flatJson, { Point: ['add_lat', 'add_lon'] });
+  return geojson;
+};
+
+export const fetchGeojson = async () => {
+  const fullJsonods = ods.exportFile(farmsBaseUrl, 'jsonods');
+  const farmsJsonodsUrl = ods.query(fullJsonods, {
+    rows: '10000',
+    select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
+  });
+  const resFromAPI = await fetch(farmsJsonodsUrl);
+  const farmsJson = await resFromAPI.json();
+  const farmGeojson = await json2geojson(farmsJson);
+  return farmGeojson;
+};
 
 const farmsRecords = ods.records(farmsBaseUrl);
 export const getFarmWhere = ods.where(farmsRecords);
@@ -40,12 +60,6 @@ export const farmsShortlistUrl = ods.query(farmsRecords, {
 // });
 //
 // export const getFarmURL = getRecordEndpoint(authDataset);
-
-// export const json2geojson = (json) => {
-//   const flatJson = json.map((record) => ({ id: record.id, ...record.fields }));
-//   const geojson = GeoJSON.parse(flatJson, { Point: ['add_lat', 'add_lon'] });
-//   return geojson;
-// };
 
 export const setActivePoint = (event) => {
   const [point] = event.detail.mapevent.features;
