@@ -7,28 +7,25 @@
 
     let farmDetails;
     if (id !== 'all') {
-      const farmUrl = getFarmWhere(`add_nom_ferme like "${id}"`);
+      // With 'where'
+      // const farmUrl = getFarmWhere(`add_nom_ferme like "${id}"`);
+      // With 'record/:id'
+      const farmUrl = getFarmRecord(id);
       const resFromAPI = await this.fetch(farmUrl);
       const jsonFromAPI = await resFromAPI.json();
       farmDetails = jsonFromAPI.records[0].record;
     }
 
-    let farmsShortlist;
-    if (true) {
-      // todo condition
-      const resFromAPI = await this.fetch(farmsShortlistUrl);
-      const jsonFromAPI = await resFromAPI.json();
-      farmsShortlist = jsonFromAPI.records;
-    }
-
-    // let { farmsGeojson } = session;
-    // if (!farmsGeojson) {
-    //   const resFromAPI = await this.fetch(farmsGeojsonUrl);
-    //   farmsGeojson = await resFromAPI.json();
-    //   session.farmsGeojson = farmsGeojson;
+    // let farmsShortlist;
+    // if (true) {
+    //   // todo condition
+    //   const resFromAPI = await this.fetch(farmsShortlistUrl);
+    //   const jsonFromAPI = await resFromAPI.json();
+    //   farmsShortlist = jsonFromAPI.records;
     // }
+
     return {
-      farmsShortlist,
+      // farmsShortlist,
       farmDetails,
       query,
     };
@@ -51,9 +48,10 @@
   import Geolocator from '@/components/Geolocator.svelte';
 
   import { paint } from './_mapstyle';
-  import { q2center, setActivePoint, filterPage } from './_helpers';
+  import { q2center, setActivePoint, filterPage, getFarmRecord } from './_helpers';
 
-  export let farmsShortlist;
+  // export let farmsShortlist;
+  let farmsShortlist = [];
   export let farmDetails;
   export let query;
 
@@ -65,9 +63,16 @@
   const partenaires = ['La ruche', 'La ferme', 'La la'];
   const services = ['Producteur', 'Point de vente'];
 
-  // Fake data for testing
-  const farmsGeojsonUrl =
-    'https://data.opendatasoft.com/api/v2/catalog/datasets/velib-disponibilite-en-temps-reel%40parisdata/exports/geojson?rows=-1&timezone=UTC&pretty=false';
+  const updateList = async (event) => {
+    const firstIds = event.detail.slice(0, 20);
+    farmsShortlist = await Promise.all(
+      firstIds.map(async (id) => {
+        const resFromAPI = await fetch(getFarmRecord(id));
+        const jsonFromAPI = await resFromAPI.json();
+        return jsonFromAPI;
+      }),
+    );
+  };
 </script>
 
 <div id="page-ctn">
@@ -105,7 +110,7 @@
       <List activeItem={farmDetails} let:id={activeId}>
         {#each farmsShortlist as farm (farm)}
           <ListItem
-            id={farm.record.fields.add_nom_ferme}
+            id={farm.record.id}
             fields={farm.record.fields}
             active={farm.record.fields.add_nom_ferme === activeId}
           />
@@ -164,8 +169,14 @@
 
     <!-- MAP -->
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <MapSource id="farms" dataUrl={farmsGeojsonUrl}>
-        <MapLayer id="farms-circles" type="circle" {paint} on:mapClick={setActivePoint} />
+      <MapSource id="farms">
+        <MapLayer
+          id="farms-circles"
+          type="circle"
+          {paint}
+          on:mapClick={setActivePoint}
+          on:render={updateList}
+        />
       </MapSource>
       {#if query.coords}
         <Marker center={q2center(query.coords)} />

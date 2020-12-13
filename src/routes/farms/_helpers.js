@@ -40,6 +40,8 @@ export const fetchGeojson = async () => {
   return farmGeojson;
 };
 
+export const getFarmRecord = ods.record(farmsBaseUrl);
+
 const farmsRecords = ods.records(farmsBaseUrl);
 export const getFarmWhere = ods.where(farmsRecords);
 

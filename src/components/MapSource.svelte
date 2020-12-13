@@ -38,7 +38,6 @@
 
   onMount(async () => {
     const farmsGeojson = await fetchGeojson();
-    console.log(farmsGeojson);
 
     if (map.isStyleLoaded()) {
       setSource(farmsGeojson);

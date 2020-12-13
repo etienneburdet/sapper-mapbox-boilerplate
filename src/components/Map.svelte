@@ -1,10 +1,12 @@
 <script>
-  import { onMount, setContext } from 'svelte';
+  import { onMount, setContext, createEventDispatcher } from 'svelte';
   import mapbox from 'mapbox-gl';
   import config from '@/app.config';
 
   import NavigationControl from './NavigationControl.svelte';
   import GeolocateControl from './GeolocateControl.svelte';
+
+  const dispatch = createEventDispatcher();
 
   export let center;
   export let navigationPosition;
