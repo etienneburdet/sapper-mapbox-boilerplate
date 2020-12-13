@@ -19,7 +19,7 @@
     } else {
       map.addSource(id, {
         type: 'geojson',
-        data,
+        data: dataUrl,
       });
       isSourceLoaded = true;
     }
@@ -36,23 +36,11 @@
   };
 
   onMount(async () => {
-    try {
-      const resFromApi = await fetch(dataUrl);
-      const geojsonFromApi = await resFromApi.json();
-      map.addSource(id, {
-        type: 'geojson',
-        data: geojsonFromApi,
-      });
-      isSourceLoaded = true;
-    } catch (err) {
-      console.error('erreur', err);
+    if (map.isStyleLoaded()) {
+      setSource();
+    } else {
+      map.on('load', () => setSource());
     }
-
-    // if (map.isStyleLoaded()) {
-    //   setSource(geojsonFromApi);
-    // } else {
-    //   map.on('load', () => setSource(geojsonFromApi));
-    // }
 
     return destroySource;
   });
