@@ -25,7 +25,7 @@
 
   const emitVisibleFeatures = () => {
     if (!map.getLayer(id)) { return; }
-  
+
     const features = map.queryRenderedFeatures(currentLayer).slice(0, 50);
     dispatch('render', features);
   };

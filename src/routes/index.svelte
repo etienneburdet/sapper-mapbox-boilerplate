@@ -1,16 +1,5 @@
-<script context="module">
-  export async function preload(page, session) {}
-</script>
-
 <script>
-  import { goto } from '@sapper/app';
-
   import Geocoder from '@/components/Geocoder.svelte';
-
-  const navigateToCoords = (event) => {
-    const [lng, lat] = event.detail.coords;
-    goto(`/farms/all?coords=${lng},${lat}`);
-  };
 </script>
 
 <section class="section has-background-light">
@@ -28,22 +17,40 @@
     <div class="columns">
       <div class="column">
         <figure class="image is-128x128">
-          <img height="245" width="195" src="https://bulma.io/images/placeholders/128x128.png" />
+          <img
+            height="245"
+            width="195"
+            alt="bulma placeholder"
+            src="https://bulma.io/images/placeholders/128x128.png"
+          />
         </figure>
       </div>
       <div class="column">
-        <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
-        <div class="field is-grouped">
-          <div class="control is-expanded">
-            <div class="select is-fullwidth">
-              <select>
-                <option>Select dropdown</option>
-                <option>With options</option>
-              </select>
+        <form action="/farms/all" method="get">
+          <Geocoder id="home-search" geolocator={true} />
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <div class="control is-expanded">
+                  <div class="select is-fullwidth">
+                    <select name="partners">
+                      <option>Select dropdown</option>
+                      <option>With options</option>
+                      <option>New option !</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column is-narrow">
+              <div class="field">
+                <p class="control">
+                  <button type="submit" class="button is-info is-block-mobile"> Search </button>
+                </p>
+              </div>
             </div>
           </div>
-          <p class="control"><button class="button is-info"> Search </button></p>
-        </div>
+        </form>
       </div>
     </div>
   </div>

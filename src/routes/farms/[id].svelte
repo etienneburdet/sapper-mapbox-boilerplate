@@ -59,7 +59,7 @@
   <div id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator={true} on:geocode={filterPage} />
+      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
 
       <div
         id="list-ctn-header-btn"
@@ -90,9 +90,9 @@
       <List activeItem={farmDetails} let:id={activeId}>
         {#each farmsShortlist as farm (farm)}
           <ListItem
-            id={farm.properties.id}
+            id={farm.properties.recordid}
             fields={farm.properties}
-            active={farm.properties.id === activeId}
+            active={farm.properties.recordid === activeId}
           />
         {/each}
       </List>
@@ -106,12 +106,10 @@
         {#if !toggleList}<span>Liste</span>{/if}
         {#if toggleList}<span>Carte</span>{/if}
       </button>
-      <div id="map-header-content">
-        <Geocoder id="mobilesearchbox" />
-      </div>
-      <div class="geolocator">
-        <Geolocator />
-      </div>
+      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
+      <!-- <div class="geolocator">
+        <Geolocator on:geolocate={filterPage} />
+      </div> -->
     </div>
 
     <!-- MAP FOOTER / FILTERS -->
@@ -155,7 +153,7 @@
           type="circle"
           {paint}
           on:mapClick={setActivePoint}
-          on:render={(event) => farmsShortlist = event.detail}
+          on:render={(event) => (farmsShortlist = event.detail)}
         />
       </MapSource>
       {#if query.coords}
