@@ -44,7 +44,7 @@
 
   map.on('click', id, dispatchLayerEvent);
 
-  map.on('mousemove', (e) => {
+  map.getLayer(id) && map.on('mousemove', (e) => {
     const items = map.queryRenderedFeatures(e.point, {
       layers: [id],
     });
