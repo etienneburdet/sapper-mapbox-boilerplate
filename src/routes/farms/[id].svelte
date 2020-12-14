@@ -59,8 +59,7 @@
   <div id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator={true}
-                on:geocode={filterPage} on:geolocate={filterPage} />
+      <Geocoder id="desktopsearchbox" geolocator={true} on:geocode={filterPage} />
 
       <div
         id="list-ctn-header-btn"
@@ -156,7 +155,7 @@
           type="circle"
           {paint}
           on:mapClick={setActivePoint}
-          on:render={(event) => farmsShortlist = event.detail}
+          on:render={(event) => (farmsShortlist = event.detail)}
         />
       </MapSource>
       {#if query.coords}
