@@ -32,7 +32,7 @@
         </figure>
       </div>
       <div class="column">
-        <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
+        <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} on:geolocate={navigateToCoords} />
         <div class="field is-grouped">
           <div class="control is-expanded">
             <div class="select is-fullwidth">

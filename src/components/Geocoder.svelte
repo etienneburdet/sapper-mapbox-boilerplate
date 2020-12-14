@@ -102,7 +102,7 @@
   </div>
   {#if geolocator}
     <div class="control">
-      <Geolocator />
+      <Geolocator on:geolocate />
     </div>
   {/if}
 </div>
