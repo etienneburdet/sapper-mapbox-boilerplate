@@ -19,9 +19,14 @@
   let input;
   let hiddenInput;
 
+  const selectAll = () => {
+      input.select();
+  };
+
   const setCoords = (event) => {
     input.value = 'Votre position';
     hiddenInput.value = event.detail.coords;
+    dispatch('geolocate', { coords: event.detail.coords});
   };
 
   onMount(async () => {
@@ -93,7 +98,7 @@
 
 <div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
   <div class="control is-expanded has-icon-left">
-    <input {id} class="input" type="text" autocomplete="off" bind:value={query} bind:this={input} />
+    <input {id} class="input" type="text" autocomplete="off" bind:value={query} bind:this={input} on:focus={selectAll} />
     <input type="hidden" name="coords" bind:this={hiddenInput} on:submit|preventDefault />
   </div>
   {#if geolocator}

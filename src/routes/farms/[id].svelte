@@ -59,7 +59,8 @@
   <div id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator={true} on:geocode={filterPage} />
+      <Geocoder id="desktopsearchbox" geolocator={true}
+                on:geocode={filterPage} on:geolocate={filterPage} />
 
       <div
         id="list-ctn-header-btn"
@@ -107,10 +108,10 @@
         {#if toggleList}<span>Carte</span>{/if}
       </button>
       <div id="map-header-content">
-        <Geocoder id="mobilesearchbox" />
+        <Geocoder id="mobilesearchbox" on:geocode={filterPage} />
       </div>
       <div class="geolocator">
-        <Geolocator />
+        <Geolocator on:geolocate={filterPage} />
       </div>
     </div>
 
