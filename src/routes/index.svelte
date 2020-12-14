@@ -1,7 +1,3 @@
-<script context="module">
-  export async function preload(page, session) {}
-</script>
-
 <script>
   import Geocoder from '@/components/Geocoder.svelte';
 </script>
@@ -21,7 +17,12 @@
     <div class="columns">
       <div class="column">
         <figure class="image is-128x128">
-          <img height="245" width="195" src="https://bulma.io/images/placeholders/128x128.png" />
+          <img
+            height="245"
+            width="195"
+            alt="bulma placeholder"
+            src="https://bulma.io/images/placeholders/128x128.png"
+          />
         </figure>
       </div>
       <div class="column">
