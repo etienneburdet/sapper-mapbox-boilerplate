@@ -3,14 +3,7 @@
 </script>
 
 <script>
-  import { goto } from '@sapper/app';
-
   import Geocoder from '@/components/Geocoder.svelte';
-
-  // const navigateToCoords = (event) => {
-  //   const [lng, lat] = event.detail.coords;
-  //   goto(`/farms/all?coords=${lng},${lat}`);
-  // };
 </script>
 
 <section class="section has-background-light">
@@ -40,6 +33,7 @@
                 <select name="partners">
                   <option>Select dropdown</option>
                   <option>With options</option>
+                  <option>New option !</option>
                 </select>
               </div>
             </div>

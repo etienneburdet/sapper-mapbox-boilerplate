@@ -16,19 +16,13 @@
   };
 
   let query;
+  let input;
   let hiddenInput;
-  let geolocated = false;
-
-  const focusInput = () => {
-    if (query) {
-      document.execCommand('selectAll');
-    }
-  };
 
   const setCoords = (event) => {
-    hiddenInput.value = event.detail.coords
-    geolocated = true;
-  }
+    input.value = 'Votre position';
+    hiddenInput.value = event.detail.coords;
+  };
 
   onMount(async () => {
     const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
@@ -90,7 +84,7 @@
       onSelection: (feedback) => {
         const coords = feedback.selection.value.geometry.coordinates;
         query = feedback.selection.value.label;
-        geolocated = false;
+        hiddenInput.value = coords;
         dispatch('geocode', { coords });
       },
     });
@@ -99,20 +93,8 @@
 
 <div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
   <div class="control is-expanded has-icon-left">
-    <input
-      {id}
-      class="input"
-      type="text"
-      autocomplete="off"
-      on:focus={focusInput}
-      bind:value={query}
-    />
-    <input type="hidden" name="coords" bind:value={query} bind:this={hiddenInput}>
-    {#if geolocated}
-      <span class="tag is-small">
-        Votre position
-      </span>
-    {/if}
+    <input {id} class="input" type="text" autocomplete="off" bind:value={query} bind:this={input} />
+    <input type="hidden" name="coords" bind:this={hiddenInput} on:submit|preventDefault />
   </div>
   {#if geolocator}
     <div class="control">
@@ -126,12 +108,6 @@
 
   input {
     width: 100%;
-  }
-
-  span {
-    position: absolute;
-    top: 8px;
-    left: 8px;
   }
 
   .jawg-geocoder {
