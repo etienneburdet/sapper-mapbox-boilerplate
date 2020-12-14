@@ -24,9 +24,8 @@
   const currentLayer = { layers: [id] };
 
   const emitVisibleFeatures = () => {
-    const features = map.queryRenderedFeatures(currentLayer);
-    const ids = features.map((feature) => feature.properties.id);
-    dispatch('render', ids);
+    const features = map.queryRenderedFeatures(currentLayer).slice(0, 50);
+    dispatch('render', features);
   };
 
   onMount(() => {
