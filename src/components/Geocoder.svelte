@@ -26,7 +26,7 @@
   const setCoords = (event) => {
     input.value = 'Votre position';
     hiddenInput.value = event.detail.coords;
-    dispatch('geolocate', { coords: event.detail.coords});
+    dispatch('geocode', { coords: event.detail.coords});
   };
 
   onMount(async () => {

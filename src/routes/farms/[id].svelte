@@ -60,7 +60,7 @@
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
       <Geocoder id="desktopsearchbox" geolocator={true}
-                on:geocode={filterPage} on:geolocate={filterPage} />
+                on:geocode={filterPage} />
 
       <div
         id="list-ctn-header-btn"
