@@ -21,10 +21,27 @@ export const farmsGeojsonUrl = ods.query(fullGeojson, {
 });
 
 const json2geojson = (json) => {
-  /* eslint-disable */
-  const flatJson = json.map((record) => Object.assign({ id: record.id }, record.fields));
-  /* eslint-enable */
-  const geojson = GeoJSON.parse(flatJson, { Point: ['add_lat', 'add_lon'] });
+  const geojson = {
+    type: 'FeatureCollection',
+    features: [],
+  };
+  const features = json.map((record) => {
+    const feature = {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [record.fields.add_lon, record.fields.add_lat],
+      },
+      properties: {
+        id: record.id,
+        add_adresse: record.fields.add_adresse,
+        add_nom_ferme: record.fields.add_nom_ferme,
+        add_ville: record.fields.add_ville,
+      },
+    };
+    return feature;
+  });
+  geojson.features = features;
   return geojson;
 };
 
