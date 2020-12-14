@@ -11,6 +11,8 @@ const ASSETS = `cache${timestamp}`;
 const to_cache = shell.concat(files);
 const staticAssets = new Set(to_cache);
 
+self.__WB_DISABLE_DEV_LOGS = true;
+
 precacheAndRoute(shell);
 precacheAndRoute(files);
 

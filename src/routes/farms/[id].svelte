@@ -13,19 +13,10 @@
       const farmUrl = getFarmRecord(id);
       const resFromAPI = await this.fetch(farmUrl);
       const jsonFromAPI = await resFromAPI.json();
-      farmDetails = jsonFromAPI.records[0].record;
+      farmDetails = jsonFromAPI.record;
     }
 
-    // let farmsShortlist;
-    // if (true) {
-    //   // todo condition
-    //   const resFromAPI = await this.fetch(farmsShortlistUrl);
-    //   const jsonFromAPI = await resFromAPI.json();
-    //   farmsShortlist = jsonFromAPI.records;
-    // }
-
     return {
-      // farmsShortlist,
       farmDetails,
       query,
     };
@@ -62,17 +53,6 @@
   const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
   const partenaires = ['La ruche', 'La ferme', 'La la'];
   const services = ['Producteur', 'Point de vente'];
-
-  const updateList = async (event) => {
-    const firstIds = event.detail.slice(0, 20);
-    farmsShortlist = await Promise.all(
-      firstIds.map(async (id) => {
-        const resFromAPI = await fetch(getFarmRecord(id));
-        const jsonFromAPI = await resFromAPI.json();
-        return jsonFromAPI;
-      }),
-    );
-  };
 </script>
 
 <div id="page-ctn">
@@ -110,9 +90,9 @@
       <List activeItem={farmDetails} let:id={activeId}>
         {#each farmsShortlist as farm (farm)}
           <ListItem
-            id={farm.record.id}
-            fields={farm.record.fields}
-            active={farm.record.fields.add_nom_ferme === activeId}
+            id={farm.properties.id}
+            fields={farm.properties}
+            active={farm.properties.id === activeId}
           />
         {/each}
       </List>
@@ -175,7 +155,7 @@
           type="circle"
           {paint}
           on:mapClick={setActivePoint}
-          on:render={updateList}
+          on:render={(event) => farmsShortlist = event.detail}
         />
       </MapSource>
       {#if query.coords}

@@ -8,7 +8,7 @@
   export let active;
 </script>
 
-<a rel="prefetch" href="/farms/{id}?{querystring}">
+<a href="/farms/{id}?{querystring}">
   <div class="item" class:has-background-light={active}>
     <p class="title is-size-5">{fields.add_nom_ferme}</p>
     <p class="subtitle is-size-6">{fields.add_adresse}</p>

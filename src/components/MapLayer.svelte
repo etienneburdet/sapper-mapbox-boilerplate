@@ -24,9 +24,10 @@
   const currentLayer = { layers: [id] };
 
   const emitVisibleFeatures = () => {
-    const features = map.queryRenderedFeatures(currentLayer);
-    const ids = features.map((feature) => feature.properties.id);
-    dispatch('render', ids);
+    if (!map.getLayer(id)) { return; }
+  
+    const features = map.queryRenderedFeatures(currentLayer).slice(0, 50);
+    dispatch('render', features);
   };
 
   onMount(() => {
@@ -45,7 +46,7 @@
 
   map.on('click', id, dispatchLayerEvent);
 
-  map.on('mousemove', (e) => {
+  map.getLayer(id) && map.on('mousemove', (e) => {
     const items = map.queryRenderedFeatures(e.point, {
       layers: [id],
     });
