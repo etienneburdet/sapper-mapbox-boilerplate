@@ -1,54 +1,61 @@
 <script>
-  import { getContext, onMount, setContext } from 'svelte';
-  import { fetchGeojson } from '@/routes/farms/_helpers';
+    import { getContext, onMount, setContext } from 'svelte';
+    import { fetchGeojson } from '@/routes/farms/_helpers';
 
-  export let dataUrl;
-  export let id;
+    import { stores } from '@sapper/app';
+    const { page, session } = stores();
 
-  let isSourceLoaded;
+    export let dataUrl;
+    export let id;
 
-  const { getMap } = getContext('map');
-  const map = getMap();
+    const { getMap } = getContext('map');
+    const map = getMap();
 
-  setContext('source', {
-    getMapSourceId: () => id,
-  });
+    let isSourceLoaded;
+    let farmsGeojson;
 
-  const setSource = (data) => {
-    if (map.getSource(id)) {
-      map.getSource(id).setData(data);
-    } else {
-      map.addSource(id, {
-        type: 'geojson',
-        data,
-      });
-      isSourceLoaded = true;
-    }
-  };
+    setContext('source', {
+        getMapSourceId: () => id,
+    });
 
-  const destroySource = () => {
-    const { layers } = map.getStyle();
-    layers.forEach((layer) => map.removeLayer(layer.id));
+    const setSource = (data) => {
+        if (map.getSource(id)) {
+            map.getSource(id)
+                    .setData(data);
+        } else {
+            map.addSource(id, {
+                type: 'geojson',
+                data,
+            });
+            isSourceLoaded = true;
+        }
+    };
 
-    if (map.getSource(id)) {
-      map.removeSource(id);
-    }
-    isSourceLoaded = false;
-  };
+    const destroySource = () => {
+        const { layers } = map.getStyle();
+        layers.forEach((layer) => map.removeLayer(layer.id));
 
-  onMount(async () => {
-    const farmsGeojson = await fetchGeojson();
+        if (map.getSource(id)) {
+            map.removeSource(id);
+        }
+        isSourceLoaded = false;
+    };
 
-    if (map.isStyleLoaded()) {
-      setSource(farmsGeojson);
+    // When url change -> refetch the data
+    $: if ($page.params['id'] == 'all') fetchGeojson($page).then((res) => { farmsGeojson = res; });
+
+    // when data changed, refresh the source
+    $: if (map.isStyleLoaded()) {
+      setSource(farmsGeojson)
     } else {
       map.on('load', () => setSource(farmsGeojson));
     }
 
-    return destroySource;
-  });
+    onMount(() => {
+        return destroySource;
+    });
 </script>
 
 {#if isSourceLoaded}
-  <slot />
+    <slot/>
 {/if}

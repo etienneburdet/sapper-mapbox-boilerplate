@@ -33,11 +33,25 @@ export const record = (url) => (id) => {
   return addPath(recordPath, url);
 };
 
+export const facets = (url) => {
+  const facetsPath = `${url.pathname}/facets`;
+  return addPath(facetsPath, url);
+};
+
 export const query = (url, queryObject) => {
+  if (!queryObject) {
+    return url;
+  }
   const searchParams = new URLSearchParams(url.search);
-  Object.entries(queryObject).forEach((entry) => {
-    searchParams.set(entry[0], entry[1]);
-  });
+  if (Array.isArray(queryObject)) {
+    queryObject.forEach((item) => {
+      searchParams.append(item.key, item.value);
+    });
+  } else {
+    Object.entries(queryObject).forEach((entry) => {
+        searchParams.set(entry[0], entry[1]);
+      });
+  }
   const queryUrl = url;
   queryUrl.search = searchParams;
   return queryUrl;

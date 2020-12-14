@@ -33,10 +33,10 @@
               <div class="field">
                 <div class="control is-expanded">
                   <div class="select is-fullwidth">
-                    <select name="partners">
-                      <option>Select dropdown</option>
-                      <option>With options</option>
-                      <option>New option !</option>
+                    <select name="add_section">
+                      <option>Sélectionnez une section</option>
+                      <option>1.1</option>
+                      <option>1.2</option>
                     </select>
                   </div>
                 </div>
