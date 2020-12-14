@@ -53,6 +53,10 @@
     "sapper": "^0.28.0",
     "sass": "^1.29.0",
     "svelte": "^3.17.3",
-    "svelte-preprocess": "^4.6.1"
+    "svelte-preprocess": "^4.6.1",
+    "workbox-expiration": "^6.0.2",
+    "workbox-routing": "^6.0.2",
+    "workbox-precaching": "^6.0.2",
+    "workbox-strategies": "^6.0.2"
   }
 }
