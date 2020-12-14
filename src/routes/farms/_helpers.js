@@ -1,5 +1,4 @@
 import { goto } from '@sapper/app';
-import GeoJSON from 'geojson';
 import * as ods from '@/plugins/ods-data';
 // import {
 //   getODSEndpoint,
