@@ -74,10 +74,10 @@
 </script>
 
 <div id="page-ctn">
-  <div id="list-ctn" class:mobile-open={toggleList}>
-    <!-- DESKTOP LIST HEADER -->
-    <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
+    <div id="list-ctn" class:mobile-open={toggleList}>
+        <!-- DESKTOP LIST HEADER -->
+        <div id="list-ctn-header" class="custom-styled-select">
+            <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage}/>
 
             <div
                     id="list-ctn-header-btn"
@@ -95,29 +95,29 @@
         <!-- DESKTOP LIST -->
         <div id="list-ctn-content">
             <List activeItem={farmDetails} let:id={activeId}>
-                {#each farmsShortlist as farm (farm)}
-                    <ListItem
-                            id={farm.properties.recordid}
-                            fields={farm.properties}
-                            active={farm.properties.recordid === activeId}
-                    />
-                {/each}
+              {#each farmsShortlist as farm (farm)}
+                  <ListItem
+                          id={farm.properties.recordid}
+                          fields={farm.properties}
+                          active={farm.properties.recordid === activeId}
+                  />
+              {/each}
             </List>
         </div>
     </div>
 
-  <div id="map-ctn">
-    <!-- MOBILE HEADER -->
-    <div id="map-header">
-      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
-        {#if !toggleList}<span>Liste</span>{/if}
-        {#if toggleList}<span>Carte</span>{/if}
-      </button>
-      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
-      <!-- <div class="geolocator">
-        <Geolocator on:geolocate={filterPage} />
-      </div> -->
-    </div>
+    <div id="map-ctn">
+        <!-- MOBILE HEADER -->
+        <div id="map-header">
+            <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
+              {#if !toggleList}<span>Liste</span>{/if}
+              {#if toggleList}<span>Carte</span>{/if}
+            </button>
+            <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate"/>
+            <!-- <div class="geolocator">
+              <Geolocator on:geolocate={filterPage} />
+            </div> -->
+        </div>
 
         <!-- MAP FOOTER / FILTERS -->
         <div id="map-footer">
@@ -152,17 +152,17 @@
                         on:render={(event) => (farmsShortlist = event.detail)}
                 />
             </MapSource>
-            {#if query.coords}
-                <Marker center={q2center(query.coords)}/>
-            {/if}
+          {#if query.coords}
+              <Marker center={q2center(query.coords)}/>
+          {/if}
         </Map>
     </div>
 
     <!-- POP UP -->
     <div id="popup-ctn" class:open={farmDetails}>
-        {#if farmDetails}
-            <Popup item={farmDetails}/>
-        {/if}
+      {#if farmDetails}
+          <Popup item={farmDetails}/>
+      {/if}
     </div>
 </div>
 
@@ -301,7 +301,7 @@
     }
 
     #popup-ctn {
-        position: absolute;
+        position: fixed;
         left: -395px;
         width: 395px;
         height: 100%;
