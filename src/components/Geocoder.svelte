@@ -16,7 +16,7 @@
   };
 
   let query;
-  let input;
+  let hiddenInput;
   let geolocated = false;
 
   const focusInput = () => {
@@ -26,7 +26,7 @@
   };
 
   const setCoords = (event) => {
-    input.value = event.detail
+    hiddenInput.value = event.detail.coords
     geolocated = true;
   }
 
@@ -104,11 +104,10 @@
       class="input"
       type="text"
       autocomplete="off"
-      name="coords"
       on:focus={focusInput}
       bind:value={query}
-      bind:this={input}
     />
+    <input type="hidden" name="coords" bind:value={query} bind:this={hiddenInput}>
     {#if geolocated}
       <span class="tag is-small">
         Votre position

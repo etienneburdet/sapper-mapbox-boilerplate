@@ -7,10 +7,10 @@
 
   import Geocoder from '@/components/Geocoder.svelte';
 
-  const navigateToCoords = (event) => {
-    const [lng, lat] = event.detail.coords;
-    goto(`/farms/all?coords=${lng},${lat}`);
-  };
+  // const navigateToCoords = (event) => {
+  //   const [lng, lat] = event.detail.coords;
+  //   goto(`/farms/all?coords=${lng},${lat}`);
+  // };
 </script>
 
 <section class="section has-background-light">
@@ -33,7 +33,7 @@
       </div>
       <div class="column">
         <form action="/farms/all" method="get">
-          <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
+          <Geocoder id="home-search" geolocator={true} />
           <div class="field is-grouped">
             <div class="control is-expanded">
               <div class="select is-fullwidth">

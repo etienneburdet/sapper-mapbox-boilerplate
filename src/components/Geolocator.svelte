@@ -1,6 +1,8 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import { goto } from '@sapper/app';
+
+  const dispatch = createEventDispatcher();
 
   let cleaner = /([+-]?\d+[.]?\d{0,6})\d*/;
   let geolocator;
@@ -8,13 +10,8 @@
 
   const setGeo = (p) => {
     let lat = cleaner.exec(p.coords.latitude)[1];
-   let long = cleaner.exec(p.coords.longitude)[1];
-   let long = cleaner.exec(p.coords.longitude)[1];
-   url.searchParams.set('coords', long + ',' + lat);
-   /*url.searchParams.set('coords', long + ',' + lat);
-   goto(url);
-   goto(url);*/
-   dispatch('geolocate', { coords : [long, lat] })
+    let long = cleaner.exec(p.coords.longitude)[1];
+    dispatch('geolocate', { coords : [long, lat] })
   };
 
   const settings = {
