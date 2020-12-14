@@ -13,8 +13,6 @@
     const url = new URL(window.location);
     let lat = cleaner.exec(p.coords.latitude)[1];
     let long = cleaner.exec(p.coords.longitude)[1];
-    /*url.searchParams.set('coords', long + ',' + lat);
-    goto(url);*/
     dispatch('geolocate', { coords : [long, lat] });
   };
 

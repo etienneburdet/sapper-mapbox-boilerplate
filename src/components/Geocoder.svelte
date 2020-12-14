@@ -15,10 +15,19 @@
     lng: 2.333333,
   };
   let query;
+  export let forcedText;
+
+  $: {
+    console.log(forcedText + " updated");
+    query = forcedText;
+  }
 
   const focusInput = () => {
     if (query) {
-      document.execCommand('selectAll');
+      let to = setTimeout(() => {
+        document.execCommand('selectAll');
+        clearTimeout(to);
+      }, 50)
     }
   };
 
@@ -81,7 +90,7 @@
       },
       onSelection: (feedback) => {
         const coords = feedback.selection.value.geometry.coordinates;
-        query = feedback.selection.value.label;
+        forcedText = feedback.selection.value.label;
         dispatch('geocode', { coords });
       },
     });
