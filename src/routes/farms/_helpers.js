@@ -13,13 +13,15 @@ export const farmsBaseUrl = ods.privateDataset(
   'API_KEY',
 );
 
+/*
 const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
 export const farmsGeojsonUrl = ods.query(fullGeojson, {
   rows: '10000',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
+*/
 
-const json2geojson = (json) => {
+/*const json2geojson = (json) => {
   const geojson = {
     type: 'FeatureCollection',
     features: [],
@@ -54,6 +56,18 @@ export const fetchGeojson = async () => {
   const farmsJson = await resFromAPI.json();
   const farmGeojson = await json2geojson(farmsJson);
   return farmGeojson;
+};*/
+
+export const fetchGeojson = async () => {
+  const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
+  const farmsGeojsonUrl = ods.query(fullGeojson, {
+    rows: '10000',
+    select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville,location',
+    record_metas: true
+  });
+  const resFromAPI = await fetch(farmsGeojsonUrl);
+  const farmsGeojson = await resFromAPI.json();
+  return farmsGeojson;
 };
 
 export const getFarmRecord = ods.record(farmsBaseUrl);
@@ -81,7 +95,7 @@ export const farmsShortlistUrl = ods.query(farmsRecords, {
 
 export const setActivePoint = (event) => {
   const [point] = event.detail.mapevent.features;
-  goto(`/farms/${point.properties.id}`);
+  goto(`/farms/${point.properties.recordid}`);
 };
 
 export const q2center = (coordsString) => {

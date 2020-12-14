@@ -90,9 +90,9 @@
       <List activeItem={farmDetails} let:id={activeId}>
         {#each farmsShortlist as farm (farm)}
           <ListItem
-            id={farm.properties.id}
+            id={farm.properties.recordid}
             fields={farm.properties}
-            active={farm.properties.id === activeId}
+            active={farm.properties.recordid === activeId}
           />
         {/each}
       </List>

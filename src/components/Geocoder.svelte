@@ -78,7 +78,7 @@
         const result = document.createElement('li');
         result.setAttribute('class', 'no_result');
         result.setAttribute('tabindex', '1');
-        result.innerHTML = `<span>Found No Results for "${dataFeedback.query}"</span>`;
+        result.innerHTML = `<span>Aucun résultat trouvé pour "${dataFeedback.query}"</span>`;
         document.querySelector(`#${ac.resultsList.idName}`).appendChild(result);
       },
       onSelection: (feedback) => {
