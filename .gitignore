@@ -3,7 +3,7 @@
 /src/node_modules/@sapper/
 yarn-error.log
 /__sapper__/build
-/__sapper__/export
+/__sapper__/dev
 /sapper-mapbox-boilerplate.iml
 /.idea/
 .vercel
