@@ -27,17 +27,27 @@
       <div class="column">
         <form action="/farms/all" method="get">
           <Geocoder id="home-search" geolocator={true} />
-          <div class="field is-grouped">
-            <div class="control is-expanded">
-              <div class="select is-fullwidth">
-                <select name="partners">
-                  <option>Select dropdown</option>
-                  <option>With options</option>
-                  <option>New option !</option>
-                </select>
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <div class="control is-expanded">
+                  <div class="select is-fullwidth">
+                    <select name="partners">
+                      <option>Select dropdown</option>
+                      <option>With options</option>
+                      <option>New option !</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
-            <p class="control"><button type="submit" class="button is-info"> Search </button></p>
+            <div class="column is-narrow">
+              <div class="field">
+                <p class="control">
+                  <button type="submit" class="button is-info is-block-mobile"> Search </button>
+                </p>
+              </div>
+            </div>
           </div>
         </form>
       </div>
