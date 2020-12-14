@@ -59,7 +59,8 @@
   <div id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
     <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator={true} on:geocode={filterPage} />
+      <Geocoder id="desktopsearchbox" geolocator={true}
+                on:geocode={filterPage} />
 
       <div
         id="list-ctn-header-btn"
@@ -90,9 +91,9 @@
       <List activeItem={farmDetails} let:id={activeId}>
         {#each farmsShortlist as farm (farm)}
           <ListItem
-            id={farm.properties.id}
+            id={farm.properties.recordid}
             fields={farm.properties}
-            active={farm.properties.id === activeId}
+            active={farm.properties.recordid === activeId}
           />
         {/each}
       </List>
@@ -107,10 +108,10 @@
         {#if toggleList}<span>Carte</span>{/if}
       </button>
       <div id="map-header-content">
-        <Geocoder id="mobilesearchbox" />
+        <Geocoder id="mobilesearchbox" on:geocode={filterPage} />
       </div>
       <div class="geolocator">
-        <Geolocator />
+        <Geolocator on:geolocate={filterPage} />
       </div>
     </div>
 

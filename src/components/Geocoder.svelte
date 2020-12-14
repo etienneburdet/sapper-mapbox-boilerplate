@@ -14,12 +14,19 @@
     lat: 48.866667,
     lng: 2.333333,
   };
-  let query;
 
-  const focusInput = () => {
-    if (query) {
-      document.execCommand('selectAll');
-    }
+  let query;
+  let input;
+  let hiddenInput;
+
+  const selectAll = () => {
+      input.select();
+  };
+
+  const setCoords = (event) => {
+    input.value = 'Votre position';
+    hiddenInput.value = event.detail.coords;
+    dispatch('geocode', { coords: event.detail.coords});
   };
 
   onMount(async () => {
@@ -76,12 +83,13 @@
         const result = document.createElement('li');
         result.setAttribute('class', 'no_result');
         result.setAttribute('tabindex', '1');
-        result.innerHTML = `<span>Found No Results for "${dataFeedback.query}"</span>`;
+        result.innerHTML = `<span>Aucun résultat trouvé pour "${dataFeedback.query}"</span>`;
         document.querySelector(`#${ac.resultsList.idName}`).appendChild(result);
       },
       onSelection: (feedback) => {
         const coords = feedback.selection.value.geometry.coordinates;
         query = feedback.selection.value.label;
+        hiddenInput.value = coords;
         dispatch('geocode', { coords });
       },
     });
@@ -89,20 +97,13 @@
 </script>
 
 <div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
-  <div class="control is-expanded">
-    <input
-      {id}
-      class="input"
-      type="text"
-      autocomplete="off"
-      name="coords"
-      on:focus={focusInput}
-      bind:value={query}
-    />
+  <div class="control is-expanded has-icon-left">
+    <input {id} class="input" type="text" autocomplete="off" bind:value={query} bind:this={input} on:focus={selectAll} />
+    <input type="hidden" name="coords" bind:this={hiddenInput} on:submit|preventDefault />
   </div>
   {#if geolocator}
     <div class="control">
-      <Geolocator />
+      <Geolocator on:geolocate={setCoords} />
     </div>
   {/if}
 </div>

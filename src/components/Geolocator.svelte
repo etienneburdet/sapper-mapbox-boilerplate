@@ -1,19 +1,17 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
-  import { goto } from '@sapper/app';
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   let cleaner = /([+-]?\d+[.]?\d{0,6})\d*/;
   let geolocator;
   let searching = false;
 
   const setGeo = (p) => {
-    searching = false;
-
-    const url = new URL(window.location);
     let lat = cleaner.exec(p.coords.latitude)[1];
     let long = cleaner.exec(p.coords.longitude)[1];
-    url.searchParams.set('coords', long + ',' + lat);
-    goto(url);
+    dispatch('geolocate', { coords: [long, lat] });
+    searching = false;
   };
 
   const settings = {
@@ -36,7 +34,7 @@
   class="button is-dark"
   class:spin={searching}
   bind:this={geolocator}
-  on:click={getPosition}
+  on:click|preventDefault={getPosition}
 >
   <img src="/location.svg" />
 </button>
