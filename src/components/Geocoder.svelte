@@ -14,13 +14,21 @@
     lat: 48.866667,
     lng: 2.333333,
   };
+
   let query;
+  let input;
+  let geolocated = false;
 
   const focusInput = () => {
     if (query) {
       document.execCommand('selectAll');
     }
   };
+
+  const setCoords = (event) => {
+    input.value = event.detail
+    geolocated = true;
+  }
 
   onMount(async () => {
     const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
@@ -82,6 +90,7 @@
       onSelection: (feedback) => {
         const coords = feedback.selection.value.geometry.coordinates;
         query = feedback.selection.value.label;
+        geolocated = false;
         dispatch('geocode', { coords });
       },
     });
@@ -89,7 +98,7 @@
 </script>
 
 <div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
-  <div class="control is-expanded">
+  <div class="control is-expanded has-icon-left">
     <input
       {id}
       class="input"
@@ -98,11 +107,17 @@
       name="coords"
       on:focus={focusInput}
       bind:value={query}
+      bind:this={input}
     />
+    {#if geolocated}
+      <span class="tag is-small">
+        Votre position
+      </span>
+    {/if}
   </div>
   {#if geolocator}
     <div class="control">
-      <Geolocator />
+      <Geolocator on:geolocate={setCoords} />
     </div>
   {/if}
 </div>
@@ -112,6 +127,12 @@
 
   input {
     width: 100%;
+  }
+
+  span {
+    position: absolute;
+    top: 8px;
+    left: 8px;
   }
 
   .jawg-geocoder {

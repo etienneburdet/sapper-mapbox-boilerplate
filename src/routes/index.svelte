@@ -32,18 +32,20 @@
         </figure>
       </div>
       <div class="column">
-        <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
-        <div class="field is-grouped">
-          <div class="control is-expanded">
-            <div class="select is-fullwidth">
-              <select>
-                <option>Select dropdown</option>
-                <option>With options</option>
-              </select>
+        <form action="/farms/all" method="get">
+          <Geocoder id="home-search" geolocator={true} on:geocode={navigateToCoords} />
+          <div class="field is-grouped">
+            <div class="control is-expanded">
+              <div class="select is-fullwidth">
+                <select name="partners">
+                  <option>Select dropdown</option>
+                  <option>With options</option>
+                </select>
+              </div>
             </div>
+            <p class="control"><button type="submit" class="button is-info"> Search </button></p>
           </div>
-          <p class="control"><button class="button is-info"> Search </button></p>
-        </div>
+        </form>
       </div>
     </div>
   </div>
