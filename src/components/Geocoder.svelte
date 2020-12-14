@@ -18,6 +18,7 @@
   let query;
   let input;
   let hiddenInput;
+  let ac;
 
   const selectAll = () => {
     input.select();
@@ -30,9 +31,10 @@
   };
 
   onMount(async () => {
+    console.log('mount');
     const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
     const autoComplete = autoCompleteModule.default;
-    const ac = new autoComplete({
+    ac = new autoComplete({
       data: {
         src: async () => {
           const { lat, lng } = center;
@@ -52,7 +54,7 @@
         cache: false,
       },
       placeHolder: placeholder,
-      selector: '#' + id,
+      selector: `#${id}`,
       threshold: 2,
       debounce: 200,
       trigger: ['input', 'focus'],
@@ -96,11 +98,16 @@
   });
 </script>
 
-<div id="search-container-{id}" class="field jawg-geocoder" class:has-addons={geolocator}>
-  <div class="control is-expanded has-icon-left">
+<div
+  id="search-container-{id}"
+  class="field jawg-geocoder is-flex-grow-1"
+  class:has-addons={geolocator === 'add-on'}
+  class:is-grouped={geolocator === 'separate'}
+>
+  <div class="control is-expanded ml-3">
     <input
       {id}
-      class="input"
+      class="input is-fullwidth"
       type="text"
       autocomplete="off"
       bind:value={query}
