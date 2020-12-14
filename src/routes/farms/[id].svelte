@@ -55,125 +55,129 @@
   const services = ['Producteur', 'Point de vente'];
 </script>
 
-<div id="page-ctn">
-  <div id="list-ctn" class:mobile-open={toggleList}>
-    <!-- DESKTOP LIST HEADER -->
-    <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
+<div id="list-ctn" class:mobile-open={toggleList}>
+  <!-- DESKTOP LIST HEADER -->
+  <div id="list-ctn-header" class="custom-styled-select">
+    <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
 
-      <div
-        id="list-ctn-header-btn"
-        class:show-adv-filters={showAdvFilters}
-        on:click={() => (showAdvFilters = !showAdvFilters)}
-      >
-        Affiner la recherche
-        <i class="fas fas-arrow-up" />
-      </div>
-
-      <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
-        <Filter id="produits" options={produits} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Produits</h4>
-          <span slot="description">Choisissez votre cotégorie de porduits</span>
-        </Filter>
-        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Partenaires</h4>
-          <span slot="description">Choisissez les partenaires</span>
-        </Filter>
-        <Filter id="services" options={services} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Services</h4>
-          <span slot="description">Type de préstation</span>
-        </Filter>
-      </div>
+    <div
+      id="list-ctn-header-btn"
+      class:show-adv-filters={showAdvFilters}
+      on:click={() => (showAdvFilters = !showAdvFilters)}
+    >
+      Affiner la recherche
+      <i class="fas fas-arrow-up" />
     </div>
-    <!-- DESKTOP LIST -->
-    <div id="list-ctn-content">
-      <List activeItem={farmDetails} let:id={activeId}>
-        {#each farmsShortlist as farm (farm)}
-          <ListItem
-            id={farm.properties.recordid}
-            fields={farm.properties}
-            active={farm.properties.recordid === activeId}
-          />
-        {/each}
-      </List>
+
+    <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
+      <Filter id="produits" options={produits} on:select={filterPage}>
+        <h4 class="title is-4" slot="title">Produits</h4>
+        <span slot="description">Choisissez votre cotégorie de porduits</span>
+      </Filter>
+      <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+        <h4 class="title is-4" slot="title">Partenaires</h4>
+        <span slot="description">Choisissez les partenaires</span>
+      </Filter>
+      <Filter id="services" options={services} on:select={filterPage}>
+        <h4 class="title is-4" slot="title">Services</h4>
+        <span slot="description">Type de préstation</span>
+      </Filter>
     </div>
   </div>
+  <!-- DESKTOP LIST -->
+  <div id="list-ctn-content">
+    <List activeItem={farmDetails} let:id={activeId}>
+      {#each farmsShortlist as farm (farm)}
+        <ListItem
+          id={farm.properties.recordid}
+          fields={farm.properties}
+          active={farm.properties.recordid === activeId}
+        />
+      {/each}
+    </List>
+  </div>
+</div>
 
-  <div id="map-ctn">
-    <!-- MOBILE HEADER -->
-    <div id="map-header">
+<!-- MOBILE HEADER -->
+<header class="is-mobile level">
+  <div class="level-left">
+    <div class="level-item">
       <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
         {#if !toggleList}<span>Liste</span>{/if}
         {#if toggleList}<span>Carte</span>{/if}
       </button>
-      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
-      <!-- <div class="geolocator">
-        <Geolocator on:geolocate={filterPage} />
-      </div> -->
     </div>
-
-    <!-- MAP FOOTER / FILTERS -->
-    <div id="map-footer">
-      <button
-        class="button is-rounded is-dark mb-3"
-        id="map-footer-filters-btn"
-        class:show-adv-filters={showMobileAdvFilters}
-        on:click={() => (showMobileAdvFilters = true)}
-      >
-        Affiner les résultats
-      </button>
-      <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
-        <div class="adv-filters-ctn-top">
-          <p>Affiner les résultats</p>
-          <i
-            class="header-menu-close fas fa-times"
-            on:click={() => (showMobileAdvFilters = false)}
-          />
-        </div>
-        <Filter id="produits" options={produits} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Produits</h4>
-          <span slot="description">Choisissez votre cotégorie de porduits</span>
-        </Filter>
-        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Partenaires</h4>
-          <span slot="description">Choisissez les partenaires</span>
-        </Filter>
-        <Filter id="services" options={services} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Services</h4>
-          <span slot="description">Type de préstation</span>
-        </Filter>
-      </div>
-    </div>
-
-    <!-- MAP -->
-    <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <MapSource id="farms">
-        <MapLayer
-          id="farms-circles"
-          type="circle"
-          {paint}
-          on:mapClick={setActivePoint}
-          on:render={(event) => (farmsShortlist = event.detail)}
-        />
-      </MapSource>
-      {#if query.coords}
-        <Marker center={q2center(query.coords)} />
-      {/if}
-    </Map>
   </div>
-
-  <!-- POP UP -->
-  <div id="popup-ctn" class:open={farmDetails}>
-    {#if farmDetails}
-      <Popup item={farmDetails} />
+  <div class="level-item is-flex-grow-1">
+    <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
+  </div>
+</header>
+<div id="map">
+  <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
+    <MapSource id="farms">
+      <MapLayer
+        id="farms-circles"
+        type="circle"
+        {paint}
+        on:mapClick={setActivePoint}
+        on:render={(event) => (farmsShortlist = event.detail)}
+      />
+    </MapSource>
+    {#if query.coords}
+      <Marker center={q2center(query.coords)} />
     {/if}
+  </Map>
+</div>
+<!-- MAP FOOTER / FILTERS -->
+<!-- <div id="map-footer">
+  <button
+    class="button is-rounded is-dark mb-3"
+    id="map-footer-filters-btn"
+    class:show-adv-filters={showMobileAdvFilters}
+    on:click={() => (showMobileAdvFilters = true)}
+  >
+    Affiner les résultats
+  </button>
+  <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
+    <div class="adv-filters-ctn-top">
+      <p>Affiner les résultats</p>
+      <i class="header-menu-close fas fa-times" on:click={() => (showMobileAdvFilters = false)} />
+    </div>
+    <Filter id="produits" options={produits} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Produits</h4>
+      <span slot="description">Choisissez votre cotégorie de porduits</span>
+    </Filter>
+    <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Partenaires</h4>
+      <span slot="description">Choisissez les partenaires</span>
+    </Filter>
+    <Filter id="services" options={services} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Services</h4>
+      <span slot="description">Type de préstation</span>
+    </Filter>
   </div>
+</div> -->
+
+<!-- POP UP -->
+<div id="popup-ctn" class:open={farmDetails}>
+  {#if farmDetails}
+    <Popup item={farmDetails} />
+  {/if}
 </div>
 
 <style lang="scss">
-  #page-ctn {
-    display: flex;
+  #map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 0;
     height: 100%;
+    width: 100%;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
   }
 
   #list-ctn {
