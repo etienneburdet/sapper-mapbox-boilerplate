@@ -1,47 +1,48 @@
 <script>
-    import { getContext } from 'svelte';
-    import { goto } from '@sapper/app';
+  import { getContext } from 'svelte';
+  import { goto } from '@sapper/app';
 
-    export let position;
+  export let position;
 
-    const { getMap, getSearchMarker, getGeolocateControl } = getContext('map');
-    const map = getMap();
-    const marker = getSearchMarker();
-    const geolocate = getGeolocateControl();
+  const { getMap, getSearchMarker, getGeolocateControl } = getContext('map');
+  const map = getMap();
+  const marker = getSearchMarker();
+  const geolocate = getGeolocateControl();
 
-    let status = false;
+  let status = false;
 
-    geolocate.on('geolocate', (e) => {
-        status = true;
-        const coords = [e.coords.longitude, e.coords.latitude];
-        /*map.flyTo({ center: coords });
+  geolocate.on('geolocate', (e) => {
+    status = true;
+    const coords = [e.coords.longitude, e.coords.latitude];
+    /*map.flyTo({ center: coords });
         marker.setLngLat(coords).addTo(map);*/
-        const url = new URL(window.location);
-        url.searchParams.set('coords', coords);
-        goto(url);
-    });
+    const url = new URL(window.location);
+    url.searchParams.set('coords', coords);
+    goto(url);
+  });
 
-    // geolocate.on('trackuserlocationstart', () => {
-    //   status = true;
-    //   dispatch('trackuserlocationstart');
-    // });
-    //
-    // geolocate.on('trackuserlocationend', function () {
-    //     status = false;
-    //     dispatch('trackuserlocationend');
-    // });
+  // geolocate.on('trackuserlocationstart', () => {
+  //   status = true;
+  //   dispatch('trackuserlocationstart');
+  // });
+  //
+  // geolocate.on('trackuserlocationend', function () {
+  //     status = false;
+  //     dispatch('trackuserlocationend');
+  // });
 
-    geolocate.on('error', () => {
-        status = false;
-    });
+  geolocate.on('error', () => {
+    status = false;
+  });
 
-    if (position instanceof HTMLElement) {
-        position.appendChild(geolocate.onAdd(map));
-    } else if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(position)) {
-        map.addControl(geolocate, position);
-    }
+  if (position instanceof HTMLElement) {
+    position.appendChild(geolocate.onAdd(map));
+  } else if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(position)) {
+    map.addControl(geolocate, position);
+  }
 </script>
 
 <svelte:head>
-    <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+  <script src="https://npmcdn.com/@turf/turf/turf.min.js">
+  </script>
 </svelte:head>
