@@ -14,10 +14,8 @@
   };
 </script>
 
-<div class="filter-title">
-  <slot name="title" />
-</div>
-<div class="select is-fullwidth">
+<slot name="title" />
+<div class="select is-fullwidth mb-5">
   <select bind:value={selection} on:change={dispatchChoice}>
     <option value="">
       <slot name="description" />
@@ -29,12 +27,4 @@
 </div>
 
 <style lang="scss">
-  .filter-title {
-    font-size: 0.9em;
-    margin-bottom: 5px;
-  }
-
-  .select {
-    margin-bottom: 15px;
-  }
 </style>

@@ -20,7 +20,14 @@ body {
 }
 
 .is-fab {
-  position: fixed;
-  bottom: 0;
+  position: absolute;
   width: 100%;
+  z-index: 10;
+  &.is-bottom {
+    bottom: 0;
+  }
+  &.is-top {
+    top: 0;
+    left: 0;
+  }
 }

@@ -11,7 +11,7 @@
   const closeMenu = () => (open = false);
 </script>
 
-<nav class:open>
+<nav class:open class="has-background-light">
   <div class="header-container is-flex is-justify-content-center is-align-items-center is-mobile">
     <img class="header-logo" src="/mstile-150x150.png" />
     <div class="header-menu">

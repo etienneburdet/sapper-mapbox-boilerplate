@@ -69,11 +69,18 @@
   let showMobileAdvFilters = false;
 
   $: querystring = new URLSearchParams($page.query).toString();
-  $: console.log(farmDetails);
 </script>
 
-<section class="is-flex-desktop is-relative">
-  <header class="is-hidden-desktop is-mobile level p-3">
+<section class="is-flex is-relative">
+  <div class="is-fab is-top has-text-left p-3" class:is-hidden={$page.params.id === 'all'}>
+    <a href="/farms/all" class="button is-rounded is-dark">
+      <span class="icon"><i class="fas fa-arrow-left" /></span>
+    </a>
+  </div>
+  <header
+    class="is-hidden-desktop is-mobile level p-3"
+    class:is-invisible={$page.params.id !== 'all'}
+  >
     <div class="level-left">
       <div class="level-item mr-3">
         <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
@@ -87,9 +94,13 @@
     </div>
   </header>
 
-  <aside id="list-ctn" class:mobile-open={toggleList}>
+  <aside
+    id="list-ctn"
+    class:mobile-open={toggleList || $page.params.id !== 'all'}
+    class:popup-open={$page.params.id !== 'all'}
+  >
     <!-- DESKTOP LIST HEADER -->
-    <header class="has-background-light is-hidden-mobile p-5">
+    <header class="has-background-primary is-hidden-mobile p-5">
       <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
       <div
         class="is-clickable mb-3"
@@ -136,10 +147,10 @@
     </Map>
   </div>
   <!-- MAP FOOTER / FILTERS -->
-  <div class="is-fab has-text-centered is-hidden-desktop">
+  <div class="is-fab is-bottom has-text-centered is-hidden-desktop">
     <button
       class="button is-rounded is-dark mb-3"
-      class:is-hidden={showMobileAdvFilters}
+      class:is-hidden={showMobileAdvFilters || $page.params.id !== 'all'}
       on:click={() => (showMobileAdvFilters = true)}
     >
       Affiner les résultats
@@ -245,6 +256,11 @@
   }
 
   @media screen and (max-width: 768px) {
+    section {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
     #map {
       position: absolute;
       width: 100%;
@@ -260,6 +276,10 @@
 
       &.mobile-open {
         left: 0;
+      }
+
+      &.popup-open {
+        height: 60%;
       }
     }
 
