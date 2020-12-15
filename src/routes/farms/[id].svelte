@@ -240,39 +240,39 @@
     z-index: -1;
 
     &.open {
-      left: 374px;
+      left: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    #map {
+      position: absolute;
+      width: 100%;
     }
 
-    @media screen and (max-width: 768px) {
-      #map {
-        position: absolute;
-        width: 100%;
-      }
+    #list-ctn {
+      left: -100%;
+      bottom: 0;
+      width: 100%;
+      z-index: 1;
+      height: calc(100% - #{$spacing-400});
+      transition: 0.2s ease left;
 
-      #list-ctn {
-        left: -100%;
-        bottom: 0;
-        width: 100%;
-        z-index: 1;
-        height: calc(100% - #{$spacing-400});
-        transition: 0.2s ease left;
-
-        &.mobile-open {
-          left: 0;
-        }
+      &.mobile-open {
+        left: 0;
       }
+    }
 
-      #map-footer {
-        display: flex;
-      }
+    #map-footer {
+      display: flex;
     }
 
     #popup-ctn {
       left: 0;
-      bottom: -70%;
-      height: 70%;
+      bottom: -100%;
       width: 100%;
       transition: 0.2s ease bottom;
+      z-index: 1;
 
       &.open {
         left: 0;

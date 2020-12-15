@@ -7,20 +7,20 @@ export const farmsBaseUrl = ods.privateDataset(
   'API_KEY',
 );
 
-/*export const farmsBaseUrl = ods.publicDataset(
+/* export const farmsBaseUrl = ods.publicDataset(
   'producteursagri',
   'bienvenue-a-la-ferme'
-);*/
+); */
 
 export const fetchGeojson = async (page) => {
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
-  let whereClause = "add_nom_ferme is not null";
+  let whereClause = 'add_nom_ferme is not null';
   if (page && page.query) {
-    const whereClauseAllowedKeys = ['add_section','cat_iphone','type','search'];
+    const whereClauseAllowedKeys = ['add_section', 'cat_iphone', 'type', 'search'];
     whereClause = Object.keys(page.query)
-      .filter(key => whereClauseAllowedKeys.includes(key))
+      .filter((key) => whereClauseAllowedKeys.includes(key))
       .reduce((str, key) => {
-        str = str + " AND " + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
+        str = `${str} AND ${key !== 'search' ? `${key}=` : ''}"${page.query[key]}"`;
         return str;
       }, whereClause);
   }
@@ -28,7 +28,7 @@ export const fetchGeojson = async (page) => {
     rows: '10000',
     select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville,location',
     where: whereClause,
-    record_metas: true
+    record_metas: true,
   });
   const resFromAPI = await fetch(farmsGeojsonUrl);
   const farmsGeojson = await resFromAPI.json();
@@ -48,22 +48,21 @@ export const farmsShortlistUrl = ods.query(farmsRecords, {
 const farmsFacets = ods.facets(farmsBaseUrl);
 export const farmFacetsUrl = ods.query(farmsFacets, [
   {
-    'key': 'facet',
-    'value': 'add_section'
+    key: 'facet',
+    value: 'add_section',
   },
   {
-    'key': 'facet',
-    'value': 'cat_iphone'
+    key: 'facet',
+    value: 'cat_iphone',
   },
   {
-    'key': 'facet',
-    'value': 'type'
-  }
+    key: 'facet',
+    value: 'type',
+  },
 ]);
 
 export const setActivePoint = (querystring) => (event) => {
   const [point] = event.detail.mapevent.features;
-  console.log(querystring);
   goto(`/farms/${point.properties.recordid}?${querystring}`);
 };
 
