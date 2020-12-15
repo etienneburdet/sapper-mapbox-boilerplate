@@ -33,7 +33,7 @@
             on:click={closeMenu}
             rel="prefetch"
             aria-current={segment === 'farms' ? 'page' : undefined}
-            href="farms"
+            href="farms/"
           >farms</a>
         </li>
         <li>
@@ -41,7 +41,7 @@
             on:click={closeMenu}
             rel="prefetch"
             aria-current={segment === 'about' ? 'page' : undefined}
-            href="about"
+            href="about/"
           >about</a>
         </li>
         <li>
@@ -49,7 +49,7 @@
             on:click={closeMenu}
             rel="prefetch"
             aria-current={segment === 'partners' ? 'page' : undefined}
-            href="partners"
+            href="partners/"
           >partners</a>
         </li>
       </ul>

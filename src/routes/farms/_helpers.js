@@ -1,11 +1,5 @@
 import { goto } from '@sapper/app';
 import * as ods from '@/plugins/ods-data';
-// import {
-//   getODSEndpoint,
-//   getJsonODSEndpoint,
-//   getRecordEndpoint,
-//   addQueryParamsObject,
-// } from '@/plugins/ods-data';
 
 export const farmsBaseUrl = ods.privateDataset(
   'producteursagri',
@@ -13,56 +7,27 @@ export const farmsBaseUrl = ods.privateDataset(
   'API_KEY',
 );
 
-/*
-const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
-export const farmsGeojsonUrl = ods.query(fullGeojson, {
-  rows: '10000',
-  select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
-});
-*/
+/*export const farmsBaseUrl = ods.publicDataset(
+  'producteursagri',
+  'bienvenue-a-la-ferme'
+);*/
 
-/*const json2geojson = (json) => {
-  const geojson = {
-    type: 'FeatureCollection',
-    features: [],
-  };
-  const features = json.map((record) => {
-    const feature = {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [record.fields.add_lon, record.fields.add_lat],
-      },
-      properties: {
-        id: record.id,
-        add_adresse: record.fields.add_adresse,
-        add_nom_ferme: record.fields.add_nom_ferme,
-        add_ville: record.fields.add_ville,
-      },
-    };
-    return feature;
-  });
-  geojson.features = features;
-  return geojson;
-};
-
-export const fetchGeojson = async () => {
-  const fullJsonods = ods.exportFile(farmsBaseUrl, 'jsonods');
-  const farmsJsonodsUrl = ods.query(fullJsonods, {
-    rows: '10000',
-    select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
-  });
-  const resFromAPI = await fetch(farmsJsonodsUrl);
-  const farmsJson = await resFromAPI.json();
-  const farmGeojson = await json2geojson(farmsJson);
-  return farmGeojson;
-};*/
-
-export const fetchGeojson = async () => {
+export const fetchGeojson = async (page) => {
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
+  let whereClause = "add_nom_ferme is not null";
+  if (page && page.query) {
+    const whereClauseAllowedKeys = ['add_section','cat_iphone','type','search'];
+    whereClause = Object.keys(page.query)
+      .filter(key => whereClauseAllowedKeys.includes(key))
+      .reduce((str, key) => {
+        str = str + " AND " + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
+        return str;
+      }, whereClause);
+  }
   const farmsGeojsonUrl = ods.query(fullGeojson, {
     rows: '10000',
     select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville,location',
+    where: whereClause,
     record_metas: true
   });
   const resFromAPI = await fetch(farmsGeojsonUrl);
@@ -80,22 +45,26 @@ export const farmsShortlistUrl = ods.query(farmsRecords, {
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
 });
 
-// const getDatasetURL = getODSEndpoint('producteursagri');
-// const datasetURL = getDatasetURL('bienvenue-a-la-ferme');
-// const authDataset = addQueryParamsObject(datasetURL)({ apikey: 'API_KEY' });
-//
-// const fullJsonURL = getJsonODSEndpoint(datasetURL);
-// export const filteredJsonURL = addQueryParamsObject(fullJsonURL)({
-//   apikey: 'API_KEY',
-//   rows: '10000',
-//   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
-// });
-//
-// export const getFarmURL = getRecordEndpoint(authDataset);
+const farmsFacets = ods.facets(farmsBaseUrl);
+export const farmFacetsUrl = ods.query(farmsFacets, [
+  {
+    'key': 'facet',
+    'value': 'add_section'
+  },
+  {
+    'key': 'facet',
+    'value': 'cat_iphone'
+  },
+  {
+    'key': 'facet',
+    'value': 'type'
+  }
+]);
 
-export const setActivePoint = (event) => {
+export const setActivePoint = (querystring) => (event) => {
   const [point] = event.detail.mapevent.features;
-  goto(`/farms/${point.properties.recordid}`);
+  console.log(querystring);
+  goto(`/farms/${point.properties.recordid}?${querystring}`);
 };
 
 export const q2center = (coordsString) => {
@@ -119,5 +88,16 @@ export const filterPage = (event) => {
       url.searchParams.delete(key);
     }
   });
+  goto(url);
+};
+
+export const searchPage = (search) => {
+  const url = new URL(window.location);
+  const searchquery = search.target.value;
+  if (searchquery) {
+    url.searchParams.set('search', search.target.value);
+  } else {
+    url.searchParams.delete('search');
+  }
   goto(url);
 };
