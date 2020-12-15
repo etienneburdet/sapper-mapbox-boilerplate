@@ -12,6 +12,8 @@
   export let layout = {};
   export let id = 'layerId';
 
+  let delayedRenderTimer;
+
   const dispatch = createEventDispatcher();
   const dispatchLayerEvent = (event) => {
     dispatch('mapClick', {
@@ -22,6 +24,17 @@
   };
 
   const currentLayer = { layers: [id] };
+
+  const debounce = (func, tempo) => () => {
+    if (delayedRenderTimer) {
+      clearTimeout(delayedRenderTimer);
+    }
+    delayedRenderTimer = setTimeout(() => {
+      func();
+      clearTimeout(delayedRenderTimer);
+      delayedRenderTimer = undefined;
+    }, tempo);
+  };
 
   const emitVisibleFeatures = () => {
     if (!map.getLayer(id)) { return; }
@@ -42,7 +55,7 @@
     return () => map.getLayer(id) && map.removeLayer(id);
   });
 
-  map.on('render', emitVisibleFeatures);
+  map.on('render', debounce(emitVisibleFeatures, 150));
 
   map.on('click', id, dispatchLayerEvent);
 
