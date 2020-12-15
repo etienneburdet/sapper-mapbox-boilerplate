@@ -55,11 +55,24 @@
   const services = ['Producteur', 'Point de vente'];
 </script>
 
-<div id="list-ctn" class:mobile-open={toggleList}>
-  <!-- DESKTOP LIST HEADER -->
-  <div id="list-ctn-header" class="custom-styled-select">
-    <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
+<header class="is-hidden-desktop is-mobile level p-3">
+  <div class="level-left">
+    <div class="level-item">
+      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
+        {#if !toggleList}<span>Liste</span>{/if}
+        {#if toggleList}<span>Carte</span>{/if}
+      </button>
+    </div>
+  </div>
+  <div class="level-item is-flex-grow-1">
+    <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
+  </div>
+</header>
 
+<aside id="list-ctn" class:mobile-open={toggleList}>
+  <!-- DESKTOP LIST HEADER -->
+  <header id="list-ctn-header" class="custom-styled-select is-hidden-mobile">
+    <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
     <div
       id="list-ctn-header-btn"
       class:show-adv-filters={showAdvFilters}
@@ -83,7 +96,7 @@
         <span slot="description">Type de préstation</span>
       </Filter>
     </div>
-  </div>
+  </header>
   <!-- DESKTOP LIST -->
   <div id="list-ctn-content">
     <List activeItem={farmDetails} let:id={activeId}>
@@ -96,22 +109,7 @@
       {/each}
     </List>
   </div>
-</div>
-
-<!-- MOBILE HEADER -->
-<header class="is-hidden-desktop is-mobile level p-3">
-  <div class="level-left">
-    <div class="level-item">
-      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
-        {#if !toggleList}<span>Liste</span>{/if}
-        {#if toggleList}<span>Carte</span>{/if}
-      </button>
-    </div>
-  </div>
-  <div class="level-item is-flex-grow-1">
-    <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
-  </div>
-</header>
+</aside>
 <div id="map">
   <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
     <!-- <MapSource id="farms">
@@ -131,42 +129,44 @@
 <!-- MAP FOOTER / FILTERS -->
 <div class="is-fab has-text-centered is-hidden-desktop">
   <button
-  class="button is-rounded is-dark mb-3"
-  class:is-hidden={showMobileAdvFilters}
-  on:click={() => (showMobileAdvFilters = true)}
+    class="button is-rounded is-dark mb-3"
+    class:is-hidden={showMobileAdvFilters}
+    on:click={() => (showMobileAdvFilters = true)}
   >
     Affiner les résultats
   </button>
 </div>
-<footer id="map-footer" class="is-hidden-desktop" class:is-hidden={!showMobileAdvFilters}>
-  <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
-    <div class="level is-mobile">
-      <div class="level-left">
-        <div class="level-item">
-          <p class="is-size-4">Affiner les résultats</p>
-        </div>
-      </div>
-      <div class="level-right">
-        <div class="level item">
-          <span class="icon is-clickable" role="button">
-            <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
-          </span>
-        </div>
+<footer
+  id="map-footer"
+  class="is-hidden-desktop has-background-primary"
+  class:is-hidden={!showMobileAdvFilters}
+>
+  <div class="level is-mobile">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
       </div>
     </div>
-    <Filter id="produits" options={produits} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Produits</h4>
-      <span slot="description">Choisissez votre cotégorie de porduits</span>
-    </Filter>
-    <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Partenaires</h4>
-      <span slot="description">Choisissez les partenaires</span>
-    </Filter>
-    <Filter id="services" options={services} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Services</h4>
-      <span slot="description">Type de préstation</span>
-    </Filter>
+    <div class="level-right">
+      <div class="level item">
+        <span class="icon is-clickable" role="button">
+          <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
+        </span>
+      </div>
+    </div>
   </div>
+  <Filter id="produits" options={produits} on:select={filterPage}>
+    <h4 class="title is-4" slot="title">Produits</h4>
+    <span slot="description">Choisissez votre cotégorie de porduits</span>
+  </Filter>
+  <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+    <h4 class="title is-4" slot="title">Partenaires</h4>
+    <span slot="description">Choisissez les partenaires</span>
+  </Filter>
+  <Filter id="services" options={services} on:select={filterPage}>
+    <h4 class="title is-4" slot="title">Services</h4>
+    <span slot="description">Type de préstation</span>
+  </Filter>
 </footer>
 
 <!-- POP UP -->
@@ -178,6 +178,8 @@
 
 <style lang="scss">
   @import 'src/styles/_ods-design-system';
+  $list-width: 374px;
+
   #map {
     position: absolute;
     top: 0;
@@ -192,55 +194,20 @@
     z-index: 1;
   }
 
-  #map-footer-filters-btn {
-    position: fixed;
-  }
-
   #map-footer {
     position: absolute;
     bottom: 0px;
     z-index: 1;
     width: 100%;
-    justify-content: center;
-    align-content: center;
-
-    #map-footer-filters-btn {
-      &.show-adv-filters {
-        display: none;
-      }
-    }
-
-    .adv-filters-ctn {
-      display: none;
-      width: 100%;
-      padding: 22px 20px;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      background-color: black;
-      color: white;
-      box-shadow: 0px -6px 13px rgba(0, 0, 0, 0.15);
-
-      .adv-filters-ctn-top {
-        display: flex;
-        justify-content: space-between;
-
-        p {
-          font-size: 1.2em;
-          font-weight: bold;
-          margin-bottom: 20px;
-        }
-      }
-
-      &.show-adv-filters {
-        display: block;
-      }
-    }
+    padding: 22px 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
   }
 
   #list-ctn {
     display: flex;
     flex-direction: column;
-    width: 374px;
+    width: $list-width;
     z-index: 2;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 
@@ -336,13 +303,13 @@
 
   @media screen and (max-width: 769px) {
     #list-ctn {
-      position: absolute;
+      position: relative;
       left: -100%;
       bottom: 0;
       width: 100%;
       z-index: 1;
       background: white;
-      height: calc(100% - 55px);
+      height: calc(100% - #{$spacing-400});
       transition: 0.2s ease left;
 
       &.mobile-open {
@@ -351,19 +318,6 @@
         #list-ctn-header {
           display: none;
         }
-      }
-    }
-
-    #map-ctn {
-      width: 100%;
-
-      #map-header {
-        display: flex;
-        align-items: center;
-      }
-
-      #map-footer {
-        display: flex;
       }
     }
 
