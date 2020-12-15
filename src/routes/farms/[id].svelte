@@ -1,5 +1,5 @@
 <script context="module">
-  import { farmsShortlistUrl, getFarmWhere } from './_helpers';
+  import { farmFacetsUrl, farmsShortlistUrl, getFarmWhere } from './_helpers';
 
   export async function preload(page, session) {
     const { id } = page.params;
@@ -16,8 +16,23 @@
       farmDetails = jsonFromAPI.record;
     }
 
+    let { facets } = session;
+    if (!facets) {
+      const resFromAPI = await this.fetch(farmFacetsUrl);
+      const jsonFacets = await resFromAPI.json();
+      if (jsonFacets) {
+        let facetsObj = {};
+        jsonFacets.facets.forEach((facet) => {
+          facetsObj[facet.name] = facet.facets;
+        });
+        facets = facetsObj;
+        session.facets = facets;
+      }
+    }
+
     return {
       farmDetails,
+      facets,
       query,
     };
   }
@@ -37,22 +52,24 @@
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
   import Geolocator from '@/components/Geolocator.svelte';
+  import AdvancedFilters from '@/components/AdvancedFilters.svelte';
 
   import { paint } from './_mapstyle';
-  import { q2center, setActivePoint, filterPage, getFarmRecord } from './_helpers';
+  import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
+  import { stores } from '@sapper/app';
+  const { page } = stores();
 
-  // export let farmsShortlist;
+  let querystring;
   let farmsShortlist = [];
   export let farmDetails;
+  export let facets;
   export let query;
 
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
 
-  const produits = ['Viande', 'Fromage', 'Fruits et légumes'];
-  const partenaires = ['La ruche', 'La ferme', 'La la'];
-  const services = ['Producteur', 'Point de vente'];
+  $: querystring = new URLSearchParams($page.query).toString();
 </script>
 
 <section class="is-flex-desktop is-relative">
@@ -110,18 +127,18 @@
   </aside>
   <div class="is-flex-grow-1" id="map">
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-      <!-- <MapSource id="farms">
-      <MapLayer
-        id="farms-circles"
-        type="circle"
-        {paint}
-        on:mapClick={setActivePoint}
-        on:render={(event) => (farmsShortlist = event.detail)}
-      />
-    </MapSource>
-    {#if query.coords}
-      <Marker center={q2center(query.coords)} />
-    {/if} -->
+      <MapSource id="farms">
+        <MapLayer
+          id="farms-circles"
+          type="circle"
+          {paint}
+          on:mapClick={setActivePoint}
+          on:render={(event) => (farmsShortlist = event.detail)}
+        />
+      </MapSource>
+      {#if query.coords}
+        <Marker center={q2center(query.coords)} />
+      {/if}
     </Map>
   </div>
   <!-- MAP FOOTER / FILTERS -->
@@ -256,24 +273,28 @@
     &.open {
       left: 374px;
     }
-  }
 
-  @media screen and (max-width: 768px) {
-    #map {
-      position: absolute;
-      width: 100%;
-    }
+    @media screen and (max-width: 768px) {
+      #map {
+        position: absolute;
+        width: 100%;
+      }
 
-    #list-ctn {
-      left: -100%;
-      bottom: 0;
-      width: 100%;
-      z-index: 1;
-      height: calc(100% - #{$spacing-400});
-      transition: 0.2s ease left;
+      #list-ctn {
+        left: -100%;
+        bottom: 0;
+        width: 100%;
+        z-index: 1;
+        height: calc(100% - #{$spacing-400});
+        transition: 0.2s ease left;
 
-      &.mobile-open {
-        left: 0;
+        &.mobile-open {
+          left: 0;
+        }
+      }
+
+      #map-footer {
+        display: flex;
       }
     }
 

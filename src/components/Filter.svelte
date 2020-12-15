@@ -5,8 +5,7 @@
 
   export let options;
   export let id;
-
-  let selection;
+  export let selection;
 
   const dispatchChoice = () => {
     const choice = {};
@@ -24,7 +23,7 @@
       <slot name="description" />
     </option>
     {#each options as option}
-      <option value={option}>{option}</option>
+      <option value={option.value}>{option.name || option}</option>
     {/each}
   </select>
 </div>
