@@ -41,20 +41,19 @@
 </main>
 
 <style lang="scss">
-  @import 'src/styles/global';
+  @import 'src/styles/_project-vars';
 
   main {
     position: relative;
     background-color: white;
     box-sizing: border-box;
     width: 100%;
-    height: calc(100% - 70px);
-    overflow: hidden;
+    height: calc(100% - #{$nav-height});
   }
 
   @media screen and (max-width: 768px) {
     main {
-      height: calc(100% - 50px);
+      height: calc(100% - #{$nav-height-mobile});
     }
   }
 </style>

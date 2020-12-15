@@ -169,16 +169,15 @@
 </section>
 
 <!-- POP UP -->
-<div id="popup-ctn" class:open={farmDetails}>
+
+<!-- <div id="popup-ctn" class:open={farmDetails}>
   {#if farmDetails}
     <Popup item={farmDetails} />
   {/if}
-</div>
-
+</div> -->
 <style lang="scss">
   @import 'src/styles/_ods-design-system';
-
-  $list-width: 374px;
+  @import 'src/styles/_project-vars';
 
   section {
     height: 100%;
@@ -259,7 +258,7 @@
     }
   }
 
-  @media screen and (max-width: 768) {
+  @media screen and (max-width: 768px) {
     #map {
       position: absolute;
       width: 100%;
