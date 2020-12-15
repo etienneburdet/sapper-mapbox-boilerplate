@@ -1,5 +1,5 @@
 <script context="module">
-    import { farmFacetsUrl, farmsShortlistUrl, getFarmWhere } from './_helpers';
+    import { farmFacetsUrl, getFarmWhere } from './_helpers';
 
     export async function preload(page, session) {
         const { id } = page.params;
@@ -59,7 +59,7 @@
     import { stores } from '@sapper/app';
     const { page } = stores();
 
-    let querystring;
+    let queryparams;
     let farmsShortlist = [];
     export let farmDetails;
     export let facets;
@@ -69,7 +69,7 @@
     let showAdvFilters = false;
     let showMobileAdvFilters = false;
 
-    $: querystring = new URLSearchParams($page.query).toString();
+    $: queryparams = new URLSearchParams($page.query);
 </script>
 
 <div id="page-ctn">
@@ -98,6 +98,7 @@
                   <ListItem
                           id={farm.properties.recordid}
                           fields={farm.properties}
+                          geometry={farm.geometry}
                           active={farm.properties.recordid === activeId}
                   />
               {/each}
@@ -141,19 +142,23 @@
         </div>
 
         <!-- MAP -->
-        <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
+        <Map navigationPosition="bottom-right" center={q2center(query.location)}>
             <MapSource id="farms">
                 <MapLayer
                         id="farms-circles"
                         type="circle"
                         {paint}
-                        on:mapClick={setActivePoint(querystring)}
+                        on:mapClick={setActivePoint(queryparams)}
                         on:render={(event) => (farmsShortlist = event.detail)}
                 />
             </MapSource>
-          {#if query.coords}
-              <Marker center={q2center(query.coords)}/>
+          {#if query.marker}
+              <Marker center={q2center(query.marker)} options={{'color':'blue'}}/>
           {/if}
+
+        {#if query.location && query.location != query.marker}
+            <Marker center={q2center(query.location)} options={{'color':'#74CABF'}}/>
+        {/if}
         </Map>
     </div>
 

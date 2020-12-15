@@ -5,7 +5,9 @@
   const map = getMap();
 
   export let center;
-  const marker = new mapbox.Marker()
+  export let options = {};
+
+  const marker = new mapbox.Marker(options);
 
   onMount(() => {
     marker.addTo(map);

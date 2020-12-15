@@ -13,7 +13,7 @@
 
 <nav class:open>
   <div class="header-container is-flex is-justify-content-center is-align-items-center is-mobile">
-    <img class="header-logo" src="/mstile-150x150.png" />
+    <img class="header-logo" src="resources/mstile-150x150.png" />
     <div class="header-menu">
       <div class="header-menu-top">
         <p>MENU</p>

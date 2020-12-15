@@ -27,16 +27,21 @@
       </div>
       <div class="column">
         <form action="/farms/all" method="get">
-          <Geocoder id="home-search" geolocator={true} />
+          <Geocoder id="home-search" geolocator={'add-on'} />
           <div class="columns">
             <div class="column">
               <div class="field">
                 <div class="control is-expanded">
                   <div class="select is-fullwidth">
-                    <select name="add_section">
-                      <option>Sélectionnez une section</option>
-                      <option>1.1</option>
-                      <option>1.2</option>
+                    <select name="typologie_ods">
+                        <option value="">
+                            Choisissez un type de service
+                        </option>
+                        <option value="Producteur">Producteur</option>
+                        <option value="Vente à la ferme">Vente à la ferme</option>
+                        <option value="Marché de producteurs">Marché de producteurs</option>
+                        <option value="Point de retrait">Point de retrait</option>
+                        <option value="Magasin de producteurs">Magasin de producteurs</option>
                     </select>
                   </div>
                 </div>

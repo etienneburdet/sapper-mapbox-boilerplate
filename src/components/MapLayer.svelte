@@ -52,21 +52,23 @@
       layout,
     });
 
+    map.on('mousemove', (e) => {
+      if (map.isStyleLoaded() && map.getLayer(id)) {
+          const items = map.queryRenderedFeatures(e.point, {
+              layers: [id],
+          });
+          if (items.length > 0) {
+              map.getCanvas().style.cursor = 'pointer';
+          } else {
+              map.getCanvas().style.cursor = 'default';
+          }
+      }
+    });
+
     return () => map.getLayer(id) && map.removeLayer(id);
   });
 
   map.on('render', debounce(emitVisibleFeatures, 150));
 
   map.on('click', id, dispatchLayerEvent);
-
-  map.getLayer(id) && map.on('mousemove', (e) => {
-    const items = map.queryRenderedFeatures(e.point, {
-      layers: [id],
-    });
-    if (items.length > 0) {
-      map.getCanvas().style.cursor = 'pointer';
-    } else {
-      map.getCanvas().style.cursor = 'default';
-    }
-  });
 </script>

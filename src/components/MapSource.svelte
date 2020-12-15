@@ -3,6 +3,8 @@
     import { fetchGeojson } from '@/routes/farms/_helpers';
 
     import { stores } from '@sapper/app';
+    import Spinner from './Spinner.svelte';
+
     const { page, session } = stores();
 
     export let dataUrl;
@@ -11,7 +13,8 @@
     const { getMap } = getContext('map');
     const map = getMap();
 
-    let isSourceLoaded;
+    let isSourceLoaded = false;
+    let spin = false;
     let farmsGeojson;
     let running = false;
 
@@ -21,6 +24,7 @@
 
     const setSource = (data) => {
         if (!data) return;
+        spin = true;
         if (map.getSource(id)) {
             map.getSource(id)
                     .setData(data);
@@ -29,8 +33,9 @@
                 type: 'geojson',
                 data,
             });
-            isSourceLoaded = true;
         }
+        isSourceLoaded = true;
+        spin = false;
     };
 
     const destroySource = () => {
@@ -46,17 +51,21 @@
     // When url change -> refetch the data
     $: {
         if ($page.params['id'] == 'all' || !running) {
-            fetchGeojson($page).then((res) => { farmsGeojson = res; });
+            spin = true;
+            fetchGeojson($page)
+                    .then((res) => {
+                        farmsGeojson = res;
+                    });
             running = true;
+            spin = false;
         }
     }
 
-
     // when data changed, refresh the source
     $: if (map.isStyleLoaded()) {
-      setSource(farmsGeojson)
+        setSource(farmsGeojson);
     } else {
-      map.on('load', () => setSource(farmsGeojson));
+        map.on('load', () => setSource(farmsGeojson));
     }
 
     onMount(() => {
@@ -67,3 +76,5 @@
 {#if isSourceLoaded}
     <slot/>
 {/if}
+
+<Spinner {spin}/>

@@ -1,30 +1,29 @@
 <script>
   import { stores } from '@sapper/app';
   const { page } = stores();
-  const querystring = new URLSearchParams($page.query).toString();
+  const queryparams = new URLSearchParams($page.query);
 
   export let item;
+
+  queryparams.delete('location');
 </script>
 
 <div class="popup">
-  <a rel="prefetch" href="/farms/all?{querystring}"> <i class="fas fa-times" /> </a>
-  <p class="title">{item.fields.add_nom_ferme}</p>
-  <p class="subtitle">{item.fields.add_ville}</p>
+  <a rel="prefetch" href="/farms/all?{queryparams.toString()}"> <i class="fas fa-times" /> </a>
+  <p class="title">{item.fields.nom}</p>
+  <p class="subtitle">{item.fields.nom_commune}</p>
   <hr />
-  <p>{item.fields.add_adresse}</p>
+  <p>{item.fields.adresse}</p>
   <hr />
   <p>
-    Exploitation familiale depuis 3 générations, située entre Morvan et Charolais, comptant 130
-    vaches allaitantes nourries par notre propre production de céréales et fourrage. Découpe et
-    transformation directement à la ferme. Accueil et vente directe à la ferme sur rendez-vous.
-    Livraison possible ou envoi chronopost réfrigéré.
+    {item.fields.typologie_ods}
   </p>
   <hr />
   <p class="title is-size-6">Type de produits</p>
   <div class="tags">
-    <div class="tag is-medium">{item.fields.typeemplacement}</div>
-    <div class="tag is-medium">{item.fields.stadedeveloppement}</div>
-    <div class="tag is-medium">{item.fields.domanialite}</div>
+    {#each item.fields.familles_des_produits.toString().split(',') as type}
+      <div class="tag is-medium">{type}</div>
+    {/each}
   </div>
 </div>
 

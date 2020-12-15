@@ -26,23 +26,23 @@
     </span>
 </div>
 
-{#if facets['add_section']}
-    <Filter id="add_section" options={facets['add_section']} selection={$page.query['add_section']}
+{#if facets['familles_des_produits']}
+    <Filter id="familles_des_produits" options={facets['familles_des_produits']} selection={$page.query['familles_des_produits']}
             on:select={filterPage}>
-        <h4 class="subtitle is-5 has-text-white" slot="title">Section</h4>
+        <h4 class="subtitle is-5 has-text-white" slot="title">Produits</h4>
         <span slot="description">Choisissez une catégorie de produits</span>
     </Filter>
 {/if}
-{#if facets['cat_iphone']}
-    <Filter id="cat_iphone" options={facets['cat_iphone']} selection={$page.query['cat_iphone']} on:select={filterPage}>
-        <h4 class="subtitle is-5 has-text-white" slot="title">Catégorie iPhone</h4>
-        <span slot="description">Choisissez une catégorie de produits</span>
-    </Filter>
-{/if}
-{#if facets['type']}
-    <Filter id="type" options={facets['type']} selection={$page.query['cat_iphone']} on:select={filterPage}>
+{#if facets['typologie_ods']}
+    <Filter id="typologie_ods" options={facets['typologie_ods']} selection={$page.query['typologie_ods']} on:select={filterPage}>
         <h4 class="subtitle is-5 has-text-white" slot="title">Services</h4>
-        <span slot="description">Type de préstation</span>
+        <span slot="description">Choisissez un type de service</span>
+    </Filter>
+{/if}
+{#if facets['nom_plateforme_partenaire']}
+    <Filter id="nom_plateforme_partenaire" options={facets['nom_plateforme_partenaire']} selection={$page.query['nom_plateforme_partenaire']} on:select={filterPage}>
+        <h4 class="subtitle is-5 has-text-white" slot="title">Source</h4>
+        <span slot="description">Choisissez une source de données</span>
     </Filter>
 {/if}
 

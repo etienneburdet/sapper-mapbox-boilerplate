@@ -1,32 +1,34 @@
 import { goto } from '@sapper/app';
 import * as ods from '@/plugins/ods-data';
+import mapbox from 'mapbox-gl';
+import { query } from '../../plugins/ods-data';
 
-export const farmsBaseUrl = ods.privateDataset(
+/*export const farmsBaseUrl = ods.privateDataset(
   'producteursagri',
   'bienvenue-a-la-ferme',
   'API_KEY',
-);
-
-/*export const farmsBaseUrl = ods.publicDataset(
-  'producteursagri',
-  'bienvenue-a-la-ferme'
 );*/
+
+export const farmsBaseUrl = ods.publicDataset(
+  'producteursagri',
+  'flux-complet-bienvenue-a-la-ferme'
+);
 
 export const fetchGeojson = async (page) => {
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
-  let whereClause = "add_nom_ferme is not null";
+  let whereClause = "";
   if (page && page.query) {
-    const whereClauseAllowedKeys = ['add_section','cat_iphone','type','search'];
+    const whereClauseAllowedKeys = ['familles_des_produits','typologie_ods','nom_plateforme_partenaire','search'];
     whereClause = Object.keys(page.query)
       .filter(key => whereClauseAllowedKeys.includes(key))
       .reduce((str, key) => {
-        str = str + " AND " + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
+        str = (str.length>0?(str + " AND "):"") + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
         return str;
       }, whereClause);
   }
   const farmsGeojsonUrl = ods.query(fullGeojson, {
     rows: '10000',
-    select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville,location',
+    select: 'nom,adresse,nom_commune,geolocalisation',
     where: whereClause,
     record_metas: true
   });
@@ -40,31 +42,31 @@ export const getFarmRecord = ods.record(farmsBaseUrl);
 const farmsRecords = ods.records(farmsBaseUrl);
 export const getFarmWhere = ods.where(farmsRecords);
 
-export const farmsShortlistUrl = ods.query(farmsRecords, {
+/*export const farmsShortlistUrl = ods.query(farmsRecords, {
   rows: '20',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
-});
+});*/
 
 const farmsFacets = ods.facets(farmsBaseUrl);
 export const farmFacetsUrl = ods.query(farmsFacets, [
   {
     'key': 'facet',
-    'value': 'add_section'
+    'value': 'familles_des_produits'
   },
   {
     'key': 'facet',
-    'value': 'cat_iphone'
+    'value': 'typologie_ods'
   },
   {
     'key': 'facet',
-    'value': 'type'
+    'value': 'nom_plateforme_partenaire'
   }
 ]);
 
-export const setActivePoint = (querystring) => (event) => {
+export const setActivePoint = (queryparams) => (event) => {
   const [point] = event.detail.mapevent.features;
-  console.log(querystring);
-  goto(`/farms/${point.properties.recordid}?${querystring}`);
+  queryparams.set('location', point.geometry.coordinates.toString());
+  goto(`/farms/${point.properties.recordid}?${queryparams.toString()}`);
 };
 
 export const q2center = (coordsString) => {
@@ -73,9 +75,15 @@ export const q2center = (coordsString) => {
   }
 
   const lngLatStr = coordsString.split(',');
-  const lng = parseFloat(lngLatStr[0]);
-  const lat = parseFloat(lngLatStr[1]);
-  return [lng, lat];
+  let lngLat;
+  try {
+    const lng = parseFloat(lngLatStr[0]);
+    const lat = parseFloat(lngLatStr[1]);
+    lngLat = new mapbox.LngLat(lng, lat);
+  } catch (e) {
+    console.error('Wrong location param : ' + e);
+  }
+  return lngLat;
 };
 
 export const filterPage = (event) => {
@@ -100,4 +108,15 @@ export const searchPage = (search) => {
     url.searchParams.delete('search');
   }
   goto(url);
+};
+
+export const updateLocation = (lngLat) => {
+  console.log(lngLat);
+  const url = new URL(window.location);
+  if (lngLat) {
+    url.searchParams.set('location', lngLat.lng + ',' + lngLat.lat);
+  } else {
+    url.searchParams.delete('location');
+  }
+  goto(url, {'replaceState':true});
 };
