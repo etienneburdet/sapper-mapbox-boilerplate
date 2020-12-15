@@ -41,6 +41,8 @@
 </main>
 
 <style lang="scss">
+  @import 'src/styles/global';
+
   main {
     position: relative;
     background-color: white;
@@ -50,7 +52,7 @@
     overflow: hidden;
   }
 
-  @media screen and (max-width: 769px) {
+  @media screen and (max-width: 768px) {
     main {
       height: calc(100% - 50px);
     }

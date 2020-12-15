@@ -104,7 +104,7 @@
   class:has-addons={geolocator === 'add-on'}
   class:is-grouped={geolocator === 'separate'}
 >
-  <div class="control is-expanded ml-3">
+  <div class="control is-expanded">
     <input
       {id}
       class="input is-fullwidth"

@@ -58,7 +58,7 @@
 <section class="is-flex-desktop is-relative">
   <header class="is-hidden-desktop is-mobile level p-3">
     <div class="level-left">
-      <div class="level-item">
+      <div class="level-item mr-3">
         <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
           {#if !toggleList}<span>Liste</span>{/if}
           {#if toggleList}<span>Carte</span>{/if}
@@ -72,29 +72,28 @@
 
   <aside id="list-ctn" class:mobile-open={toggleList}>
     <!-- DESKTOP LIST HEADER -->
-    <header id="list-ctn-header" class="is-hidden-mobile">
+    <header class="has-background-light is-hidden-mobile p-5">
       <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
       <div
-        class="is-clickable"
+        class="is-clickable mb-3"
         class:show-adv-filters={showAdvFilters}
         on:click={() => (showAdvFilters = !showAdvFilters)}
       >
-        Affiner la recherche
-        <span class="icon has-text-wihte">
-          <i class="fas"fa-chevron-up" /></span>
+        <span>Affiner la recherche</span>
+        <span class="icon has-text-wihte"> <i class="fas fa-chevron-up" /></span>
       </div>
 
       <div class:is-hidden={showAdvFilters}>
         <Filter id="produits" options={produits} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Produits</h4>
+          <p slot="title">Produits</p>
           <span slot="description">Choisissez votre cotégorie de porduits</span>
         </Filter>
         <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Partenaires</h4>
+          <p slot="title">Partenaires</p>
           <span slot="description">Choisissez les partenaires</span>
         </Filter>
         <Filter id="services" options={services} on:select={filterPage}>
-          <h4 class="title is-4" slot="title">Services</h4>
+          <p slot="title">Services</p>
           <span slot="description">Type de préstation</span>
         </Filter>
       </div>
@@ -137,7 +136,7 @@
   </div>
   <nav
     id="map-footer"
-    class="is-hidden-desktop has-background-primary"
+    class="is-hidden-desktop has-background-dark has-text-light"
     class:is-hidden={!showMobileAdvFilters}
   >
     <div class="level is-mobile">
@@ -155,15 +154,15 @@
       </div>
     </div>
     <Filter id="produits" options={produits} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Produits</h4>
+      <p slot="title">Produits</p>
       <span slot="description">Choisissez votre cotégorie de porduits</span>
     </Filter>
     <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Partenaires</h4>
+      <p slot="title">Partenaires</p>
       <span slot="description">Choisissez les partenaires</span>
     </Filter>
     <Filter id="services" options={services} on:select={filterPage}>
-      <h4 class="title is-4" slot="title">Services</h4>
+      <p slot="title">Services</p>
       <span slot="description">Type de préstation</span>
     </Filter>
   </nav>
@@ -178,6 +177,7 @@
 
 <style lang="scss">
   @import 'src/styles/_ods-design-system';
+
   $list-width: 374px;
 
   section {
@@ -234,17 +234,12 @@
           transform: rotate(-45deg);
         }
       } */
-    }
+  }
 
-    #list-ctn-content {
-      flex: 1;
-      overflow: scroll;
-      background: white;
-    }
-
-    :global(&.open) {
-      left: 0;
-    }
+  #list-ctn-content {
+    flex: 1;
+    overflow: scroll;
+    background: white;
   }
 
   #popup-ctn {
@@ -264,7 +259,7 @@
     }
   }
 
-  @media screen and (max-width: 769px) {
+  @media screen and (max-width: 768) {
     #map {
       position: absolute;
       width: 100%;
