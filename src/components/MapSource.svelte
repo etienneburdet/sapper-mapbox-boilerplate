@@ -4,6 +4,7 @@
 
     import { stores } from '@sapper/app';
     import Spinner from './Spinner.svelte';
+    import { filterQueryParams } from '../routes/farms/_helpers';
 
     const { page, session } = stores();
 
@@ -16,7 +17,7 @@
     let isSourceLoaded = false;
     let spin = false;
     let farmsGeojson;
-    let running = false;
+    let lastQueryParams = false;
 
     setContext('source', {
         getMapSourceId: () => id,
@@ -50,13 +51,14 @@
 
     // When url change -> refetch the data
     $: {
-        if ($page.params['id'] == 'all' || !running) {
+        let filteredQueryParams = filterQueryParams($page.query);
+        if (!lastQueryParams || filteredQueryParams != lastQueryParams) {
             spin = true;
             fetchGeojson($page)
                     .then((res) => {
                         farmsGeojson = res;
                     });
-            running = true;
+            lastQueryParams = filteredQueryParams;
             spin = false;
         }
     }

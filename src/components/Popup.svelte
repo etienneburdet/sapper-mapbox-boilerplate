@@ -2,15 +2,19 @@
   import { stores } from '@sapper/app';
   import { popupTemplate } from '../plugins/ods-templates';
   const { page } = stores();
-  const queryparams = new URLSearchParams($page.query);
 
   export let item;
 
+  let queryparams;
   let popup;
+
+  $: {
+    queryparams = new URLSearchParams($page.query);
+    queryparams.delete('location');
+  }
 
   $: popup && item && (popup.innerHTML = popupTemplate(item));
 
-  queryparams.delete('location');
 </script>
 
 <div class="popup">

@@ -9,8 +9,8 @@ import { query } from '../../plugins/ods-data';
   'API_KEY',
 );*/
 
-export const farmsBaseUrl = ods.publicDataset(
-  'producteursagri',
+export const farmsBaseUrl = ods.publicDatasetFromBase(
+  'https://www.duproducteurdacote.fr',
   'flux-complet-bienvenue-a-la-ferme'
 );
 
@@ -111,7 +111,6 @@ export const searchPage = (search) => {
 };
 
 export const updateLocation = (lngLat) => {
-  console.log(lngLat);
   const url = new URL(window.location);
   if (lngLat) {
     url.searchParams.set('location', lngLat.lng + ',' + lngLat.lat);
@@ -120,3 +119,10 @@ export const updateLocation = (lngLat) => {
   }
   goto(url, {'replaceState':true});
 };
+
+export const filterQueryParams = (query) => {
+  let queryparams = Object.assign({}, query); // don't know why, query is a reference ! not a copy
+  delete queryparams['marker'];
+  delete queryparams['location'];
+  return new URLSearchParams(queryparams).toString();
+}
