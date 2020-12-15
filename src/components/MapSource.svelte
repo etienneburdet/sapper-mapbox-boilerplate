@@ -13,12 +13,14 @@
 
     let isSourceLoaded;
     let farmsGeojson;
+    let running = false;
 
     setContext('source', {
         getMapSourceId: () => id,
     });
 
     const setSource = (data) => {
+        if (!data) return;
         if (map.getSource(id)) {
             map.getSource(id)
                     .setData(data);
@@ -42,7 +44,13 @@
     };
 
     // When url change -> refetch the data
-    $: if ($page.params['id'] == 'all') fetchGeojson($page).then((res) => { farmsGeojson = res; });
+    $: {
+        if ($page.params['id'] == 'all' || !running) {
+            fetchGeojson($page).then((res) => { farmsGeojson = res; });
+            running = true;
+        }
+    }
+
 
     // when data changed, refresh the source
     $: if (map.isStyleLoaded()) {

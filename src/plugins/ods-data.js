@@ -12,6 +12,11 @@ const apikey = (url, key) => {
   return authUrl;
 };
 
+export const publicDataset = (domain, datasetName) => {
+  const publicUrl = dataset(domain, datasetName);
+  return publicUrl;
+};
+
 export const privateDataset = (domain, datasetName, key) => {
   const publicUrl = dataset(domain, datasetName);
   const authUrl = apikey(publicUrl, key);

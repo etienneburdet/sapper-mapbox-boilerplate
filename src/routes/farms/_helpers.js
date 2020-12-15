@@ -7,6 +7,11 @@ export const farmsBaseUrl = ods.privateDataset(
   'API_KEY',
 );
 
+/*export const farmsBaseUrl = ods.publicDataset(
+  'producteursagri',
+  'bienvenue-a-la-ferme'
+);*/
+
 export const fetchGeojson = async (page) => {
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
   let whereClause = "add_nom_ferme is not null";
@@ -58,6 +63,7 @@ export const farmFacetsUrl = ods.query(farmsFacets, [
 
 export const setActivePoint = (querystring) => (event) => {
   const [point] = event.detail.mapevent.features;
+  console.log(querystring);
   goto(`/farms/${point.properties.recordid}?${querystring}`);
 };
 

@@ -59,9 +59,7 @@
     import { stores } from '@sapper/app';
     const { page } = stores();
 
-    const querystring = new URLSearchParams($page.query).toString();
-
-    // export let farmsShortlist;
+    let querystring;
     let farmsShortlist = [];
     export let farmDetails;
     export let facets;
@@ -71,6 +69,7 @@
     let showAdvFilters = false;
     let showMobileAdvFilters = false;
 
+    $: querystring = new URLSearchParams($page.query).toString();
 </script>
 
 <div id="page-ctn">
