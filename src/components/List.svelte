@@ -1,12 +1,5 @@
-<script>
-  export let activeItem;
-
-  let id;
-  $: id = activeItem && activeItem.fields.objectid;
-</script>
-
 <div>
-  <slot {id}></slot>
+  <slot></slot>
 </div>
 
 <style>

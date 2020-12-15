@@ -93,13 +93,13 @@
         </div>
         <!-- DESKTOP LIST -->
         <div id="list-ctn-content">
-            <List activeItem={farmDetails} let:id={activeId}>
+            <List>
               {#each farmsShortlist as farm (farm)}
                   <ListItem
                           id={farm.properties.recordid}
                           fields={farm.properties}
                           geometry={farm.geometry}
-                          active={farm.properties.recordid === activeId}
+                          active={farmDetails && (farm.properties.recordid === farmDetails.id)}
                   />
               {/each}
             </List>
