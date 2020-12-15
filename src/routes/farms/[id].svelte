@@ -55,50 +55,50 @@
   const services = ['Producteur', 'Point de vente'];
 </script>
 
-<header class="is-hidden-desktop is-mobile level p-3">
-  <div class="level-left">
+<section class="is-flex-desktop is-relative">
+  <header class="is-hidden-desktop is-mobile level p-3">
+    <div class="level-left">
+      <div class="level-item">
+        <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
+          {#if !toggleList}<span>Liste</span>{/if}
+          {#if toggleList}<span>Carte</span>{/if}
+        </button>
+      </div>
+    </div>
     <div class="level-item">
-      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
-        {#if !toggleList}<span>Liste</span>{/if}
-        {#if toggleList}<span>Carte</span>{/if}
-      </button>
-    </div>
-  </div>
-  <div class="level-item is-flex-grow-1">
-    <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
-  </div>
-</header>
-
-<aside id="list-ctn" class:mobile-open={toggleList}>
-  <!-- DESKTOP LIST HEADER -->
-  <header id="list-ctn-header" class="custom-styled-select is-hidden-mobile">
-    <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
-    <div
-      id="list-ctn-header-btn"
-      class:show-adv-filters={showAdvFilters}
-      on:click={() => (showAdvFilters = !showAdvFilters)}
-    >
-      Affiner la recherche
-      <i class="fas fas-arrow-up" />
-    </div>
-
-    <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
-      <Filter id="produits" options={produits} on:select={filterPage}>
-        <h4 class="title is-4" slot="title">Produits</h4>
-        <span slot="description">Choisissez votre cotégorie de porduits</span>
-      </Filter>
-      <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-        <h4 class="title is-4" slot="title">Partenaires</h4>
-        <span slot="description">Choisissez les partenaires</span>
-      </Filter>
-      <Filter id="services" options={services} on:select={filterPage}>
-        <h4 class="title is-4" slot="title">Services</h4>
-        <span slot="description">Type de préstation</span>
-      </Filter>
+      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
     </div>
   </header>
-  <!-- DESKTOP LIST -->
-  <div id="list-ctn-content">
+
+  <aside id="list-ctn" class:mobile-open={toggleList}>
+    <!-- DESKTOP LIST HEADER -->
+    <header id="list-ctn-header" class="is-hidden-mobile">
+      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
+      <div
+        class="is-clickable"
+        class:show-adv-filters={showAdvFilters}
+        on:click={() => (showAdvFilters = !showAdvFilters)}
+      >
+        Affiner la recherche
+        <span class="icon has-text-wihte">
+          <i class="fas"fa-chevron-up" /></span>
+      </div>
+
+      <div class:is-hidden={showAdvFilters}>
+        <Filter id="produits" options={produits} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Produits</h4>
+          <span slot="description">Choisissez votre cotégorie de porduits</span>
+        </Filter>
+        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Partenaires</h4>
+          <span slot="description">Choisissez les partenaires</span>
+        </Filter>
+        <Filter id="services" options={services} on:select={filterPage}>
+          <h4 class="title is-4" slot="title">Services</h4>
+          <span slot="description">Type de préstation</span>
+        </Filter>
+      </div>
+    </header>
     <List activeItem={farmDetails} let:id={activeId}>
       {#each farmsShortlist as farm (farm)}
         <ListItem
@@ -108,11 +108,10 @@
         />
       {/each}
     </List>
-  </div>
-</aside>
-<div id="map">
-  <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-    <!-- <MapSource id="farms">
+  </aside>
+  <div class="is-flex-grow-1" id="map">
+    <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
+      <!-- <MapSource id="farms">
       <MapLayer
         id="farms-circles"
         type="circle"
@@ -124,50 +123,51 @@
     {#if query.coords}
       <Marker center={q2center(query.coords)} />
     {/if} -->
-  </Map>
-</div>
-<!-- MAP FOOTER / FILTERS -->
-<div class="is-fab has-text-centered is-hidden-desktop">
-  <button
-    class="button is-rounded is-dark mb-3"
-    class:is-hidden={showMobileAdvFilters}
-    on:click={() => (showMobileAdvFilters = true)}
-  >
-    Affiner les résultats
-  </button>
-</div>
-<footer
-  id="map-footer"
-  class="is-hidden-desktop has-background-primary"
-  class:is-hidden={!showMobileAdvFilters}
->
-  <div class="level is-mobile">
-    <div class="level-left">
-      <div class="level-item">
-        <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
-      </div>
-    </div>
-    <div class="level-right">
-      <div class="level item">
-        <span class="icon is-clickable" role="button">
-          <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
-        </span>
-      </div>
-    </div>
+    </Map>
   </div>
-  <Filter id="produits" options={produits} on:select={filterPage}>
-    <h4 class="title is-4" slot="title">Produits</h4>
-    <span slot="description">Choisissez votre cotégorie de porduits</span>
-  </Filter>
-  <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-    <h4 class="title is-4" slot="title">Partenaires</h4>
-    <span slot="description">Choisissez les partenaires</span>
-  </Filter>
-  <Filter id="services" options={services} on:select={filterPage}>
-    <h4 class="title is-4" slot="title">Services</h4>
-    <span slot="description">Type de préstation</span>
-  </Filter>
-</footer>
+  <!-- MAP FOOTER / FILTERS -->
+  <div class="is-fab has-text-centered is-hidden-desktop">
+    <button
+      class="button is-rounded is-dark mb-3"
+      class:is-hidden={showMobileAdvFilters}
+      on:click={() => (showMobileAdvFilters = true)}
+    >
+      Affiner les résultats
+    </button>
+  </div>
+  <nav
+    id="map-footer"
+    class="is-hidden-desktop has-background-primary"
+    class:is-hidden={!showMobileAdvFilters}
+  >
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level item">
+          <span class="icon is-clickable" role="button">
+            <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
+          </span>
+        </div>
+      </div>
+    </div>
+    <Filter id="produits" options={produits} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Produits</h4>
+      <span slot="description">Choisissez votre cotégorie de porduits</span>
+    </Filter>
+    <Filter id="partenaires" options={partenaires} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Partenaires</h4>
+      <span slot="description">Choisissez les partenaires</span>
+    </Filter>
+    <Filter id="services" options={services} on:select={filterPage}>
+      <h4 class="title is-4" slot="title">Services</h4>
+      <span slot="description">Type de préstation</span>
+    </Filter>
+  </nav>
+</section>
 
 <!-- POP UP -->
 <div id="popup-ctn" class:open={farmDetails}>
@@ -180,13 +180,16 @@
   @import 'src/styles/_ods-design-system';
   $list-width: 374px;
 
+  section {
+    height: 100%;
+  }
+
   #map {
-    position: absolute;
+    position: relative;
     top: 0;
     right: 0;
     z-index: 0;
     height: 100%;
-    width: 100%;
   }
 
   header {
@@ -205,24 +208,15 @@
   }
 
   #list-ctn {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: $list-width;
+    height: 100%;
     z-index: 2;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 
-    #list-ctn-header {
-      background-color: black;
-      color: white;
-      position: relative;
-      padding: 20px;
-
-      #list-ctn-header-btn {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        &:after {
+    /* &:after {
           border: 2px solid white;
           border-radius: 1.5px;
           border-right: 0;
@@ -239,16 +233,7 @@
         &.show-adv-filters:after {
           transform: rotate(-45deg);
         }
-      }
-
-      .adv-filters-ctn {
-        display: none;
-        margin-top: 10px;
-
-        &.show-adv-filters {
-          display: block;
-        }
-      }
+      } */
     }
 
     #list-ctn-content {
@@ -259,28 +244,6 @@
 
     :global(&.open) {
       left: 0;
-    }
-  }
-
-  #map-ctn {
-    width: calc(100% - 374px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-
-    #map-header {
-      display: none;
-
-      position: absolute;
-      z-index: 1;
-      padding: 10px;
-      height: 57px;
-      width: 100%;
-
-      #map-header-content {
-        flex: 1;
-        margin: 0 5px;
-      }
     }
   }
 
@@ -302,22 +265,21 @@
   }
 
   @media screen and (max-width: 769px) {
+    #map {
+      position: absolute;
+      width: 100%;
+    }
+
     #list-ctn {
-      position: relative;
       left: -100%;
       bottom: 0;
       width: 100%;
       z-index: 1;
-      background: white;
       height: calc(100% - #{$spacing-400});
       transition: 0.2s ease left;
 
       &.mobile-open {
         left: 0;
-
-        #list-ctn-header {
-          display: none;
-        }
       }
     }
 

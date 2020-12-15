@@ -47,6 +47,7 @@
     box-sizing: border-box;
     width: 100%;
     height: calc(100% - 70px);
+    overflow: hidden;
   }
 
   @media screen and (max-width: 769px) {
