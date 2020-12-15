@@ -7,9 +7,6 @@
 
     let farmDetails;
     if (id !== 'all') {
-      // With 'where'
-      // const farmUrl = getFarmWhere(`add_nom_ferme like "${id}"`);
-      // With 'record/:id'
       const farmUrl = getFarmRecord(id);
       const resFromAPI = await this.fetch(farmUrl);
       const jsonFromAPI = await resFromAPI.json();
@@ -57,19 +54,22 @@
   import { paint } from './_mapstyle';
   import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
   import { stores } from '@sapper/app';
+
   const { page } = stores();
 
-  let querystring;
-  let farmsShortlist = [];
   export let farmDetails;
   export let facets;
   export let query;
+
+  let querystring;
+  let farmsShortlist = [];
 
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
 
   $: querystring = new URLSearchParams($page.query).toString();
+  $: console.log(farmDetails);
 </script>
 
 <section class="is-flex-desktop is-relative">
@@ -101,18 +101,7 @@
       </div>
 
       <div class:is-hidden={showAdvFilters}>
-        <Filter id="produits" options={produits} on:select={filterPage}>
-          <p slot="title">Produits</p>
-          <span slot="description">Choisissez votre cotégorie de porduits</span>
-        </Filter>
-        <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-          <p slot="title">Partenaires</p>
-          <span slot="description">Choisissez les partenaires</span>
-        </Filter>
-        <Filter id="services" options={services} on:select={filterPage}>
-          <p slot="title">Services</p>
-          <span slot="description">Type de préstation</span>
-        </Filter>
+        <AdvancedFilters {facets} />
       </div>
     </header>
     <List activeItem={farmDetails} let:id={activeId}>
@@ -124,6 +113,11 @@
         />
       {/each}
     </List>
+    <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
+      {#if farmDetails}
+        <Popup item={farmDetails} />
+      {/if}
+    </div>
   </aside>
   <div class="is-flex-grow-1" id="map">
     <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
@@ -170,28 +164,11 @@
         </div>
       </div>
     </div>
-    <Filter id="produits" options={produits} on:select={filterPage}>
-      <p slot="title">Produits</p>
-      <span slot="description">Choisissez votre cotégorie de porduits</span>
-    </Filter>
-    <Filter id="partenaires" options={partenaires} on:select={filterPage}>
-      <p slot="title">Partenaires</p>
-      <span slot="description">Choisissez les partenaires</span>
-    </Filter>
-    <Filter id="services" options={services} on:select={filterPage}>
-      <p slot="title">Services</p>
-      <span slot="description">Type de préstation</span>
-    </Filter>
+    <AdvancedFilters {facets} />
   </nav>
 </section>
 
 <!-- POP UP -->
-
-<!-- <div id="popup-ctn" class:open={farmDetails}>
-  {#if farmDetails}
-    <Popup item={farmDetails} />
-  {/if}
-</div> -->
 <style lang="scss">
   @import 'src/styles/_ods-design-system';
   @import 'src/styles/_project-vars';
@@ -252,23 +229,15 @@
       } */
   }
 
-  #list-ctn-content {
-    flex: 1;
-    overflow: scroll;
-    background: white;
-  }
-
   #popup-ctn {
     position: absolute;
-    left: -395px;
-    width: 395px;
+    left: calc(-1 * #{$popup-width});
+    width: $popup-width;
     height: 100%;
-    overflow-y: auto;
-    background: white;
+    overflow-y: hidden;
     border-left: 1px solid #dddddd;
     transition: 0.2s ease left;
-    z-index: 1;
-    padding: 20px;
+    z-index: -1;
 
     &.open {
       left: 374px;

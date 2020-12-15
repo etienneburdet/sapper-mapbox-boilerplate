@@ -2,7 +2,7 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.9e2dc0ef.js"
+    "main": "client.c2b012d0.js"
   },
   "css": {
     "main": [
@@ -11,47 +11,47 @@
   },
   "dependencies": {
     "index.svelte": [
-      "index.70d7586f.js",
-      "Geocoder.d237968a.js",
+      "index.699ddecd.js",
+      "Geocoder.f6e8aba8.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "index-fdb47273.css"
     ],
     "partners.svelte": [
-      "partners.0b5d93d9.js",
+      "partners.1c5c407c.js",
       "inject_styles.5607aec6.js"
     ],
     "about.svelte": [
-      "about.379a2e38.js",
+      "about.69e5dc06.js",
       "inject_styles.5607aec6.js"
     ],
     "farms/index.svelte": [
-      "index.057b9b22.js",
+      "index.249fd591.js",
       "inject_styles.5607aec6.js"
     ],
     "farms/_helpers.js": [
-      "[id].b41fdeed.js",
-      "Geocoder.d237968a.js",
+      "[id].c453bb93.js",
+      "Geocoder.f6e8aba8.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
-      "[id]-0562cf00.css"
+      "[id]-de8ae31b.css"
     ],
     "farms/_mapstyle.js": [
-      "[id].b41fdeed.js",
-      "Geocoder.d237968a.js",
+      "[id].c453bb93.js",
+      "Geocoder.f6e8aba8.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
-      "[id]-0562cf00.css"
+      "[id]-de8ae31b.css"
     ],
     "farms/[id].svelte": [
-      "[id].b41fdeed.js",
-      "Geocoder.d237968a.js",
+      "[id].c453bb93.js",
+      "Geocoder.f6e8aba8.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
-      "[id]-0562cf00.css"
+      "[id]-de8ae31b.css"
     ]
   }
 }
