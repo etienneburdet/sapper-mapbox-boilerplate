@@ -27,7 +27,7 @@
       </div>
       <div class="column">
         <form action="/farms/all" method="get">
-          <Geocoder id="home-search" geolocator={true} />
+          <Geocoder id="home-search" geolocator="add-on" />
           <div class="columns">
             <div class="column">
               <div class="field">

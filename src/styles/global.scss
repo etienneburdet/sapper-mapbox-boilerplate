@@ -19,8 +19,8 @@ body {
   width: 100%;
 }
 
-.control.is-grouped {
-  +mobile {
-    flex-direction: column;
-  }
+.is-fab {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

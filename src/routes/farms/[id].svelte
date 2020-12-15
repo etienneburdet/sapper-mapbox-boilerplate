@@ -99,7 +99,7 @@
 </div>
 
 <!-- MOBILE HEADER -->
-<header class="is-mobile level">
+<header class="is-hidden-desktop is-mobile level p-3">
   <div class="level-left">
     <div class="level-item">
       <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
@@ -114,7 +114,7 @@
 </header>
 <div id="map">
   <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
-    <MapSource id="farms">
+    <!-- <MapSource id="farms">
       <MapLayer
         id="farms-circles"
         type="circle"
@@ -125,23 +125,34 @@
     </MapSource>
     {#if query.coords}
       <Marker center={q2center(query.coords)} />
-    {/if}
+    {/if} -->
   </Map>
 </div>
 <!-- MAP FOOTER / FILTERS -->
-<!-- <div id="map-footer">
+<div class="is-fab has-text-centered is-hidden-desktop">
   <button
-    class="button is-rounded is-dark mb-3"
-    id="map-footer-filters-btn"
-    class:show-adv-filters={showMobileAdvFilters}
-    on:click={() => (showMobileAdvFilters = true)}
+  class="button is-rounded is-dark mb-3"
+  class:is-hidden={showMobileAdvFilters}
+  on:click={() => (showMobileAdvFilters = true)}
   >
     Affiner les résultats
   </button>
+</div>
+<footer id="map-footer" class="is-hidden-desktop" class:is-hidden={!showMobileAdvFilters}>
   <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
-    <div class="adv-filters-ctn-top">
-      <p>Affiner les résultats</p>
-      <i class="header-menu-close fas fa-times" on:click={() => (showMobileAdvFilters = false)} />
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="is-size-4">Affiner les résultats</p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level item">
+          <span class="icon is-clickable" role="button">
+            <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
+          </span>
+        </div>
+      </div>
     </div>
     <Filter id="produits" options={produits} on:select={filterPage}>
       <h4 class="title is-4" slot="title">Produits</h4>
@@ -156,7 +167,7 @@
       <span slot="description">Type de préstation</span>
     </Filter>
   </div>
-</div> -->
+</footer>
 
 <!-- POP UP -->
 <div id="popup-ctn" class:open={farmDetails}>
@@ -166,6 +177,7 @@
 </div>
 
 <style lang="scss">
+  @import 'src/styles/_ods-design-system';
   #map {
     position: absolute;
     top: 0;
@@ -178,6 +190,51 @@
   header {
     position: relative;
     z-index: 1;
+  }
+
+  #map-footer-filters-btn {
+    position: fixed;
+  }
+
+  #map-footer {
+    position: absolute;
+    bottom: 0px;
+    z-index: 1;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+
+    #map-footer-filters-btn {
+      &.show-adv-filters {
+        display: none;
+      }
+    }
+
+    .adv-filters-ctn {
+      display: none;
+      width: 100%;
+      padding: 22px 20px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      background-color: black;
+      color: white;
+      box-shadow: 0px -6px 13px rgba(0, 0, 0, 0.15);
+
+      .adv-filters-ctn-top {
+        display: flex;
+        justify-content: space-between;
+
+        p {
+          font-size: 1.2em;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+      }
+
+      &.show-adv-filters {
+        display: block;
+      }
+    }
   }
 
   #list-ctn {
@@ -256,54 +313,6 @@
       #map-header-content {
         flex: 1;
         margin: 0 5px;
-      }
-    }
-
-    #map-footer {
-      display: none;
-
-      position: absolute;
-      bottom: 0px;
-      z-index: 1;
-      width: 100%;
-      justify-content: center;
-      align-content: center;
-
-      #map-footer-filters-btn {
-        &.show-adv-filters {
-          display: none;
-        }
-      }
-
-      .adv-filters-ctn {
-        display: none;
-        width: 100%;
-        padding: 22px 20px;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        background-color: black;
-        color: white;
-        box-shadow: 0px -6px 13px rgba(0, 0, 0, 0.15);
-
-        .adv-filters-ctn-top {
-          display: flex;
-          justify-content: space-between;
-
-          p {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 20px;
-          }
-
-          .header-menu-close {
-            font-size: 1.2em;
-            cursor: pointer;
-          }
-        }
-
-        &.show-adv-filters {
-          display: block;
-        }
       }
     }
   }
