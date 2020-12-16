@@ -20,7 +20,7 @@ export const fetchGeojson = async (page) => {
   if (page && page.query) {
     const whereClauseAllowedKeys = ['familles_des_produits','typologie_ods','nom_plateforme_partenaire','search'];
     whereClause = Object.keys(page.query)
-      .filter(key => whereClauseAllowedKeys.includes(key))
+      .filter(key => whereClauseAllowedKeys.includes(key) && page.query[key])
       .reduce((str, key) => {
         str = (str.length>0?(str + " AND "):"") + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
         return str;

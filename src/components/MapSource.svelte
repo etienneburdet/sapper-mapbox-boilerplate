@@ -52,7 +52,7 @@
     // When url change -> refetch the data
     $: {
         let filteredQueryParams = filterQueryParams($page.query);
-        if (!lastQueryParams || filteredQueryParams != lastQueryParams) {
+        if (!lastQueryParams || filteredQueryParams !== lastQueryParams) {
             spin = true;
             fetchGeojson($page)
                     .then((res) => {
