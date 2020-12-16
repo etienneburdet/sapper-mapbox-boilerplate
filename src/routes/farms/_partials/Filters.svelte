@@ -3,13 +3,18 @@
   import Filter from '@/components/Filter.svelte';
   import { facetsInfo } from '../_constants';
 
-  import { stores } from '@sapper/app';
+  import { stores, goto } from '@sapper/app';
   const { page, session } = stores();
 
-  const pouepouet = () => console.log('pouepouet');
+  let form;
+  let search = $page.query.search || '';
+
+  const lazySubmit = (event) => {
+    console.log(form.value);
+  };
 </script>
 
-<FormFilters on:submit={pouepouet}>
+<form action={$page.path} method="get" bind:this={form} on:submit|preventDefault={lazySubmit}>
   <div class="control has-icons-right my-3">
     <input
       class="input"
@@ -18,7 +23,7 @@
       name="search"
       autocomplete="off"
       placeholder="Rechercher un producteur/point de vente"
-      value={$page.query.search || ''}
+      bind:value={search}
     />
     <span class="icon is-small is-right"> <i class="fas fa-search" /> </span>
   </div>
@@ -32,7 +37,7 @@
       {/each}
     </div>
   </div>
-</FormFilters>
+</form>
 
 <style lang="scss">
 </style>
