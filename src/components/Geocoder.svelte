@@ -27,11 +27,10 @@
   const setCoords = (event) => {
     input.value = 'Votre position';
     hiddenInput.value = event.detail.coords;
-    dispatch('geocode', { coords: event.detail.coords });
+    dispatch('geocode', { marker: event.detail.coords, location: event.detail.coords });
   };
 
   onMount(async () => {
-    console.log('mount');
     const autoCompleteModule = await import('@tarekraafat/autocomplete.js');
     const autoComplete = autoCompleteModule.default;
     ac = new autoComplete({
@@ -92,7 +91,7 @@
         const coords = feedback.selection.value.geometry.coordinates;
         query = feedback.selection.value.label;
         hiddenInput.value = coords;
-        dispatch('geocode', { coords });
+        dispatch('geocode', { marker: coords, location: coords });
       },
     });
   });
@@ -114,7 +113,7 @@
       bind:this={input}
       on:focus={selectAll}
     />
-    <input type="hidden" name="coords" bind:this={hiddenInput} on:submit|preventDefault />
+    <input type="hidden" name="marker" bind:this={hiddenInput} on:submit|preventDefault />
   </div>
   {#if geolocator}
     <div class="control">

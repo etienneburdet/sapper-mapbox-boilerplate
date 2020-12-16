@@ -36,7 +36,7 @@
   bind:this={geolocator}
   on:click|preventDefault={getPosition}
 >
-  <img src="/location.svg" alt="location icon" />
+  <img src="/resources/location.svg" alt="location icon" />
 </button>
 
 <style lang="scss">

@@ -3,6 +3,9 @@
   import { fetchGeojson } from '@/routes/farms/_helpers';
 
   import { stores } from '@sapper/app';
+  import Spinner from './Spinner.svelte';
+  import { filterQueryParams } from '../routes/farms/_helpers';
+
   const { page, session } = stores();
 
   export let dataUrl;
@@ -11,9 +14,10 @@
   const { getMap } = getContext('map');
   const map = getMap();
 
-  let isSourceLoaded;
+  let isSourceLoaded = false;
+  let loading = false;
   let farmsGeojson;
-  let running = false;
+  let lastQueryParams = false;
 
   setContext('source', {
     getMapSourceId: () => id,
@@ -28,8 +32,8 @@
         type: 'geojson',
         data,
       });
-      isSourceLoaded = true;
     }
+    isSourceLoaded = true;
   };
 
   const destroySource = () => {
@@ -42,13 +46,17 @@
     isSourceLoaded = false;
   };
 
+  map.on('sourcedata', () => (loading = false));
+
   // When url change -> refetch the data
   $: {
-    if ($page.params['id'] == 'all' || !running) {
+    let filteredQueryParams = filterQueryParams($page.query);
+    if (!lastQueryParams || filteredQueryParams !== lastQueryParams) {
+      loading = true;
       fetchGeojson($page).then((res) => {
         farmsGeojson = res;
       });
-      running = true;
+      lastQueryParams = filteredQueryParams;
     }
   }
 
@@ -67,3 +75,22 @@
 {#if isSourceLoaded}
   <slot />
 {/if}
+
+<div class="wrapper">
+  <div class="control" class:is-loading={loading} />
+</div>
+
+<style lang="scss">
+  .wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  div.control.is-loading::after {
+    height: 10rem;
+    width: 10rem;
+  }
+</style>

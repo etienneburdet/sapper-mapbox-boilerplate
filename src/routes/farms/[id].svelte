@@ -1,5 +1,5 @@
 <script context="module">
-  import { farmFacetsUrl, farmsShortlistUrl, getFarmWhere } from './_helpers';
+  import { farmFacetsUrl, getFarmWhere } from './_helpers';
 
   export async function preload(page, session) {
     const { id } = page.params;
@@ -50,7 +50,10 @@
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
   import Geolocator from '@/components/Geolocator.svelte';
+
   import Filters from './_partials/Filters.svelte';
+  import PopupContent from './_partials/PopupContent.svelte';
+  import ItemContent from './_partials/ItemContent.svelte';
 
   import { paint } from './_constants';
   import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
@@ -62,18 +65,21 @@
   export let facets;
   export let query;
 
-  let querystring;
+  let queryparams;
   let farmsShortlist = [];
 
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
 
-  $: querystring = new URLSearchParams($page.query).toString();
+  $: queryparams = new URLSearchParams($page.query);
 </script>
 
 <section class="is-flex is-relative">
-  <div class="is-fab is-top has-text-left p-3" class:is-hidden={$page.params.id === 'all'}>
+  <div
+    class="is-fab is-top has-text-left p-3 is-hidden-desktop"
+    class:is-hidden={$page.params.id === 'all'}
+  >
     <a href="/farms/all" class="button is-rounded is-dark">
       <span class="icon"><i class="fas fa-arrow-left" /></span>
     </a>
@@ -122,29 +128,38 @@
         <ListItem
           id={farm.properties.recordid}
           fields={farm.properties}
-          active={farm.properties.recordid === activeId}
-        />
+          geometry={farm.geometry}
+          active={farmDetails && farm.properties.recordid === farmDetails.id}
+        >
+          <ItemContent fields={farm.properties} />
+        </ListItem>
       {/each}
     </List>
     <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
       {#if farmDetails}
-        <Popup item={farmDetails} />
+        <Popup item={farmDetails}>
+          <PopupContent item={farmDetails} />
+        </Popup>
       {/if}
     </div>
   </aside>
   <div class="is-flex-grow-1" id="map">
-    <Map navigationPosition="bottom-right" center={q2center(query.coords)}>
+    <Map navigationPosition="bottom-right" center={q2center(query.location)}>
       <MapSource id="farms">
         <MapLayer
           id="farms-circles"
           type="circle"
           {paint}
-          on:mapClick={setActivePoint}
+          on:mapClick={setActivePoint(queryparams)}
           on:render={(event) => (farmsShortlist = event.detail)}
         />
       </MapSource>
-      {#if query.coords}
-        <Marker center={q2center(query.coords)} />
+      {#if query.marker}
+        <Marker center={q2center(query.marker)} options={{ color: 'blue' }} />
+      {/if}
+
+      {#if query.location && query.location != query.marker}
+        <Marker center={q2center(query.location)} options={{ color: '#74CABF' }} />
       {/if}
     </Map>
   </div>

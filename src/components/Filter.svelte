@@ -9,7 +9,7 @@
 
   const dispatchChoice = () => {
     const choice = {};
-    choice[id] = selection;
+    choice[name] = selection;
     dispatch('select', choice);
   };
 </script>

@@ -25,13 +25,13 @@ export const paint = {
 }; */
 
 export const facetsInfo = {
-  add_section: {
+  typologie_ods: {
     title: 'Type de service',
   },
-  cat_iphone: {
+  familles_des_produits: {
     title: 'Type de produits',
   },
-  type: {
+  nom_plateforme_partenaire: {
     title: 'Partenaires',
   },
 };

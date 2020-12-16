@@ -6,6 +6,10 @@
   import NavigationControl from './NavigationControl.svelte';
   import GeolocateControl from './GeolocateControl.svelte';
 
+  import { stores } from '@sapper/app';
+  import { q2center, updateLocation } from '../routes/farms/_helpers';
+  const { page } = stores();
+
   const dispatch = createEventDispatcher();
 
   export let center;
@@ -40,6 +44,10 @@
       center: config.mapbox.init.center,
       zoom: config.mapbox.init.zoom,
     });
+
+    /*map.on('dragend', () => {
+        updateLocation(map.getCenter());
+    });*/
 
     searchMarker = new mapbox.Marker();
 
