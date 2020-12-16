@@ -77,7 +77,7 @@
 
 <section class="is-flex is-relative">
   <div
-    class="is-fab is-top has-text-left p-3 is-hidden-desktop"
+    class="is-fab is-top has-text-left p-3 is-hidden-tablet"
     class:is-hidden={$page.params.id === 'all'}
   >
     <a href="/farms/all" class="button is-rounded is-dark">
@@ -85,7 +85,7 @@
     </a>
   </div>
   <header
-    class="is-hidden-desktop is-mobile level p-3"
+    class="is-hidden-tablet is-mobile level p-3"
     class:is-invisible={$page.params.id !== 'all'}
   >
     <div class="level-left">
@@ -135,13 +135,13 @@
         </ListItem>
       {/each}
     </List>
-    <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
-      {#if farmDetails}
+    {#if farmDetails}
+      <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
         <Popup item={farmDetails}>
           <PopupContent item={farmDetails} />
         </Popup>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </aside>
   <div class="is-flex-grow-1" id="map">
     <Map navigationPosition="bottom-right" center={q2center(query.location)}>
@@ -164,7 +164,7 @@
     </Map>
   </div>
   <!-- MAP FOOTER / FILTERS -->
-  <div class="is-fab is-bottom has-text-centered is-hidden-desktop">
+  <div class="is-fab is-bottom has-text-centered is-hidden-tablet">
     <button
       class="button is-rounded is-dark mb-3"
       class:is-hidden={showMobileAdvFilters || $page.params.id !== 'all'}
