@@ -13,7 +13,7 @@ $popup-width: 105%;
 /* Colors
    ========================================================================== */
 
-$primary: $identity-200;
+$primary: #c6cbde;
 $info: $identity-300;
 $success: $identity-600;
 $warning: $identity-400;
@@ -23,15 +23,6 @@ $body-background-color: $light-100;
 
 /* Typography
    ========================================================================== */
-
-$body-size: 14px;
-$size-1: 2.466rem; // 37 px
-$size-2: 1.935rem; // 29 px
-$size-3: 1.5335rem; // 23 px
-$size-4: 1.3rem;
-$size-5: 1rem;
-$size-6: 0.8rem;
-$size-7: 0.64rem;
 
 $size-small: $size-7;
 $size-normal: $size-5;
@@ -54,14 +45,6 @@ $icon-dimensions-large: $size-1;
 $radius-small: 4px;
 $radius: 6px;
 $radius-large: 8px;
-
-/* Spacing
-   ========================================================================== */
-
-$spacing-100: 0.866rem; // 13px
-$spacing-200: 1.733rem; // 26px
-$spacing-300: 2.6rem; // 39px
-$spacing-400: 4.3rem; // 65px
 
 /* Content
    ========================================================================== */

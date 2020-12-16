@@ -4,7 +4,7 @@
   const dispatch = createEventDispatcher();
 
   export let options;
-  export let id;
+  export let name;
   export let selection;
 
   const dispatchChoice = () => {
@@ -16,7 +16,7 @@
 
 <slot name="title" />
 <div class="select is-fullwidth mb-5">
-  <select bind:value={selection} on:change={dispatchChoice}>
+  <select {name} bind:value={selection} on:change={dispatchChoice}>
     <option value="">
       <slot name="description" />
     </option>

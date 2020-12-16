@@ -38,6 +38,7 @@
 <script>
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
+  import { slide } from 'svelte/transition';
 
   import Filter from '@/components/Filter.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
@@ -49,9 +50,9 @@
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
   import Geolocator from '@/components/Geolocator.svelte';
-  import AdvancedFilters from '@/components/AdvancedFilters.svelte';
+  import Filters from './_partials/Filters.svelte';
 
-  import { paint } from './_mapstyle';
+  import { paint } from './_constants';
   import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
   import { stores } from '@sapper/app';
 
@@ -108,12 +109,13 @@
         on:click={() => (showAdvFilters = !showAdvFilters)}
       >
         <span>Affiner la recherche</span>
-        <span class="icon has-text-wihte"> <i class="fas fa-chevron-up" /></span>
+        <span class="icon"> <i class="fas fa-chevron-up" /></span>
       </div>
-
-      <div class:is-hidden={showAdvFilters}>
-        <AdvancedFilters {facets} />
-      </div>
+      {#if showAdvFilters}
+        <div transition:slide={{ duration: 200 }}>
+          <Filters />
+        </div>
+      {/if}
     </header>
     <List activeItem={farmDetails} let:id={activeId}>
       {#each farmsShortlist as farm (farm)}
@@ -156,29 +158,32 @@
       Affiner les résultats
     </button>
   </div>
-  <nav
-    id="map-footer"
-    class="is-hidden-desktop has-background-dark has-text-light"
-    class:is-hidden={!showMobileAdvFilters}
-  >
-    <div class="level is-mobile">
-      <div class="level-left">
-        <div class="level-item">
-          <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
+  {#if showMobileAdvFilters}
+    <nav
+      id="map-footer"
+      class="is-hidden-desktop has-background-dark has-text-light"
+      class:is-hidden={!showMobileAdvFilters}
+      transition:slide={{ duration: 200 }}
+    >
+      <div class="level is-mobile">
+        <div class="level-left">
+          <div class="level-item">
+            <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level item">
+            <span class="icon is-clickable" role="button">
+              <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
+            </span>
+          </div>
         </div>
       </div>
-      <div class="level-right">
-        <div class="level item">
-          <span class="icon is-clickable" role="button">
-            <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
-          </span>
-        </div>
+      <div>
+        <Filters />
       </div>
-    </div>
-    <div>
-      <AdvancedFilters {facets} />
-    </div>
-  </nav>
+    </nav>
+  {/if}
 </section>
 
 <!-- POP UP -->
@@ -196,6 +201,15 @@
     right: 0;
     z-index: 0;
     height: 100%;
+  }
+
+  .icon {
+    transition: all 0.2s ease;
+  }
+
+  .show-adv-filters .icon {
+    transition: all 0.2s ease;
+    transform: rotate(-180deg);
   }
 
   header {
@@ -221,25 +235,6 @@
     height: 100%;
     z-index: 2;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
-
-    /* &:after {
-          border: 2px solid white;
-          border-radius: 1.5px;
-          border-right: 0;
-          border-top: 0;
-          content: ' ';
-          display: block;
-          height: 0.625em;
-          margin-left: 5px;
-          transform: rotate(135deg);
-          transform-origin: center;
-          width: 0.625em;
-        }
-
-        &.show-adv-filters:after {
-          transform: rotate(-45deg);
-        }
-      } */
   }
 
   #popup-ctn {
