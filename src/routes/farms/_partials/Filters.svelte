@@ -10,11 +10,6 @@
   const { page, session } = stores();
 
   let input;
-  let search = $page.query.search || '';
-
-  const selectAll = () => {
-    input.select();
-  };
 </script>
 
 <div class="field has-addons py-3">
@@ -26,9 +21,10 @@
       name="search"
       autocomplete="off"
       placeholder="Rechercher un producteur/point de vente"
-      bind:value={search}
+      value={$page.query.search || ''}
       bind:this={input}
       on:focus={() => input.select()}
+      on:change={searchPage}
     />
   </div>
   <div class="control">

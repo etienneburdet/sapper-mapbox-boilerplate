@@ -108,8 +108,9 @@ export const filterPage = (event) => {
 
 export const searchPage = (search) => {
   const url = new URL(window.location);
-  if (search) {
-    url.searchParams.set('search', search);
+  const searchquery = search.target.value;
+  if (searchquery) {
+    url.searchParams.set('search', search.target.value);
   } else {
     url.searchParams.delete('search');
   }
