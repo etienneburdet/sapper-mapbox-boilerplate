@@ -1,6 +1,5 @@
 <script>
   import { stores } from '@sapper/app';
-  import { popupTemplate } from '../plugins/ods-templates';
   const { page } = stores();
 
   export let href = '/';

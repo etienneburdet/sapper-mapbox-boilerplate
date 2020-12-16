@@ -1,12 +1,9 @@
 <script>
   import { stores } from '@sapper/app';
-  import { popupTemplate } from '@/plugins/ods-templates';
 
   import BackButton from './BackButton.svelte';
 
   const { page } = stores();
-
-  export let item;
 
   let queryparams;
   let popup;

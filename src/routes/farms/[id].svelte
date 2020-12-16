@@ -122,7 +122,7 @@
       </div>
       {#if showAdvFilters}
         <div transition:slide={{ duration: 200 }}>
-          <Filters />
+          <Filters {facets} />
         </div>
       {/if}
     </header>
@@ -198,7 +198,7 @@
         </div>
       </div>
       <div>
-        <Filters />
+        <Filters {facets} />
       </div>
     </nav>
   {/if}

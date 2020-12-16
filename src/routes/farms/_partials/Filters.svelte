@@ -7,7 +7,9 @@
   import { stores } from '@sapper/app';
   import { onMount } from 'svelte';
 
-  const { page, session } = stores();
+  const { page } = stores();
+
+  export let facets;
 
   let input;
 </script>
@@ -36,7 +38,7 @@
 
 <div class="field">
   <div class="control">
-    {#each Object.entries($session.facets) as entry (entry)}
+    {#each Object.entries(facets) as entry (entry)}
       <Filter
         name={entry[0]}
         options={entry[1]}
