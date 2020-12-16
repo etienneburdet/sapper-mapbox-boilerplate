@@ -41,6 +41,7 @@
   import { slide } from 'svelte/transition';
 
   import Filter from '@/components/Filter.svelte';
+  import BackButton from '@/components/BackButton.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
@@ -80,9 +81,11 @@
     class="is-fab is-top has-text-left p-3 is-hidden-tablet"
     class:is-hidden={$page.params.id === 'all'}
   >
-    <a href="/farms/all" class="button is-rounded is-dark">
-      <span class="icon"><i class="fas fa-arrow-left" /></span>
-    </a>
+    <BackButton href="/farms/all">
+      <div class="button is-rounded is-dark">
+        <span class="icon"><i class="fas fa-arrow-left" /></span>
+      </div>
+    </BackButton>
   </div>
   <header
     class="is-hidden-tablet is-mobile level p-3"
