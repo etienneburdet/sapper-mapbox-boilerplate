@@ -48,7 +48,7 @@
             <div class="column is-narrow">
               <div class="field">
                 <p class="control">
-                  <button type="submit" class="button is-danger is-block-mobile"> Search </button>
+                  <button type="submit" class="button is-danger"> Search </button>
                 </p>
               </div>
             </div>
@@ -124,4 +124,7 @@
 </footer>
 
 <style lang="scss">
+  .control button {
+    width: 100%;
+  }
 </style>
