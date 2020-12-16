@@ -124,7 +124,7 @@
 </div>
 
 <style lang="scss" global>
-  @import 'src/styles/_ods-design-system.scss';
+  @import 'src/styles/_project-vars';
 
   input {
     width: 100%;

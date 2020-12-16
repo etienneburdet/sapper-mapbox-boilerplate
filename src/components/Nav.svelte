@@ -68,10 +68,10 @@
 </nav>
 
 <style lang="scss">
-  @import 'src/styles/_ods-design-system';
+  @import 'src/styles/_project-vars';
 
   nav {
-    height: 60px;
+    height: $nav-height;
   }
 
   [aria-current] {
@@ -81,7 +81,7 @@
 
   @media screen and (max-width: 768px) {
     nav {
-      height: 50px;
+      height: $nav-height-mobile;
     }
   }
 </style>
