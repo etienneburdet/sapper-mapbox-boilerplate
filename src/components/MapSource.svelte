@@ -59,7 +59,6 @@
                         farmsGeojson = res;
                     });
             lastQueryParams = filteredQueryParams;
-            spin = false;
         }
     }
 
