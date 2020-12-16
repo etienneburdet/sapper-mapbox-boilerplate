@@ -25,13 +25,16 @@ export const paint = {
 }; */
 
 export const facetsInfo = {
-  typologie_ods: {
-    title: 'Type de service',
-  },
   familles_des_produits: {
     title: 'Type de produits',
+    description: 'Tous les produits',
+  },
+  typologie_ods: {
+    title: 'Type de service',
+    description: 'Tous les services',
   },
   nom_plateforme_partenaire: {
     title: 'Partenaires',
+    description: 'Tous les partenaires',
   },
 };

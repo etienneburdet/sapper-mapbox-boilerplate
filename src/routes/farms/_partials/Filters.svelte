@@ -5,27 +5,37 @@
   import { filterPage, searchPage } from '../_helpers';
 
   import { stores } from '@sapper/app';
+  import { onMount } from 'svelte';
+
   const { page, session } = stores();
 
-  let form;
+  let input;
   let search = $page.query.search || '';
 
-  $: if (search.lenght > 3) {
-    serachPage();
-  }
+  const selectAll = () => {
+    input.select();
+  };
 </script>
 
-<div class="control has-icons-right my-3">
-  <input
-    class="input"
-    type="text"
-    id="search"
-    name="search"
-    autocomplete="off"
-    placeholder="Rechercher un producteur/point de vente"
-    bind:value={search}
-  />
-  <span class="icon is-small is-right"> <i class="fas fa-search" /> </span>
+<div class="field has-addons py-3">
+  <div class="control is-expanded">
+    <input
+      class="input is-fullwidth"
+      type="text"
+      id="search"
+      name="search"
+      autocomplete="off"
+      placeholder="Rechercher un producteur/point de vente"
+      bind:value={search}
+      bind:this={input}
+      on:focus={() => input.select()}
+    />
+  </div>
+  <div class="control">
+    <button class="button is-dark">
+      <span class="icon is-small is-right"> <i class="fas fa-search" /> </span>
+    </button>
+  </div>
 </div>
 
 <div class="field">
@@ -35,9 +45,10 @@
         name={entry[0]}
         options={entry[1]}
         selection={$page.query[entry[0]]}
-        on:change={filterPage}
+        on:select={filterPage}
       >
         <h5 class="subtitle is-5" slot="title">{facetsInfo[entry[0]].title}</h5>
+        <span slot="description">{facetsInfo[entry[0]].description}</span>
       </Filter>
     {/each}
   </div>

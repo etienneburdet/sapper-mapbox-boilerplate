@@ -56,7 +56,7 @@
   import ItemContent from './_partials/ItemContent.svelte';
 
   import { paint } from './_constants';
-  import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
+  import { q2center, setActivePoint, filterPage, getFarmRecord } from './_helpers';
   import { stores } from '@sapper/app';
 
   const { page } = stores();

@@ -2,7 +2,7 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.37e4a222.js"
+    "main": "client.f52d3d5d.js"
   },
   "css": {
     "main": [
@@ -11,67 +11,67 @@
   },
   "dependencies": {
     "index.svelte": [
-      "index.2d648d0c.js",
-      "Geocoder.5ca9a3af.js",
+      "index.1915d476.js",
+      "Geocoder.2276bc05.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "index-03be9173.css"
     ],
     "partners.svelte": [
-      "partners.eb4b0b7b.js",
+      "partners.accb788d.js",
       "inject_styles.5607aec6.js"
     ],
     "about.svelte": [
-      "about.a6f83a86.js",
+      "about.88f187d3.js",
       "inject_styles.5607aec6.js"
     ],
     "farms/index.svelte": [
-      "index.4b06ea6c.js",
+      "index.7cab0999.js",
       "inject_styles.5607aec6.js"
     ],
     "farms/_helpers.js": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "[id]-2dfcdd24.css"
     ],
     "farms/_constants.js": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "[id]-2dfcdd24.css"
     ],
     "farms/_partials/Filters.svelte": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "[id]-2dfcdd24.css"
     ],
     "farms/_partials/PopupContent.svelte": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "[id]-2dfcdd24.css"
     ],
     "farms/_partials/ItemContent.svelte": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
       "[id]-2dfcdd24.css"
     ],
     "farms/[id].svelte": [
-      "[id].564d4a6a.js",
-      "Geocoder.5ca9a3af.js",
+      "[id].58f238e5.js",
+      "Geocoder.2276bc05.js",
       "_commonjsHelpers.91583ccb.js",
       "inject_styles.5607aec6.js",
       "Geocoder-1bf72039.css",
