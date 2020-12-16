@@ -38,6 +38,7 @@
 <script>
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
+  import { slide } from 'svelte/transition';
 
   import Filter from '@/components/Filter.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
@@ -49,18 +50,23 @@
   import List from '@/components/List.svelte';
   import ListItem from '@/components/ListItem.svelte';
   import Geolocator from '@/components/Geolocator.svelte';
-  import AdvancedFilters from '@/components/AdvancedFilters.svelte';
 
-  import { paint } from './_mapstyle';
+  import Filters from './_partials/Filters.svelte';
+  import PopupContent from './_partials/PopupContent.svelte';
+  import ItemContent from './_partials/ItemContent.svelte';
+
+  import { paint } from './_constants';
   import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
   import { stores } from '@sapper/app';
+
   const { page } = stores();
 
-  let queryparams;
-  let farmsShortlist = [];
   export let farmDetails;
   export let facets;
   export let query;
+
+  let queryparams;
+  let farmsShortlist = [];
 
   let toggleList = false;
   let showAdvFilters = false;
@@ -69,76 +75,75 @@
   $: queryparams = new URLSearchParams($page.query);
 </script>
 
-<div id="page-ctn">
-  <div id="list-ctn" class:mobile-open={toggleList}>
-    <!-- DESKTOP LIST HEADER -->
-    <div id="list-ctn-header" class="custom-styled-select">
-      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
+<section class="is-flex is-relative">
+  <div
+    class="is-fab is-top has-text-left p-3 is-hidden-desktop"
+    class:is-hidden={$page.params.id === 'all'}
+  >
+    <a href="/farms/all" class="button is-rounded is-dark">
+      <span class="icon"><i class="fas fa-arrow-left" /></span>
+    </a>
+  </div>
+  <header
+    class="is-hidden-desktop is-mobile level p-3"
+    class:is-invisible={$page.params.id !== 'all'}
+  >
+    <div class="level-left">
+      <div class="level-item mr-3">
+        <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
+          {#if !toggleList}<span>Liste</span>{/if}
+          {#if toggleList}<span>Carte</span>{/if}
+        </button>
+      </div>
+    </div>
+    <div class="level-item">
+      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
+    </div>
+  </header>
 
+  <aside
+    id="list-ctn"
+    class:mobile-open={toggleList || $page.params.id !== 'all'}
+    class:popup-open={$page.params.id !== 'all'}
+  >
+    <!-- DESKTOP LIST HEADER -->
+    <header class="has-background-primary is-hidden-mobile p-5">
+      <Geocoder id="desktopsearchbox" geolocator="add-on" on:geocode={filterPage} />
       <div
-        id="list-ctn-header-btn"
+        class="is-clickable mb-3"
         class:show-adv-filters={showAdvFilters}
         on:click={() => (showAdvFilters = !showAdvFilters)}
       >
-        Affiner la recherche
-        <i class="fas fas-arrow-up" />
+        <span>Affiner la recherche</span>
+        <span class="icon"> <i class="fas fa-chevron-up" /></span>
       </div>
-
-      <div class="adv-filters-ctn" class:show-adv-filters={showAdvFilters}>
-        <AdvancedFilters {facets} />
-      </div>
-    </div>
-    <!-- DESKTOP LIST -->
-    <div id="list-ctn-content">
-      <List>
-        {#each farmsShortlist as farm (farm)}
-          <ListItem
-            id={farm.properties.recordid}
-            fields={farm.properties}
-            geometry={farm.geometry}
-            active={farmDetails && farm.properties.recordid === farmDetails.id}
-          />
-        {/each}
-      </List>
-    </div>
-  </div>
-
-  <div id="map-ctn">
-    <!-- MOBILE HEADER -->
-    <div id="map-header">
-      <button class="button is-dark" on:click={() => (toggleList = !toggleList)}>
-        {#if !toggleList}<span>Liste</span>{/if}
-        {#if toggleList}<span>Carte</span>{/if}
-      </button>
-      <Geocoder id="mobilesearchbox" on:geocode={filterPage} geolocator="separate" />
-      <!-- <div class="geolocator">
-              <Geolocator on:geolocate={filterPage} />
-            </div> -->
-    </div>
-
-    <!-- MAP FOOTER / FILTERS -->
-    <div id="map-footer">
-      <button
-        class="button is-rounded is-dark mb-3"
-        id="map-footer-filters-btn"
-        class:show-adv-filters={showMobileAdvFilters}
-        on:click={() => (showMobileAdvFilters = true)}
-      >
-        Affiner les résultats
-      </button>
-      <div class="adv-filters-ctn" class:show-adv-filters={showMobileAdvFilters}>
-        <div class="adv-filters-ctn-top">
-          <p>Affiner les résultats</p>
-          <i
-            class="header-menu-close fas fa-times"
-            on:click={() => (showMobileAdvFilters = false)}
-          />
+      {#if showAdvFilters}
+        <div transition:slide={{ duration: 200 }}>
+          <Filters />
         </div>
-        <AdvancedFilters {facets} />
-      </div>
+      {/if}
+    </header>
+    <List activeItem={farmDetails} let:id={activeId}>
+      {#each farmsShortlist as farm (farm)}
+        <ListItem
+          id={farm.properties.recordid}
+          fields={farm.properties}
+          geometry={farm.geometry}
+          active={farmDetails && farm.properties.recordid === farmDetails.id}
+        >
+          <ItemContent fields={farm.properties} />
+        </ListItem>
+      {/each}
+    </List>
+    <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
+      {#if farmDetails}
+        <Popup item={farmDetails}>
+          <PopupContent item={farmDetails} />
+        </Popup>
+      {/if}
     </div>
-
-    <!-- MAP -->
+  </aside>
+  <div class="is-flex-grow-1" id="map">
     <Map navigationPosition="bottom-right" center={q2center(query.location)}>
       <MapSource id="farms">
         <MapLayer
@@ -158,205 +163,144 @@
       {/if}
     </Map>
   </div>
-
-  <!-- POP UP -->
-  <div id="popup-ctn" class:open={farmDetails}>
-    {#if farmDetails}
-      <Popup item={farmDetails} />
-    {/if}
+  <!-- MAP FOOTER / FILTERS -->
+  <div class="is-fab is-bottom has-text-centered is-hidden-desktop">
+    <button
+      class="button is-rounded is-dark mb-3"
+      class:is-hidden={showMobileAdvFilters || $page.params.id !== 'all'}
+      on:click={() => (showMobileAdvFilters = true)}
+    >
+      Affiner les résultats
+    </button>
   </div>
-</div>
+  {#if showMobileAdvFilters}
+    <nav
+      id="map-footer"
+      class="is-hidden-desktop has-background-dark has-text-light"
+      class:is-hidden={!showMobileAdvFilters}
+      transition:slide={{ duration: 200 }}
+    >
+      <div class="level is-mobile">
+        <div class="level-left">
+          <div class="level-item">
+            <p class="is-size-4 has-text-weight-bold">Affiner les résultats</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level item">
+            <span class="icon is-clickable" role="button">
+              <i class="fas fa-times fa-lg" on:click={() => (showMobileAdvFilters = false)} />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <Filters />
+      </div>
+    </nav>
+  {/if}
+</section>
 
+<!-- POP UP -->
 <style lang="scss">
-  #page-ctn {
-    display: flex;
+  @import 'src/styles/_ods-design-system';
+  @import 'src/styles/_project-vars';
+
+  section {
     height: 100%;
+  }
+
+  #map {
+    position: relative;
+    top: 0;
+    right: 0;
+    z-index: 0;
+    height: 100%;
+  }
+
+  .icon {
+    transition: all 0.2s ease;
+  }
+
+  .show-adv-filters .icon {
+    transition: all 0.2s ease;
+    transform: rotate(-180deg);
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+  }
+
+  #map-footer {
+    position: absolute;
+    bottom: 0px;
+    z-index: 1;
+    width: 100%;
+    padding: 22px 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
   }
 
   #list-ctn {
+    position: relative;
     display: flex;
     flex-direction: column;
-    width: 374px;
+    width: $list-width;
+    height: 100%;
     z-index: 2;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
-
-    #list-ctn-header {
-      background-color: black;
-      color: white;
-      position: relative;
-      padding: 20px;
-
-      #list-ctn-header-btn {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        &:after {
-          border: 2px solid white;
-          border-radius: 1.5px;
-          border-right: 0;
-          border-top: 0;
-          content: ' ';
-          display: block;
-          height: 0.625em;
-          margin-left: 5px;
-          transform: rotate(135deg);
-          transform-origin: center;
-          width: 0.625em;
-        }
-
-        &.show-adv-filters:after {
-          transform: rotate(-45deg);
-        }
-      }
-
-      .adv-filters-ctn {
-        display: none;
-        margin-top: 10px;
-
-        &.show-adv-filters {
-          display: block;
-        }
-      }
-    }
-
-    #list-ctn-content {
-      flex: 1;
-      overflow: scroll;
-      background: white;
-    }
-
-    :global(&.open) {
-      left: 0;
-    }
-  }
-
-  #map-ctn {
-    width: calc(100% - 374px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-
-    #map-header {
-      display: none;
-
-      position: absolute;
-      z-index: 1;
-      padding: 10px;
-      height: 57px;
-      width: 100%;
-
-      #map-header-content {
-        flex: 1;
-        margin: 0 5px;
-      }
-    }
-
-    #map-footer {
-      display: none;
-
-      position: absolute;
-      bottom: 0px;
-      z-index: 1;
-      width: 100%;
-      justify-content: center;
-      align-content: center;
-
-      #map-footer-filters-btn {
-        &.show-adv-filters {
-          display: none;
-        }
-      }
-
-      .adv-filters-ctn {
-        display: none;
-        width: 100%;
-        padding: 22px 20px;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        background-color: black;
-        color: white;
-        box-shadow: 0px -6px 13px rgba(0, 0, 0, 0.15);
-
-        .adv-filters-ctn-top {
-          display: flex;
-          justify-content: space-between;
-
-          p {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 20px;
-          }
-
-          .header-menu-close {
-            font-size: 1.2em;
-            cursor: pointer;
-          }
-        }
-
-        &.show-adv-filters {
-          display: block;
-        }
-      }
-    }
   }
 
   #popup-ctn {
-    position: fixed;
-    left: -395px;
-    width: 395px;
+    position: absolute;
+    left: calc(-1 * #{$popup-width});
+    width: $popup-width;
     height: 100%;
-    overflow-y: auto;
-    background: white;
+    overflow-y: hidden;
     border-left: 1px solid #dddddd;
     transition: 0.2s ease left;
-    z-index: 1;
-    padding: 20px;
+    z-index: -1;
 
     &.open {
-      left: 374px;
+      left: 100%;
     }
   }
 
-  @media screen and (max-width: 769px) {
-    #list-ctn {
+  @media screen and (max-width: 768px) {
+    section {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #map {
       position: absolute;
+      width: 100%;
+    }
+
+    #list-ctn {
       left: -100%;
       bottom: 0;
       width: 100%;
       z-index: 1;
-      background: white;
-      height: calc(100% - 55px);
+      height: calc(100% - #{$spacing-400});
       transition: 0.2s ease left;
 
       &.mobile-open {
         left: 0;
-
-        #list-ctn-header {
-          display: none;
-        }
-      }
-    }
-
-    #map-ctn {
-      width: 100%;
-
-      #map-header {
-        display: flex;
-        align-items: center;
       }
 
-      #map-footer {
-        display: flex;
+      &.popup-open {
+        height: 60%;
       }
     }
 
     #popup-ctn {
       left: 0;
-      bottom: -70%;
-      height: 70%;
+      bottom: -100%;
       width: 100%;
       transition: 0.2s ease bottom;
+      z-index: 1;
 
       &.open {
         left: 0;

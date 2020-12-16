@@ -12,14 +12,11 @@
     queryparams = new URLSearchParams($page.query);
     queryparams.delete('location');
   }
-
-  $: popup && item && (popup.innerHTML = popupTemplate(item));
-
 </script>
 
 <div class="popup">
   <a rel="prefetch" href="/farms/all?{queryparams.toString()}"> <i class="fas fa-times" /> </a>
-    <div class="popup-content" bind:this={popup} ></div>
+  <slot />
 </div>
 
 <style lang="scss">

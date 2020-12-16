@@ -4,21 +4,19 @@
   const dispatch = createEventDispatcher();
 
   export let options;
-  export let id;
+  export let name;
   export let selection;
 
   const dispatchChoice = () => {
     const choice = {};
-    choice[id] = selection;
+    choice[name] = selection;
     dispatch('select', choice);
   };
 </script>
 
-<div class="filter-title">
-  <slot name="title" />
-</div>
-<div class="select is-fullwidth">
-  <select bind:value={selection} on:change={dispatchChoice}>
+<slot name="title" />
+<div class="select is-fullwidth mb-5">
+  <select {name} bind:value={selection} on:change={dispatchChoice}>
     <option value="">
       <slot name="description" />
     </option>
@@ -29,12 +27,4 @@
 </div>
 
 <style lang="scss">
-  .filter-title {
-    font-size: 0.9em;
-    margin-bottom: 5px;
-  }
-
-  .select {
-    margin-bottom: 15px;
-  }
 </style>

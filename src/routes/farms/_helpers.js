@@ -3,26 +3,33 @@ import * as ods from '@/plugins/ods-data';
 import mapbox from 'mapbox-gl';
 import { query } from '../../plugins/ods-data';
 
-/*export const farmsBaseUrl = ods.privateDataset(
+/* export const farmsBaseUrl = ods.privateDataset(
   'producteursagri',
   'bienvenue-a-la-ferme',
   'API_KEY',
-);*/
+); */
 
 export const farmsBaseUrl = ods.publicDatasetFromBase(
   'https://www.duproducteurdacote.fr',
-  'flux-complet-bienvenue-a-la-ferme'
+  'flux-complet-bienvenue-a-la-ferme',
 );
 
 export const fetchGeojson = async (page) => {
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
-  let whereClause = "";
+  let whereClause = '';
   if (page && page.query) {
-    const whereClauseAllowedKeys = ['familles_des_produits','typologie_ods','nom_plateforme_partenaire','search'];
+    const whereClauseAllowedKeys = [
+      'familles_des_produits',
+      'typologie_ods',
+      'nom_plateforme_partenaire',
+      'search',
+    ];
     whereClause = Object.keys(page.query)
-      .filter(key => whereClauseAllowedKeys.includes(key) && page.query[key])
+      .filter((key) => whereClauseAllowedKeys.includes(key) && page.query[key])
       .reduce((str, key) => {
-        str = (str.length>0?(str + " AND "):"") + (key!=='search'?(key + "="):"") + "\"" + page.query[key] + "\"";
+        str = `${(str.length > 0 ? `${str} AND ` : '') + (key !== 'search' ? `${key}=` : '')}"${
+          page.query[key]
+        }"`;
         return str;
       }, whereClause);
   }
@@ -30,7 +37,7 @@ export const fetchGeojson = async (page) => {
     rows: '10000',
     select: 'nom,adresse,nom_commune,geolocalisation',
     where: whereClause,
-    record_metas: true
+    record_metas: true,
   });
   const resFromAPI = await fetch(farmsGeojsonUrl);
   const farmsGeojson = await resFromAPI.json();
@@ -42,25 +49,25 @@ export const getFarmRecord = ods.record(farmsBaseUrl);
 const farmsRecords = ods.records(farmsBaseUrl);
 export const getFarmWhere = ods.where(farmsRecords);
 
-/*export const farmsShortlistUrl = ods.query(farmsRecords, {
+/* export const farmsShortlistUrl = ods.query(farmsRecords, {
   rows: '20',
   select: 'add_lon,add_lat,add_adresse,add_nom_ferme,add_ville',
-});*/
+}); */
 
 const farmsFacets = ods.facets(farmsBaseUrl);
 export const farmFacetsUrl = ods.query(farmsFacets, [
   {
-    'key': 'facet',
-    'value': 'familles_des_produits'
+    key: 'facet',
+    value: 'familles_des_produits',
   },
   {
-    'key': 'facet',
-    'value': 'typologie_ods'
+    key: 'facet',
+    value: 'typologie_ods',
   },
   {
-    'key': 'facet',
-    'value': 'nom_plateforme_partenaire'
-  }
+    key: 'facet',
+    value: 'nom_plateforme_partenaire',
+  },
 ]);
 
 export const setActivePoint = (queryparams) => (event) => {
@@ -81,7 +88,7 @@ export const q2center = (coordsString) => {
     const lat = parseFloat(lngLatStr[1]);
     lngLat = new mapbox.LngLat(lng, lat);
   } catch (e) {
-    console.error('Wrong location param : ' + e);
+    console.error(`Wrong location param : ${e}`);
   }
   return lngLat;
 };
@@ -113,16 +120,16 @@ export const searchPage = (search) => {
 export const updateLocation = (lngLat) => {
   const url = new URL(window.location);
   if (lngLat) {
-    url.searchParams.set('location', lngLat.lng + ',' + lngLat.lat);
+    url.searchParams.set('location', `${lngLat.lng},${lngLat.lat}`);
   } else {
     url.searchParams.delete('location');
   }
-  goto(url, {'replaceState':true});
+  goto(url, { replaceState: true });
 };
 
 export const filterQueryParams = (query) => {
-  let queryparams = Object.assign({}, query); // don't know why, query is a reference ! not a copy
-  delete queryparams['marker'];
-  delete queryparams['location'];
+  const queryparams = { ...query }; // don't know why, query is a reference ! not a copy
+  delete queryparams.marker;
+  delete queryparams.location;
   return new URLSearchParams(queryparams).toString();
-}
+};

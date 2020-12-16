@@ -24,7 +24,7 @@
 {/if}
 
 <style lang="scss">
-  @import 'src/styles/_ods-design-system.scss';
+  @import 'src/styles/_project-vars';
 
   .progress-container {
     position: absolute;

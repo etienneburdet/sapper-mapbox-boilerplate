@@ -103,7 +103,7 @@
   class:has-addons={geolocator === 'add-on'}
   class:is-grouped={geolocator === 'separate'}
 >
-  <div class="control is-expanded ml-3">
+  <div class="control is-expanded">
     <input
       {id}
       class="input is-fullwidth"
@@ -123,7 +123,7 @@
 </div>
 
 <style lang="scss" global>
-  @import 'src/styles/_ods-design-system.scss';
+  @import 'src/styles/_project-vars';
 
   input {
     width: 100%;

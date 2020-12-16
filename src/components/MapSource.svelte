@@ -19,8 +19,6 @@
   let farmsGeojson;
   let lastQueryParams = false;
 
-  map.on('sourcedata', () => (loading = false));
-
   setContext('source', {
     getMapSourceId: () => id,
   });
@@ -47,6 +45,8 @@
     }
     isSourceLoaded = false;
   };
+
+  map.on('sourcedata', () => (loading = false));
 
   // When url change -> refetch the data
   $: {
