@@ -175,7 +175,9 @@
         </div>
       </div>
     </div>
-    <AdvancedFilters {facets} />
+    <div>
+      <AdvancedFilters {facets} />
+    </div>
   </nav>
 </section>
 
@@ -281,10 +283,6 @@
       &.popup-open {
         height: 60%;
       }
-    }
-
-    #map-footer {
-      display: flex;
     }
 
     #popup-ctn {
