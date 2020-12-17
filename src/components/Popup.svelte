@@ -1,9 +1,9 @@
 <script>
   import { stores } from '@sapper/app';
-  import { popupTemplate } from '../plugins/ods-templates';
-  const { page } = stores();
 
-  export let item;
+  import BackButton from './BackButton.svelte';
+
+  const { page } = stores();
 
   let queryparams;
   let popup;
@@ -14,24 +14,16 @@
   }
 </script>
 
-<div class="popup">
-  <a rel="prefetch" href="/farms/all?{queryparams.toString()}"> <i class="fas fa-times" /> </a>
+<div>
+  <BackButton href="/farms/all">
+    <span class="icon has-text-dark is-pulled-right"><i class="fa fa-times fa-lg" /></span>
+  </BackButton>
   <slot />
 </div>
 
 <style lang="scss">
-  .popup {
+  div {
     height: 100%;
     width: 100%;
-
-    a {
-      color: black;
-      font-size: 1.2em;
-      float: right;
-    }
-
-    .tag:not(body).is-medium {
-      font-size: 0.9rem;
-    }
   }
 </style>

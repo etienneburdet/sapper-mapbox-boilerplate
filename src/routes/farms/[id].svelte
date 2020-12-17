@@ -38,9 +38,10 @@
 <script>
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
-  import { slide } from 'svelte/transition';
+  import { slide, fly } from 'svelte/transition';
 
   import Filter from '@/components/Filter.svelte';
+  import BackButton from '@/components/BackButton.svelte';
   import Geocoder from '@/components/Geocoder.svelte';
   import Map from '@/components/Map.svelte';
   import MapSource from '@/components/MapSource.svelte';
@@ -56,7 +57,14 @@
   import ItemContent from './_partials/ItemContent.svelte';
 
   import { paint } from './_constants';
-  import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord, distanceSort } from './_helpers';
+  import {
+    q2center,
+    setActivePoint,
+    filterPage,
+    searchPage,
+    getFarmRecord,
+    distanceSort,
+  } from './_helpers';
   import { stores } from '@sapper/app';
 
   const { page } = stores();
@@ -77,15 +85,17 @@
 
 <section class="is-flex is-relative">
   <div
-    class="is-fab is-top has-text-left p-3 is-hidden-desktop"
+    class="is-fab is-top has-text-left p-3 is-hidden-tablet"
     class:is-hidden={$page.params.id === 'all'}
   >
-    <a href="/farms/all" class="button is-rounded is-dark">
-      <span class="icon"><i class="fas fa-arrow-left" /></span>
-    </a>
+    <BackButton href="/farms/all">
+      <div class="button is-rounded is-square is-dark">
+        <span class="icon"><i class="fas fa-arrow-left" /></span>
+      </div>
+    </BackButton>
   </div>
   <header
-    class="is-hidden-desktop is-mobile level p-3"
+    class="is-hidden-tablet is-mobile level p-3"
     class:is-invisible={$page.params.id !== 'all'}
   >
     <div class="level-left">
@@ -119,7 +129,7 @@
       </div>
       {#if showAdvFilters}
         <div transition:slide={{ duration: 200 }}>
-          <Filters />
+          <Filters {facets} />
         </div>
       {/if}
     </header>
@@ -135,16 +145,20 @@
         </ListItem>
       {/each}
     </List>
-    <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
-      {#if farmDetails}
+    {#if farmDetails}
+      <div
+        id="popup-ctn"
+        class="has-background-white p-5"
+        transition:fly={{ x: -300, duration: 200 }}
+      >
         <Popup item={farmDetails}>
           <PopupContent item={farmDetails} />
         </Popup>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </aside>
   <div class="is-flex-grow-1" id="map">
-    <Map navigationPosition="bottom-right" center={q2center(query.location)} >
+    <Map navigationPosition="bottom-right" center={q2center(query.location)}>
       <MapSource id="farms">
         <MapLayer
           id="farms-circles"
@@ -164,7 +178,7 @@
     </Map>
   </div>
   <!-- MAP FOOTER / FILTERS -->
-  <div class="is-fab is-bottom has-text-centered is-hidden-desktop">
+  <div class="is-fab is-bottom has-text-centered is-hidden-tablet">
     <button
       class="button is-rounded is-dark mb-3"
       class:is-hidden={showMobileAdvFilters || $page.params.id !== 'all'}
@@ -177,7 +191,6 @@
     <nav
       id="map-footer"
       class="is-hidden-desktop has-background-dark has-text-light"
-      class:is-hidden={!showMobileAdvFilters}
       transition:slide={{ duration: 200 }}
     >
       <div class="level is-mobile">
@@ -195,7 +208,7 @@
         </div>
       </div>
       <div>
-        <Filters />
+        <Filters {facets} />
       </div>
     </nav>
   {/if}
@@ -254,17 +267,13 @@
 
   #popup-ctn {
     position: absolute;
-    left: calc(-1 * #{$popup-width});
+    left: 100%;
     width: $popup-width;
     height: 100%;
     overflow-y: hidden;
     border-left: 1px solid #dddddd;
     transition: 0.2s linear left;
     z-index: -1;
-
-    &.open {
-      left: 100%;
-    }
   }
 
   @media screen and (max-width: 768px) {
@@ -297,15 +306,10 @@
 
     #popup-ctn {
       left: 0;
-      bottom: -100%;
+      bottom: 0;
       width: 100%;
       transition: 0.2s ease bottom;
       z-index: 1;
-
-      &.open {
-        left: 0;
-        bottom: 0;
-      }
     }
   }
 </style>

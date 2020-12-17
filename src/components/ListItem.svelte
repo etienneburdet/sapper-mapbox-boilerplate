@@ -1,11 +1,9 @@
 <script>
-  import { itemTemplate } from '../plugins/ods-templates';
   import { stores } from '@sapper/app';
   const { page } = stores();
   const searchparams = new URLSearchParams($page.query);
 
   export let id;
-  export let fields;
   export let geometry;
   export let active;
 

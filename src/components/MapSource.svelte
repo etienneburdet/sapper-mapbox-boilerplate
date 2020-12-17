@@ -8,7 +8,6 @@
 
   const { page, session } = stores();
 
-  export let dataUrl;
   export let id;
 
   const { getMap } = getContext('map');

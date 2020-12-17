@@ -25,6 +25,3 @@
     {/each}
   </select>
 </div>
-
-<style lang="scss">
-</style>

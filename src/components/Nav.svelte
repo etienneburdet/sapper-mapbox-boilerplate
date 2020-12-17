@@ -11,7 +11,7 @@
   const closeMenu = () => (open = false);
 </script>
 
-<nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light has-shadow" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/" class:is-hidden={segment === undefined}>
       <h3 class="title is-3">Producteur <span class="has-text-info">d'à côté</span></h3>

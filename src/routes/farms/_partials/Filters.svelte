@@ -2,37 +2,55 @@
   import FormFilters from '@/components/FormFilters.svelte';
   import Filter from '@/components/Filter.svelte';
   import { facetsInfo } from '../_constants';
+  import { filterPage, searchPage } from '../_helpers';
 
   import { stores } from '@sapper/app';
-  const { page, session } = stores();
+  import { onMount } from 'svelte';
 
-  const pouepouet = () => console.log('pouepouet');
+  const { page } = stores();
+
+  export let facets;
+
+  let input;
 </script>
 
-<FormFilters on:submit={pouepouet}>
-  <div class="control has-icons-right my-3">
+<div class="field has-addons py-3">
+  <div class="control is-expanded">
     <input
-      class="input"
+      class="input is-fullwidth"
       type="text"
       id="search"
       name="search"
       autocomplete="off"
       placeholder="Rechercher un producteur/point de vente"
       value={$page.query.search || ''}
+      bind:this={input}
+      on:focus={() => input.select()}
+      on:change={searchPage}
     />
-    <span class="icon is-small is-right"> <i class="fas fa-search" /> </span>
   </div>
+  <div class="control">
+    <button class="button is-dark">
+      <span class="icon is-small is-right"> <i class="fas fa-search" /> </span>
+    </button>
+  </div>
+</div>
 
-  <div class="field">
-    <div class="control">
-      {#each Object.entries($session.facets) as entry (entry)}
-        <Filter name={entry[0]} options={entry[1]} selection={$page.query[entry[0]]}>
-          <h5 class="subtitle is-5" slot="title">{facetsInfo[entry[0]].title}</h5>
-        </Filter>
-      {/each}
-    </div>
+<div class="field">
+  <div class="control">
+    {#each Object.entries(facets) as entry (entry)}
+      <Filter
+        name={entry[0]}
+        options={entry[1]}
+        selection={$page.query[entry[0]]}
+        on:select={filterPage}
+      >
+        <h5 class="subtitle is-5" slot="title">{facetsInfo[entry[0]].title}</h5>
+        <span slot="description">{facetsInfo[entry[0]].description}</span>
+      </Filter>
+    {/each}
   </div>
-</FormFilters>
+</div>
 
 <style lang="scss">
 </style>
