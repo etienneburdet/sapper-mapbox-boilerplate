@@ -14,7 +14,7 @@
   const map = getMap();
 
   let isSourceLoaded = false;
-  let loading = false;
+  let loading = true;
   let farmsGeojson;
   let lastQueryParams = false;
 
@@ -30,7 +30,7 @@
       map.addSource(id, {
         type: 'geojson',
         data,
-        promoteId: 'recordid'
+        promoteId: 'recordid',
       });
     }
     isSourceLoaded = true;
@@ -46,7 +46,7 @@
     isSourceLoaded = false;
   };
 
-  map.on('sourcedata', () => (loading = false));
+  // map.on('sourcedata', () => (loading = false));
 
   // When url change -> refetch the data
   $: {
@@ -76,12 +76,12 @@
   <slot />
 {/if}
 
-<div class="wrapper">
+<div class="loader-wrapper">
   <div class="control" class:is-loading={loading} />
 </div>
 
 <style lang="scss">
-  .wrapper {
+  .loader-wrapper {
     height: 100%;
     width: 100%;
     display: flex;
@@ -89,8 +89,17 @@
     justify-content: center;
   }
 
-  div.control.is-loading::after {
+  .control {
     height: 10rem;
     width: 10rem;
+  }
+
+  div.control.is-loading::after {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-color: #898d92;
+    border-right-color: transparent;
+    border-top-color: transparent;
   }
 </style>
