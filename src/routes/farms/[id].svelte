@@ -60,6 +60,7 @@
   import {
     q2center,
     setActivePoint,
+    fetchGeojson,
     filterPage,
     searchPage,
     getFarmRecord,
@@ -73,14 +74,13 @@
   export let facets;
   export let query;
 
-  let queryparams;
+  let queryparams = new URLSearchParams(query);
   let farmsShortlist = [];
+  let farmsGeojson;
 
   let toggleList = false;
   let showAdvFilters = false;
   let showMobileAdvFilters = false;
-
-  $: queryparams = new URLSearchParams($page.query);
 </script>
 
 <section class="is-flex is-relative">
@@ -159,15 +159,27 @@
   </aside>
   <div class="is-flex-grow-1" id="map">
     <Map navigationPosition="bottom-right" center={q2center(query.location)}>
-      <MapSource id="farms">
-        <MapLayer
-          id="farms-circles"
-          type="circle"
-          {paint}
-          on:mapClick={setActivePoint(queryparams)}
-          on:render={(event) => (farmsShortlist = event.detail)}
-        />
-      </MapSource>
+      {#await fetchGeojson($page)}
+        <MapSource id="farms" fetching={true}>
+          <MapLayer
+            id="farms-circles"
+            type="circle"
+            {paint}
+            on:mapClick={setActivePoint(queryparams)}
+            on:render={(event) => (farmsShortlist = event.detail)}
+          />
+        </MapSource>
+      {:then geojson}
+        <MapSource id="farms" fetching={false} {geojson}>
+          <MapLayer
+            id="farms-circles"
+            type="circle"
+            {paint}
+            on:mapClick={setActivePoint(queryparams)}
+            on:render={(event) => (farmsShortlist = event.detail)}
+          />
+        </MapSource>
+      {/await}
       {#if query.marker}
         <Marker center={q2center(query.marker)} options={{ color: '#504d57' }} />
       {/if}

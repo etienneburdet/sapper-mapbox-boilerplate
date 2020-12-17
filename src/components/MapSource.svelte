@@ -3,20 +3,18 @@
   import { fetchGeojson } from '@/routes/farms/_helpers';
 
   import { stores } from '@sapper/app';
-  import Spinner from './Spinner.svelte';
-  import { filterQueryParams } from '../routes/farms/_helpers';
 
   const { page, session } = stores();
 
   export let id;
+  export let geojson;
+  export let fetching;
 
   const { getMap } = getContext('map');
   const map = getMap();
 
+  let loading;
   let isSourceLoaded = false;
-  let loading = true;
-  let farmsGeojson;
-  let lastQueryParams = false;
 
   setContext('source', {
     getMapSourceId: () => id,
@@ -46,30 +44,12 @@
     isSourceLoaded = false;
   };
 
-  map.on('sourcedata', () => (loading = false));
-
-  // When url change -> refetch the data
-  $: {
-    let filteredQueryParams = filterQueryParams($page.query);
-    if (!lastQueryParams || filteredQueryParams !== lastQueryParams) {
-      loading = true;
-      fetchGeojson($page).then((res) => {
-        farmsGeojson = res;
-      });
-      lastQueryParams = filteredQueryParams;
-    }
-  }
-
   // when data changed, refresh the source
   $: if (map.isStyleLoaded()) {
-    setSource(farmsGeojson);
+    setSource(geojson);
   } else {
-    map.on('load', () => setSource(farmsGeojson));
+    map.on('load', () => setSource(geojson));
   }
-
-  onMount(() => {
-    return destroySource;
-  });
 </script>
 
 {#if isSourceLoaded}
@@ -77,7 +57,7 @@
 {/if}
 
 <div class="loader-wrapper">
-  <div class="control" class:is-loading={loading} />
+  <div class="control" class:is-loading={fetching} />
 </div>
 
 <style lang="scss">
