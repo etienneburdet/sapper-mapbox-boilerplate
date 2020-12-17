@@ -46,7 +46,7 @@
     isSourceLoaded = false;
   };
 
-  // map.on('sourcedata', () => (loading = false));
+  map.on('sourcedata', () => (loading = false));
 
   // When url change -> refetch the data
   $: {
