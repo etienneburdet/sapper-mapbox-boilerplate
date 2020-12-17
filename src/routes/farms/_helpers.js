@@ -2,7 +2,6 @@ import { goto } from '@sapper/app';
 import * as ods from '@/plugins/ods-data';
 import mapbox from 'mapbox-gl';
 import { distance } from '@turf/turf';
-import { query } from '../../plugins/ods-data';
 
 /* export const farmsBaseUrl = ods.privateDataset(
   'producteursagri',
@@ -16,6 +15,10 @@ export const farmsBaseUrl = ods.publicDatasetFromBase(
 );
 
 export const fetchGeojson = async (page) => {
+  if (process.browser !== true) {
+    return;
+  }
+
   const fullGeojson = ods.exportFile(farmsBaseUrl, 'geojson');
   let whereClause = '';
   if (page && page.query) {
@@ -142,10 +145,11 @@ export const distanceSort = (position) => (a, b) => {
       value: distance(
         [a.geometry.coordinates[1], a.geometry.coordinates[0]],
         [position.lat, position.lng],
-        {units: 'meters'}),
+        { units: 'meters' },
+      ),
       writable: true,
       enumerable: true,
-      configurable: true
+      configurable: true,
     });
   }
   if (!b.properties.hasOwnProperty('geo_distance')) {
@@ -153,10 +157,11 @@ export const distanceSort = (position) => (a, b) => {
       value: distance(
         [b.geometry.coordinates[1], b.geometry.coordinates[0]],
         [position.lat, position.lng],
-        {units: 'meters'}),
+        { units: 'meters' },
+      ),
       writable: true,
       enumerable: true,
-      configurable: true
+      configurable: true,
     });
   }
   if (a.properties.geo_distance > b.properties.geo_distance) return 1;
