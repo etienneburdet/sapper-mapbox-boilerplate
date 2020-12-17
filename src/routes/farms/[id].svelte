@@ -38,7 +38,7 @@
 <script>
   import { goto } from '@sapper/app';
   import { onMount } from 'svelte';
-  import { slide } from 'svelte/transition';
+  import { slide, fly } from 'svelte/transition';
 
   import Filter from '@/components/Filter.svelte';
   import BackButton from '@/components/BackButton.svelte';
@@ -139,7 +139,11 @@
       {/each}
     </List>
     {#if farmDetails}
-      <div id="popup-ctn" class="has-background-white p-5" class:open={farmDetails}>
+      <div
+        id="popup-ctn"
+        class="has-background-white p-5"
+        transition:fly={{ x: -300, duration: 200 }}
+      >
         <Popup item={farmDetails}>
           <PopupContent item={farmDetails} />
         </Popup>
@@ -180,7 +184,6 @@
     <nav
       id="map-footer"
       class="is-hidden-desktop has-background-dark has-text-light"
-      class:is-hidden={!showMobileAdvFilters}
       transition:slide={{ duration: 200 }}
     >
       <div class="level is-mobile">
@@ -257,17 +260,13 @@
 
   #popup-ctn {
     position: absolute;
-    left: calc(-1 * #{$popup-width});
+    left: 100%;
     width: $popup-width;
     height: 100%;
     overflow-y: hidden;
     border-left: 1px solid #dddddd;
     transition: 0.2s ease left;
     z-index: -1;
-
-    &.open {
-      left: 100%;
-    }
   }
 
   @media screen and (max-width: 768px) {
@@ -300,15 +299,10 @@
 
     #popup-ctn {
       left: 0;
-      bottom: -100%;
+      bottom: 0;
       width: 100%;
       transition: 0.2s ease bottom;
       z-index: 1;
-
-      &.open {
-        left: 0;
-        bottom: 0;
-      }
     }
   }
 </style>
