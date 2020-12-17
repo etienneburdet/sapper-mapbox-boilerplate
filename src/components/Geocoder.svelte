@@ -24,6 +24,10 @@
     input.select();
   };
 
+  const preventSubmit = (e) => {
+    if (e.code == "Enter") e.preventDefault();
+  };
+
   const setCoords = (event) => {
     input.value = 'Votre position';
     hiddenInput.value = event.detail.coords;
@@ -112,6 +116,7 @@
       bind:value={query}
       bind:this={input}
       on:focus={selectAll}
+      on:keypress={preventSubmit}
     />
     <input type="hidden" name="marker" bind:this={hiddenInput} on:submit|preventDefault />
   </div>

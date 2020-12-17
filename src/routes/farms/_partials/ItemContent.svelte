@@ -12,11 +12,11 @@
 
 <p class="title is-size-5">{fields.nom.toString() != 'null' ? fields.nom : 'Nom non renseigné'}</p>
 <p class="subtitle is-size-6">
-  <!-- {fields.adresse.toString() != 'null' ? fields.adresse : 'Adresse non renseigné'}
-  {#if fields.geo_distance.toString() != 'null'}
+   {fields.adresse.toString() != 'null' ? fields.adresse : 'Adresse non renseigné'}
+  {#if fields.geo_distance && fields.geo_distance.toString() != 'null'}
     -
     <span class="distance">{'<' + prettyPrintDistances(fields.geo_distance)}</span>
-  {/if} -->
+  {/if}
 </p>
 <div class="tags">
   <div class="tag is-medium">

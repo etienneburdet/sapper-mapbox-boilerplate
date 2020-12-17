@@ -68,16 +68,17 @@
       urlid = undefined;
     }
     urlid = $page.params['id'];
-    map.setFeatureState(
-      {
-        source: source,
-        id: urlid,
-      },
-      {
-        active: true,
-        'circle-sort-key': 1000,
-      },
-    );
+    if (urlid) {
+      map.setFeatureState(
+        {
+            source: source,
+            id: urlid,
+        },
+        {
+            active: true
+        },
+      );
+    }
   }
 
   const closeMobilePopup = () => {
