@@ -45,10 +45,6 @@
       zoom: config.mapbox.init.zoom,
     });
 
-    /*map.on('dragend', () => {
-        updateLocation(map.getCenter());
-    });*/
-
     searchMarker = new mapbox.Marker();
 
     if (geolocatePosition) {
@@ -56,7 +52,28 @@
     }
   });
 
-  $: map && map.flyTo({ center });
+  let mobileView;
+  let screenHeight;
+  //let screenWidth;
+  if (typeof window !== 'undefined') {
+      const mql = window.matchMedia('(max-width: 769px)');
+      mobileView = mql.matches;
+      screenHeight = window.innerHeight;
+      //screenWidth = window.innerWidth;
+  }
+
+  let onId;
+  $: onId = ($page.params.id !== 'all');
+
+  $: map && map.flyTo({
+      center,
+      zoom: (map.getZoom()<10?10:map.getZoom()),
+      screenSpeed: 2.5,
+      padding: {
+        bottom: (onId?(mobileView?3*(innerHeight/5):0):0),
+        left:   (onId?(mobileView?0:(374*2.05)/2):0)
+      }
+  });
 </script>
 
 <svelte:head>

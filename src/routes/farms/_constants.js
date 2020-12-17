@@ -1,28 +1,51 @@
 export const paint = {
-  'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 4, 15, 10, 22, 15],
-  'circle-opacity': 0.8,
-  'circle-color': '#54BFB2',
-  'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 8, 1, 15, 2],
-  'circle-stroke-color': '#000',
-};
-
-/* export const inner = {
-  'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 6, 15, 12, 22, 15],
+  'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1, 4, 3, 10, 10, 12, 12],
   'circle-opacity': 0.8,
   'circle-color': [
     'match',
-    ['get', 'stadedeveloppement'],
-    'A',
-    '#317256',
-    'J',
-    '#398564',
-    'JA',
-    '#419873',
-    'M',
-    '#49ab81',
-    /!* other *!/ '#52bf90',
+    ['get', 'categorie'],
+    'Producteur',
+    /*'#e693b4',*/
+    [
+      'case',
+      ['boolean', ['feature-state', 'active'], false],
+      '#c50c66',
+      '#e693b4'
+    ],
+    'Point de vente',
+    /*'#93bbb2',*/
+    [
+      'case',
+      ['boolean', ['feature-state', 'active'], false],
+      '#007364',
+      '#93bbb2'
+    ],
+    '#ccc', /* other */
   ],
-}; */
+  'circle-stroke-width': ['interpolate', ['linear'], ['zoom'],
+    1, ['case',['boolean', ['feature-state', 'active'], false], 8, 0.5],
+    15, ['case',['boolean', ['feature-state', 'active'], false], 12, 2.5],
+  ],
+  'circle-stroke-color': [
+    'match',
+    ['get', 'categorie'],
+    'Producteur',
+    [
+      'case',
+      ['boolean', ['feature-state', 'active'], false],
+      '#e693b4',
+      '#c50c66'
+    ],
+    'Point de vente',
+    [
+      'case',
+      ['boolean', ['feature-state', 'active'], false],
+      '#93bbb2',
+      '#007364'
+    ],
+    '#ccc', /* other */
+  ],
+};
 
 export const facetsInfo = {
   typologie_ods: {

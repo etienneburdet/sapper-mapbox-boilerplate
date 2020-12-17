@@ -55,7 +55,7 @@
   }
 
   .spin {
-    background-color: blue;
+    background-color: blue !important;
     color: white;
 
     img {

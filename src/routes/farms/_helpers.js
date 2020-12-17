@@ -1,6 +1,7 @@
 import { goto } from '@sapper/app';
 import * as ods from '@/plugins/ods-data';
 import mapbox from 'mapbox-gl';
+import { distance } from '@turf/turf';
 import { query } from '../../plugins/ods-data';
 
 /* export const farmsBaseUrl = ods.privateDataset(
@@ -35,7 +36,7 @@ export const fetchGeojson = async (page) => {
   }
   const farmsGeojsonUrl = ods.query(fullGeojson, {
     rows: '10000',
-    select: 'nom,adresse,nom_commune,geolocalisation',
+    select: 'nom,adresse,nom_commune,geolocalisation,categorie,nom_plateforme_partenaire',
     where: whereClause,
     record_metas: true,
   });
@@ -132,4 +133,33 @@ export const filterQueryParams = (query) => {
   delete queryparams.marker;
   delete queryparams.location;
   return new URLSearchParams(queryparams).toString();
+};
+
+export const distanceSort = (position) => (a, b) => {
+  if (!position) return;
+  if (!a.properties.hasOwnProperty('geo_distance')) {
+    Object.defineProperty(a.properties, 'geo_distance', {
+      value: distance(
+        [a.geometry.coordinates[1], a.geometry.coordinates[0]],
+        [position.lat, position.lng],
+        {units: 'meters'}),
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+  if (!b.properties.hasOwnProperty('geo_distance')) {
+    Object.defineProperty(b.properties, 'geo_distance', {
+      value: distance(
+        [b.geometry.coordinates[1], b.geometry.coordinates[0]],
+        [position.lat, position.lng],
+        {units: 'meters'}),
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+  if (a.properties.geo_distance > b.properties.geo_distance) return 1;
+  if (a.properties.geo_distance < b.properties.geo_distance) return -1;
+  return 0;
 };

@@ -31,6 +31,7 @@
       map.addSource(id, {
         type: 'geojson',
         data,
+        promoteId: 'recordid'
       });
     }
     isSourceLoaded = true;

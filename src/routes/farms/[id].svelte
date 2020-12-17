@@ -56,7 +56,7 @@
   import ItemContent from './_partials/ItemContent.svelte';
 
   import { paint } from './_constants';
-  import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord } from './_helpers';
+  import { q2center, setActivePoint, filterPage, searchPage, getFarmRecord, distanceSort } from './_helpers';
   import { stores } from '@sapper/app';
 
   const { page } = stores();
@@ -124,7 +124,7 @@
       {/if}
     </header>
     <List activeItem={farmDetails} let:id={activeId}>
-      {#each farmsShortlist as farm (farm)}
+      {#each farmsShortlist.sort(distanceSort(q2center(query.marker))).slice(0, 50) as farm (farm)}
         <ListItem
           id={farm.properties.recordid}
           fields={farm.properties}
@@ -144,7 +144,7 @@
     </div>
   </aside>
   <div class="is-flex-grow-1" id="map">
-    <Map navigationPosition="bottom-right" center={q2center(query.location)}>
+    <Map navigationPosition="bottom-right" center={q2center(query.location)} >
       <MapSource id="farms">
         <MapLayer
           id="farms-circles"
@@ -155,12 +155,12 @@
         />
       </MapSource>
       {#if query.marker}
-        <Marker center={q2center(query.marker)} options={{ color: 'blue' }} />
+        <Marker center={q2center(query.marker)} options={{ color: '#504d57' }} />
       {/if}
 
-      {#if query.location && query.location != query.marker}
+      <!--{#if query.location && query.location != query.marker}
         <Marker center={q2center(query.location)} options={{ color: '#74CABF' }} />
-      {/if}
+      {/if}-->
     </Map>
   </div>
   <!-- MAP FOOTER / FILTERS -->
@@ -259,7 +259,7 @@
     height: 100%;
     overflow-y: hidden;
     border-left: 1px solid #dddddd;
-    transition: 0.2s ease left;
+    transition: 0.2s linear left;
     z-index: -1;
 
     &.open {
