@@ -67,7 +67,7 @@
 
   $: map && map.flyTo({
       center,
-      zoom: (map.getZoom()<10?10:map.getZoom()),
+      zoom: (map.getZoom()<10&&onId?10:map.getZoom()),
       screenSpeed: 2.5,
       padding: {
         bottom: (onId?(mobileView?3*(innerHeight/5):0):0),

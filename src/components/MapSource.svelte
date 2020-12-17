@@ -76,9 +76,11 @@
   <slot />
 {/if}
 
-<div class="loader-wrapper">
-  <div class="control" class:is-loading={loading} />
-</div>
+{#if loading}
+  <div class="loader-wrapper">
+    <div class="control is-loading" />
+  </div>
+{/if}
 
 <style lang="scss">
   .loader-wrapper {
