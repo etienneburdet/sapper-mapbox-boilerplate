@@ -4,6 +4,7 @@
 @import 'bulma/bulma';
 
 $mobile: $tablet;
+$tablet: $desktop;
 
 html {
   height: 100%;
