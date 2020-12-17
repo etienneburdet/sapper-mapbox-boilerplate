@@ -82,7 +82,7 @@
     class:is-hidden={$page.params.id === 'all'}
   >
     <BackButton href="/farms/all">
-      <div class="button is-rounded is-dark">
+      <div class="button is-rounded is-square is-dark">
         <span class="icon"><i class="fas fa-arrow-left" /></span>
       </div>
     </BackButton>

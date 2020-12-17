@@ -1,9 +1,6 @@
 <script>
   export let item;
   let tags = item.fields.familles_des_produits;
-
-  $: console.log(item);
-  $: console.log(tags);
 </script>
 
 <p class="title">{item.fields.nom}</p>
