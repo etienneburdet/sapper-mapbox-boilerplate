@@ -14,7 +14,7 @@
   const map = getMap();
 
   let isSourceLoaded = false;
-  let loading = false;
+  let loading = true;
   let farmsGeojson;
   let lastQueryParams = false;
 
@@ -46,7 +46,7 @@
     isSourceLoaded = false;
   };
 
-  map.on('sourcedata', () => (loading = false));
+  // map.on('sourcedata', () => (loading = false));
 
   // When url change -> refetch the data
   $: {
